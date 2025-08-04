@@ -3,34 +3,37 @@ import './App.css'
 import styled from 'styled-components'
 import { Board } from './game/conponents/board'
 
-const StyledButton = styled.button`
-  background-color: #c2e221;
-  color: #3d21b9;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 32px;
-`
 
+const PageWrapper = styled.div`
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const InfoWrapper = styled.div`
+  margin-top: 20px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+`;
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <h1>2048</h1>
+    <PageWrapper>
 
-      <div>
-          <Board></Board>
-      </div>
+      <h1 style={{ color: "black" }}>2048</h1>
 
+      <Board/>
 
+      <InfoWrapper>
+        {"Game by Tal and Natasha Segal"}
+      </InfoWrapper>
 
-      <p className="info">
-        Game by Tal Segal
-      </p>
-    </>
+    </PageWrapper>
   )
 }
 

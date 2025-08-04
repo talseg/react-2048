@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface TileProps {
@@ -12,10 +12,11 @@ export const TileSize: number  = 80;
 const TileWrapper = styled.div`
     width: ${TileSize}px;
     height: ${TileSize}px;
-    background-color: #3f3f3f;
+    background-color: #69624e;
     text-align: middle;
     border-radius: 16px;
     color: white;
+    font-weight: bold;
     font-size: 30px;
     display: flex;
     align-items: center;
@@ -24,12 +25,17 @@ const TileWrapper = styled.div`
 
 export const Tile: React.FC<TileProps> = ({ value, row, column }) => {
 
+    const [ tileValue, setTileValue ] = useState(value);
+
+    const handleClick = () => {
+        setTileValue((val) => val * 2);
+    }
+
     return (
-        <TileWrapper>
-            {value}
+        <TileWrapper onClick={handleClick}>
+            {tileValue}
         </TileWrapper>
     );
-
 
 }
 
