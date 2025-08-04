@@ -16,9 +16,7 @@ const BoardWrapper = styled.div`
 export const Board: React.FC = () => {
 
     return (
-        // <BoardWrapper>
-            
-        // </BoardWrapper>
+ 
         <div style={{ color: "red", fontSize: "30px"}}>
             This is the game!!
         </div>
