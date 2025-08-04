@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import styled from 'styled-components'
+import { Board } from './game/conponents/board'
 
 const StyledButton = styled.button`
   background-color: #c2e221;
@@ -21,11 +22,7 @@ function App() {
       <h1>2048</h1>
 
       <div>
-        <div style={{ color: "black", 
-          fontSize: "30px"
-          
-          }}>here is the game</div>
-
+          <Board></Board>
       </div>
 
 
