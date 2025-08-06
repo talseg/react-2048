@@ -4,11 +4,11 @@ import { Board } from './game/conponents/board'
 import FullscreenToggle from './game/conponents/fullScreenToggle';
 
 const PageWrapper = styled.div`
-  min-height: 100vh;
+  min-height: 90vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: start;  
 `;
 
 const InfoWrapper = styled.div`
