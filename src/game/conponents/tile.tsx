@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+
 interface TileProps {
     value: number;
-    row: number;
-    column: number;
+    className?: string;
 }
 
-export const TileSize: number  = 80;
+export const TileSize: number  = 65;
 
 const TileWrapper = styled.div`
     width: ${TileSize}px;
@@ -21,21 +21,17 @@ const TileWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`
+    
+`;
 
-export const Tile: React.FC<TileProps> = ({ value, row, column }) => {
+export const Tile: React.FC<TileProps> = ({ value, className }) => {
 
     const [ tileValue, setTileValue ] = useState(value);
 
-    const handleClick = () => {
-        setTileValue((val) => val * 2);
-    }
-
     return (
-        <TileWrapper onClick={handleClick}>
-            {tileValue}
-        </TileWrapper>
+            <TileWrapper className={className}>
+                {value}
+            </TileWrapper>
     );
-
 }
 

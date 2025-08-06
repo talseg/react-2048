@@ -32,8 +32,6 @@ function App() {
         {"Game by Inbar and Tal Segal"}
       </InfoWrapper>
 
-      
-
     </PageWrapper>
   )
 }

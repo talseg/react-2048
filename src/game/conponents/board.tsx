@@ -33,14 +33,6 @@ export const Board: React.FC = () => {
 
     const handleClick = () =>
     {
-        // if (column == 1) {
-        //     setColumn(4);
-        //     setValue((val) => val *2);
-        // }
-        // else {
-        //     setColumn(1);
-        //     setValue((val) => val *2);
-        // }
     }
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -52,16 +44,17 @@ export const Board: React.FC = () => {
         const delta = currentX - touchStartX;
         const swipeLength = Math.abs(delta);
 
-        // There was a drag
+        // There was a swipe
         if (swipeLength > 50) { 
 
-            setValue((val) => val * 2);
             if (delta < 0 && column > 1) // swipe left
             {
                 setColumn(1);
+                setValue((val) => val * 2);
             }   
             else if (delta > 0 && column < 4) {    // swipe right
                 setColumn(4);
+                setValue((val) => val * 2);
             }
         }
     }
