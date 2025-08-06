@@ -1,15 +1,14 @@
-import { useState } from 'react'
 import './App.css'
 import styled from 'styled-components'
 import { Board } from './game/conponents/board'
-
+import FullscreenToggle from './game/conponents/fullScreenToggle';
 
 const PageWrapper = styled.div`
-  min-height: 75vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
 `;
 
 const InfoWrapper = styled.div`
@@ -19,19 +18,21 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-
 function App() {
 
   return (
     <PageWrapper>
 
+      <FullscreenToggle/>
       <h1 style={{ color: "black" }}>2048</h1>
 
       <Board/>
 
       <InfoWrapper>
-        {"Game by Tal and Natasha Segal"}
+        {"Game by Inbar and Tal Segal"}
       </InfoWrapper>
+
+      
 
     </PageWrapper>
   )
