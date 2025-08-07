@@ -25,9 +25,11 @@ ${({ gridRow, gridColumn }) => `
 export const Board: React.FC = () => {
 
     const [column, setColumn] = useState(1);
-    const [value, setValue] = useState(2);
+    const [row, setRow] = useState(1);
+    const [tileValue, setTileValue] = useState(2);
 
     const [touchStartX, setTouchStartX] = useState(0); 
+    const [touchStartY, setTouchStartY] = useState(0);
 
 
     useEffect(() => {
@@ -37,13 +39,27 @@ export const Board: React.FC = () => {
                 if (column > 1) // swipe left
                 {
                     setColumn(1);
-                    setValue((val) => val * 2);
+                    setTileValue(tileValue * 2);
                 }  
                 break;
             case 'ArrowRight':
                 if (column < 4) {
                     setColumn(4);
-                    setValue((val) => val * 2);
+                    setTileValue(tileValue * 2);
+                }
+                break;
+            case 'ArrowUp':
+                if (row > 1) // swipe up
+                {
+                    setRow(1);
+                    setTileValue(tileValue * 2);
+                }
+                break;
+            case 'ArrowDown':
+                if (row < 4) // swipe down
+                {
+                    setRow(4);
+                    setTileValue(tileValue * 2);
                 }
                 break;
             // Add cases for other arrow keys if needed
@@ -57,39 +73,56 @@ export const Board: React.FC = () => {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       }
-    }, [column])
+    }, [column, row])
     
 
 
     const handleClick = () =>
     {
-        console.log("Tile clicked");
     }
 
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStartX(e.changedTouches[0].screenX);
+        setTouchStartY(e.changedTouches[0].screenY);
     }
 
     const handleTouchEnd = (e: React.TouchEvent) => {
         const currentX = e.changedTouches[0].screenX;
-        const delta = currentX - touchStartX;
-        const swipeLength = Math.abs(delta);
+        const currentY = e.changedTouches[0].screenY;
+        const deltaX = currentX - touchStartX;
+        const deltaY = currentY - touchStartY;
+        
+        const swipeLengthX = Math.abs(deltaX);
+        const swipeLengthY = Math.abs(deltaY);
 
-        // There was a swipe
-        if (swipeLength > 50) { 
+        // There was an X swipe
+        if (swipeLengthX > 50) { 
 
-            if (delta < 0 && column > 1) // swipe left
+            if (deltaX < 0 && column > 1) // swipe left
             {
                 setColumn(1);
-                setValue((val) => val * 2);
+                setTileValue((val) => val * 2);
             }   
-            else if (delta > 0 && column < 4) {    // swipe right
+            else if (deltaX > 0 && column < 4) {    // swipe right
                 setColumn(4);
-                setValue((val) => val * 2);
+                setTileValue((val) => val * 2);
+            }
+        }
+
+        // There was a Y swipe
+        if (swipeLengthY > 50) { 
+
+            if (deltaY < 0 && row > 1) // swipe up
+            {
+                setRow(1);
+                setTileValue((val) => val * 2);
+            }   
+            else if (deltaY > 0 && row < 4) {    // swipe down
+                setRow(4);
+                setTileValue((val) => val * 2);
             }
         }
     }
-
 
     return (
         <BoardWrapper
@@ -98,7 +131,7 @@ export const Board: React.FC = () => {
             onTouchEnd={handleTouchEnd}
         >
 
-            <TileStyled value={value} gridRow={1} gridColumn={column}>
+            <TileStyled value={tileValue} gridRow={row} gridColumn={column}>
             </TileStyled>
 
             {/* <TileStyled value={12} gridRow={1} gridColumn={2}>
