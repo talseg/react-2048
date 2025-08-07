@@ -95,33 +95,37 @@ export const Board: React.FC = () => {
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
 
+        if (swipeLengthX > swipeLengthY) {
         // There was an X swipe
-        if (swipeLengthX > 50) { 
+            if (swipeLengthX > 50) { 
 
-            if (deltaX < 0 && column > 1) // swipe left
-            {
-                setColumn(1);
-                setTileValue((val) => val * 2);
-            }   
-            else if (deltaX > 0 && column < 4) {    // swipe right
-                setColumn(4);
-                setTileValue((val) => val * 2);
+                if (deltaX < 0 && column > 1) // swipe left
+                {
+                    setColumn(1);
+                    setTileValue((val) => val * 2);
+                }   
+                else if (deltaX > 0 && column < 4) {    // swipe right
+                    setColumn(4);
+                    setTileValue((val) => val * 2);
+                }
             }
         }
-
+        else {
         // There was a Y swipe
-        if (swipeLengthY > 50) { 
+            if (swipeLengthY > 50) { 
 
-            if (deltaY < 0 && row > 1) // swipe up
-            {
-                setRow(1);
-                setTileValue((val) => val * 2);
-            }   
-            else if (deltaY > 0 && row < 4) {    // swipe down
-                setRow(4);
-                setTileValue((val) => val * 2);
+                if (deltaY < 0 && row > 1) // swipe up
+                {
+                    setRow(1);
+                    setTileValue((val) => val * 2);
+                }   
+                else if (deltaY > 0 && row < 4) {    // swipe down
+                    setRow(4);
+                    setTileValue((val) => val * 2);
+                }
             }
         }
+
     }
 
     return (

@@ -15,7 +15,7 @@ const TileWrapper = styled.div`
     background-color: #d34114;
     text-align: middle;
     border-radius: 16px;
-    color: white;
+    color: black;
     font-weight: bold;
     font-size: 30px;
     display: flex;
