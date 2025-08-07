@@ -16,7 +16,7 @@ const BoardWrapper = styled.div`
 `
 
 const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
-${({ gridRow, gridColumn }) => `
+    ${({ gridRow, gridColumn }) => css`
     grid-row: ${gridRow};
     grid-column: ${gridColumn};
   `}
@@ -73,7 +73,7 @@ export const Board: React.FC = () => {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       }
-    }, [column, row])
+    }, [column, row, tileValue])
     
 
 
