@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from './tile';
 
@@ -24,15 +24,46 @@ ${({ gridRow, gridColumn }) => `
 
 export const Board: React.FC = () => {
 
-    const [column, setColumn] = useState(4);
+    const [column, setColumn] = useState(1);
     const [value, setValue] = useState(2);
 
     const [touchStartX, setTouchStartX] = useState(0); 
-    const [touchEndX, setTouchEndX] = useState(0); 
+
+
+    useEffect(() => {
+            const handleKeyDown = (event: KeyboardEvent) => {
+            switch (event.key) {
+            case 'ArrowLeft':
+                if (column > 1) // swipe left
+                {
+                    setColumn(1);
+                    setValue((val) => val * 2);
+                }  
+                break;
+            case 'ArrowRight':
+                if (column < 4) {
+                    setColumn(4);
+                    setValue((val) => val * 2);
+                }
+                break;
+            // Add cases for other arrow keys if needed
+            default:
+                break;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+    
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
+    }, [column])
+    
 
 
     const handleClick = () =>
     {
+        console.log("Tile clicked");
     }
 
     const handleTouchStart = (e: React.TouchEvent) => {

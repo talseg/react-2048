@@ -12,7 +12,7 @@ export const TileSize: number  = 65;
 const TileWrapper = styled.div`
     width: ${TileSize}px;
     height: ${TileSize}px;
-    background-color: #69624e;
+    background-color: #d34114;
     text-align: middle;
     border-radius: 16px;
     color: white;
