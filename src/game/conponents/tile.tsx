@@ -7,7 +7,7 @@ interface TileProps {
     className?: string;
 }
 
-export const TileSize: number  = 65;
+export const TileSize: number  = 64;
 
 const TileWrapper = styled.div`
     width: ${TileSize}px;
