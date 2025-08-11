@@ -1,0 +1,71 @@
+# Git Branch & PR Cheat Sheet
+
+## 1️⃣ Creating Branches
+- **New local branch (no remote yet)**
+git switch -c branch-name
+Creates and switches to a new branch from your current branch (usually `main`).
+
+- **New branch and push to remote**
+git push -u origin branch-name
+Links your local branch with the remote branch so `git push` / `git pull` work without extra parameters.
+
+## 2️⃣ Pulling Changes
+- **From the branch you’re on**
+git pull
+If the branch is linked to a remote branch, it pulls automatically.
+
+- **From a specific branch**
+git pull origin branch-name
+
+## 3️⃣ Deleting Branches
+- **Local branch**
+git branch -d branch-name   # safe delete (only if merged)
+git branch -D branch-name   # force delete (even if not merged)
+
+- **Remote branch (GitHub)**
+git push origin --delete branch-name
+Or delete from the GitHub UI (in the PR screen or in branch list).
+
+- **Remove stale remote references**
+git fetch -p
+(-p = prune → removes references to branches deleted from remote)
+
+## 4️⃣ Checking Branches
+- **Local branches**
+git branch
+
+- **All branches (local + remote)**
+git branch -a
+
+- **Show branch & upstream link**
+git status
+
+## 5️⃣ Creating a Pull Request (PR)
+1. Commit & push your changes to your feature branch.
+2. Go to GitHub → "Compare & Pull Request".
+3. Select:
+   - Base branch → `main`
+   - Compare branch → your feature branch
+4. Add a title & description → Create PR.
+5. Merge:
+   - Merge commit → preserves all commits
+   - Squash & merge → combines all commits into one
+   - Rebase & merge → applies commits on top of base branch (clean history)
+
+## 6️⃣ Updating After Merge
+After a PR is merged & branch deleted on GitHub:
+# Switch to main
+git switch main
+
+# Pull latest changes
+git pull
+
+# Delete local branch
+git branch -d branch-name
+
+# Remove stale remote references
+git fetch -p
+
+✅ Tip: If you always want a new branch linked to `main` when you create it:
+git switch -c new-branch main
+git push -u origin new-branch
