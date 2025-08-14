@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Tile, TileSize } from './tile';
+import { Tile, TileSize } from '../tile/Tile';
 
 // test PR
 
@@ -137,7 +137,7 @@ export const Board: React.FC = () => {
             onTouchEnd={handleTouchEnd}
         >
 
-            <TileStyled value={tileValue} gridRow={row} gridColumn={column}>
+            <TileStyled value={tileValue} gridRow={row} gridColumn={column} backgroundColor="#50505055">
             </TileStyled>
 
             {/* <TileStyled value={12} gridRow={1} gridColumn={2}>
