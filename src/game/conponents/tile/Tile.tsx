@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import styled, { css } from 'styled-components';
 
 
 interface TileProps {
     value: number;
+    backgroundColor: string;
     className?: string;
 }
 
 export const TileSize: number  = 64;
 
-const TileWrapper = styled.div`
+const TileWrapper = styled.div<{color: string}>`
+    ${({ color }) => css`
     width: ${TileSize}px;
     height: ${TileSize}px;
-    background-color: #d34114;
+    background-color: ${color};
     text-align: middle;
     border-radius: 16px;
     color: black;
@@ -21,15 +23,12 @@ const TileWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    
-`;
+`}`;
 
-export const Tile: React.FC<TileProps> = ({ value, className }) => {
-
-    const [ tileValue, setTileValue ] = useState(value);
+export const Tile: React.FC<TileProps> = ({ value, backgroundColor, className }) => {
 
     return (
-            <TileWrapper className={className}>
+            <TileWrapper className={className} color={backgroundColor}>
                 {value}
             </TileWrapper>
     );

@@ -1,6 +1,6 @@
 import './App.css'
 import styled from 'styled-components'
-import { Board } from './game/conponents/board'
+import { Board } from './game/conponents/board/Board'
 import FullscreenToggle from './game/conponents/fullScreenToggle';
 
 const PageWrapper = styled.div`
