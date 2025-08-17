@@ -23,6 +23,7 @@ const TileWrapper = styled.div<{color: string}>`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: Arial;
 `}`;
 
 export const Tile: React.FC<TileProps> = ({ value, backgroundColor, className }) => {
