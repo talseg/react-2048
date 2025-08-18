@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
+import { getNewMatrixByDirection } from '../../logic/boardLogic';
 
 // test PR
 
@@ -27,13 +28,18 @@ const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
 const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
   const tiles: React.ReactElement[] = [];
   
+  // ToDo - Explain to Inbar
+  var key = 0;
   for (let row = 0; row < matrix.length; row++) {
-    for (let col = 0; col < matrix[row].length; col++) {
+        for (let col = 0; col < matrix[row].length; col++) {
 
-      tiles.push(<TileStyled value={matrix[row][col]} 
-        gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>);
+            const value = matrix[row][col];
+            if (value != 0) {
+                tiles.push(<TileStyled value={value} key={key++}
+                gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>);
+            }
+        }
     }
-  }
   return tiles;
 };
 
@@ -46,28 +52,27 @@ export const Board: React.FC = () => {
     const [touchStartX, setTouchStartX] = useState(0); 
     const [touchStartY, setTouchStartY] = useState(0);
 
-    const boardMatrix = [
-        [1,2,3,4],
-        [5,6,7,8],
-        [9,10,11,12],
-        [13,14,15,16]
-    ];
+    const [boardData, setBoardData] = useState(
+        [
+        [2,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+        ]
+    )
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
+            let newBoardData: number[][];
+
             switch (event.key) {
             case 'ArrowLeft':
-                if (column > 1) // swipe left
-                {
-                    setColumn(1);
-                    setTileValue(tileValue * 2);
-                }  
+                newBoardData = getNewMatrixByDirection(boardData, "left");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowRight':
-                if (column < 4) {
-                    setColumn(4);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "right");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowUp':
                 if (row > 1) // swipe up
@@ -94,7 +99,7 @@ export const Board: React.FC = () => {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       }
-    }, [column, row, tileValue])
+    }, [boardData])
     
 
 
@@ -155,7 +160,7 @@ export const Board: React.FC = () => {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
-            { mapMatrixToTiles(boardMatrix) }
+            { mapMatrixToTiles(boardData) }
 
         </BoardWrapper>
     );
