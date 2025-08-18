@@ -24,6 +24,20 @@ const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
   `}
 `;
 
+const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
+
+  const tiles: React.ReactElement[] = [];
+
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[row].length; col++) {
+        const tile = 
+            <TileStyled value={matrix[row][col]} gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>;
+      tiles.push(tile);
+    }
+  }
+  return tiles;
+};
+
 export const Board: React.FC = () => {
 
     const [column, setColumn] = useState(1);
@@ -33,6 +47,12 @@ export const Board: React.FC = () => {
     const [touchStartX, setTouchStartX] = useState(0); 
     const [touchStartY, setTouchStartY] = useState(0);
 
+    const boardMatrix = [
+        [1,2,3,4],
+        [5,6,7,8],
+        [9,10,11,12],
+        [13,14,15,16]
+    ];
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
@@ -136,18 +156,7 @@ export const Board: React.FC = () => {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
-
-            <TileStyled value={tileValue} gridRow={row} gridColumn={column} backgroundColor="#50505055">
-            </TileStyled>
-
-            {/* <TileStyled value={12} gridRow={1} gridColumn={2}>
-            </TileStyled>
-
-            <TileStyled value={21} gridRow={2} gridColumn={1}>
-            </TileStyled>
-
-            <TileStyled value={22} gridRow={2} gridColumn={2}>
-            </TileStyled> */}
+            { mapMatrixToTiles(boardMatrix) }
 
         </BoardWrapper>
     );
