@@ -25,14 +25,13 @@ const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
 `;
 
 const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
-
   const tiles: React.ReactElement[] = [];
-
+  
   for (let row = 0; row < matrix.length; row++) {
     for (let col = 0; col < matrix[row].length; col++) {
-        const tile = 
-            <TileStyled value={matrix[row][col]} gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>;
-      tiles.push(tile);
+
+      tiles.push(<TileStyled value={matrix[row][col]} 
+        gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>);
     }
   }
   return tiles;
