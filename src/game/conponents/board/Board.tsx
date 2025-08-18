@@ -75,18 +75,12 @@ export const Board: React.FC = () => {
                 setBoardData(newBoardData);
                 break;
             case 'ArrowUp':
-                if (row > 1) // swipe up
-                {
-                    setRow(1);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "up");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowDown':
-                if (row < 4) // swipe down
-                {
-                    setRow(4);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "down");
+                setBoardData(newBoardData);
                 break;
             // Add cases for other arrow keys if needed
             default:
@@ -121,18 +115,20 @@ export const Board: React.FC = () => {
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
 
+        let newBoardData: number[][];
+
         if (swipeLengthX > swipeLengthY) {
         // There was an X swipe
             if (swipeLengthX > 50) { 
 
-                if (deltaX < 0 && column > 1) // swipe left
+                if (deltaX < 0) // swipe left
                 {
-                    setColumn(1);
-                    setTileValue((val) => val * 2);
+                    newBoardData = getNewMatrixByDirection(boardData, "left");
+                    setBoardData(newBoardData);
                 }   
-                else if (deltaX > 0 && column < 4) {    // swipe right
-                    setColumn(4);
-                    setTileValue((val) => val * 2);
+                else if (deltaX > 0) {    // swipe right
+                    newBoardData = getNewMatrixByDirection(boardData, "right");
+                    setBoardData(newBoardData);
                 }
             }
         }
@@ -140,14 +136,14 @@ export const Board: React.FC = () => {
         // There was a Y swipe
             if (swipeLengthY > 50) { 
 
-                if (deltaY < 0 && row > 1) // swipe up
+                if (deltaY < 0) // swipe up
                 {
-                    setRow(1);
-                    setTileValue((val) => val * 2);
+                    newBoardData = getNewMatrixByDirection(boardData, "up");
+                    setBoardData(newBoardData);
                 }   
-                else if (deltaY > 0 && row < 4) {    // swipe down
-                    setRow(4);
-                    setTileValue((val) => val * 2);
+                else if (deltaY > 0) {    // swipe down
+                    newBoardData = getNewMatrixByDirection(boardData, "down");
+                    setBoardData(newBoardData);
                 }
             }
         }
