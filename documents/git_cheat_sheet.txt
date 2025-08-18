@@ -6,8 +6,8 @@ git switch -c branch-name
 Creates and switches to a new branch from your current branch (usually `main`).
 
 - **New branch and push to remote**
-git push -u origin branch-name
-Links your local branch with the remote branch so `git push` / `git pull` work without extra parameters.
+git switch -c tal-mac        # create local branch from current state
+git push -u origin tal-mac   # publish it to GitHub
 
 ## 2️⃣ Pulling Changes
 - **From the branch you’re on**
@@ -69,3 +69,6 @@ git fetch -p
 ✅ Tip: If you always want a new branch linked to `main` when you create it:
 git switch -c new-branch main
 git push -u origin new-branch
+
+fetch and prune any deleted remote branches
+git fetch --prune origin
