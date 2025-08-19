@@ -25,6 +25,7 @@ const TileWrapper = styled.div<{backgroundColor: string, color: string, fontSize
     font-family: Arial;
 `}`;
 
+// ToDo - change the colors a little bit
 const getTileColorByValue = (value: number) : string => {
 
     switch (value) {

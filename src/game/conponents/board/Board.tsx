@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
 import { getNewMatrixByDirection } from '../../logic/boardLogic';
 
-// test PR
-
 const TilesMargin = 7;
 
 const BoardWrapper = styled.div`
@@ -45,19 +43,25 @@ const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
 
 export const Board: React.FC = () => {
 
-    const [column, setColumn] = useState(1);
-    const [row, setRow] = useState(1);
-    const [tileValue, setTileValue] = useState(2);
-
     const [touchStartX, setTouchStartX] = useState(0); 
     const [touchStartY, setTouchStartY] = useState(0);
 
-    const boardMatrix = [
+    const [boardData, setBoardData] = useState(
+        [
         [8,4,2,2],
         [16,32,64,128],
         [2048,1024,512,256],
         [4096,8192,16384,65536]
-    ];
+        ]
+    )
+
+    // This is for testing visual of all fonts and colors
+    /*
+        [8,4,2,2],
+        [16,32,64,128],
+        [2048,1024,512,256],
+        [4096,8192,16384,65536]
+    */
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
@@ -80,7 +84,6 @@ export const Board: React.FC = () => {
                 newBoardData = getNewMatrixByDirection(boardData, "down");
                 setBoardData(newBoardData);
                 break;
-            // Add cases for other arrow keys if needed
             default:
                 break;
             }
