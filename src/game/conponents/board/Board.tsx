@@ -11,10 +11,10 @@ const BoardWrapper = styled.div`
     grid-template-rows: repeat(4, ${TileSize}px);
     grid-template-columns: repeat(4, ${TileSize}px);
     gap: ${TilesMargin}px;
-    background-color: #aeaeae;
+    background-color: #bbada0;
     width: auto;
     padding: ${TilesMargin}px;
-    border-radius: 16px;
+    border-radius: 10px;
 `
 
 const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
@@ -31,7 +31,7 @@ const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
     for (let col = 0; col < matrix[row].length; col++) {
 
       tiles.push(<TileStyled value={matrix[row][col]} 
-        gridRow={row+1} gridColumn={col+1} backgroundColor="#50505055"/>);
+        gridRow={row+1} gridColumn={col+1}/>);
     }
   }
   return tiles;
@@ -47,10 +47,10 @@ export const Board: React.FC = () => {
     const [touchStartY, setTouchStartY] = useState(0);
 
     const boardMatrix = [
-        [1,2,3,4],
-        [5,6,7,8],
-        [9,10,11,12],
-        [13,14,15,16]
+        [8,4,2,2],
+        [16,32,64,128],
+        [2048,1024,512,256],
+        [4096,8192,16384,65536]
     ];
 
     useEffect(() => {
