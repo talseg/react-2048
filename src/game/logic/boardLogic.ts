@@ -3,17 +3,17 @@ import { mapMatrix, printMatrix } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 
 export const getNewMatrixByDirection = (board: number[][], direction: Direction): number[][] => {
-    
+
     let newBoard: number[][] = mapMatrix(board);
 
     switch (direction) {
 
         case "left":
-                    handelLeft(newBoard);
+            handelLeft(newBoard);
             break;
 
         case "right":
-                            handelRight(newBoard);
+            handelRight(newBoard);
             break;
 
         case "up":
