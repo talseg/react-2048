@@ -28,7 +28,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     return newBoard;
 }
 
-const handelLeft = (board: Number[][]) => {
+const handelLeft = (board: number[][]) => {
     if (board[0][3] === 2) {
         board[0][3] = 0;
         board[0][0] = 2;
@@ -39,17 +39,34 @@ const handelLeft = (board: Number[][]) => {
     }
 }
 
-const handelRight = (board: Number[][]) => {
-    if (board[0][0] === 2) {
-        board[0][0] = 0;
-        board[0][3] = 2;
-    }
+const handelRight = (board: number[][]) => {
 
-    if (board[3][0] === 2) {
-        board[3][0] = 0;
-        board[3][3] = 2;
+    if (board[0][0] !== 0) {
+
+        if (board[0][0] === board[0][3]) {
+            board[0][3] = board[0][0] + board[0][3];
+            board[0][0] = 0;
+        }
+
+        else{
+            board[0][2] = board[0][0];
+            board[0][0] = 0;
+        }
+
+        
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 const handelUp = (board: Number[][]) => {
     if (board[3][0] == 2) {
         board[3][0] = 0;
