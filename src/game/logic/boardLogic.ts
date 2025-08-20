@@ -1,21 +1,19 @@
+import { mapMatrix, printMatrix } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
 export const getNewMatrixByDirection = (matrix: number[][], direction: Direction ): number[][] => {
 
+    let newMatrix: number[][] = mapMatrix(matrix);
+
     switch (direction) {
 
         case "left" :
         if (matrix[0][3] === 2) {
-            return ([
-                [2,0,0,0],
-                [0,0,0,0],
-                [0,0,0,0],
-                [0,0,0,0]
-            ]);
-        }
-
-        if (matrix[3][3] === 2) {
+            newMatrix[0][3] = 0;
+            newMatrix[0][0] = 2;
+        } 
+        else if (matrix[3][3] === 2) {
             return ([
                 [0,0,0,0],
                 [0,0,0,0],
@@ -91,5 +89,5 @@ export const getNewMatrixByDirection = (matrix: number[][], direction: Direction
         break;
     }
     
-    return matrix;
+    return newMatrix;
 }

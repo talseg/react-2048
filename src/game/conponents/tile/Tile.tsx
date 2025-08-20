@@ -9,11 +9,12 @@ interface TileProps {
 
 export const TileSize: number  = 64;
 
-const TileWrapper = styled.div<{backgroundColor: string, color: string, fontSize: number}>`
-    ${({ backgroundColor, color, fontSize }) => css`
+// ToDO - background color
+const TileWrapper = styled.div<{color: string, fontSize: number}>`
+    ${({  color, fontSize }) => css`
     width: ${TileSize}px;
     height: ${TileSize}px;
-    background-color: ${backgroundColor};
+    background-color: #e5b1b1;
     text-align: middle;
     border-radius: 6px;
     color: ${color};
@@ -96,8 +97,10 @@ export const Tile: React.FC<TileProps> = ({ value, className }) => {
     const textColor = getTextColorByValue(value);
     const fontSize = getFontSizeByValue(value);
 
+    // backgroundColor={tileColor}
+
     return (
-            <TileWrapper className={className} backgroundColor={tileColor} color={textColor} fontSize={fontSize}>
+            <TileWrapper className={className}  color={textColor} fontSize={fontSize}>
                 {value}
             </TileWrapper>
     );

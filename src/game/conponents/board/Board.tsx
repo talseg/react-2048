@@ -48,7 +48,7 @@ export const Board: React.FC = () => {
 
     const [boardData, setBoardData] = useState(
         [
-        [2,0,0,0],
+        [0,0,0,2],
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0]
