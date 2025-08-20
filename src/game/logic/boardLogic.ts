@@ -2,61 +2,78 @@ import { mapMatrix, printMatrix } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
-export const getNewMatrixByDirection = (matrix: number[][], direction: Direction ): number[][] => {
+export const getNewMatrixByDirection = (matrix: number[][], direction: Direction): number[][] => {
 
     let newMatrix: number[][] = mapMatrix(matrix);
 
     switch (direction) {
 
-        case "left" :
-        if (newMatrix[0][3] === 2) {
-            newMatrix[0][3] = 0;
-            newMatrix[0][0] = 2;
-        } 
-        if (matrix[3][3] === 2) {
-            newMatrix[3][3] = 0;
-            newMatrix[3][0] = 2;
-        }
-        break;
+        case "left":
+            handelLeft(newMatrix);
+            break;
 
-        case "right" :
-        if (matrix[0][0] === 2) {
-            newMatrix[0][0] = 0;
-            newMatrix[0][3] = 2;
-        }
-
-        if (matrix[3][0] === 2) {
-            newMatrix[3][0] = 0;
-            newMatrix[3][3] = 2;
-        }
-        break;
+        case "right":
+            handelRight(newMatrix);
+            break;
 
         case "up":
-            if(matrix[3][0]==2){
-                newMatrix[3][0] = 0;
-                newMatrix[0][0] = 2;
-            }
+            handelUp(newMatrix);
+            break;
 
-            if(matrix[3][3]==2){
-                newMatrix[3][3] = 0;
-                newMatrix[0][3] = 2;
-            }
-        break;
-        
         case "down":
-
-        if(matrix[0][0]==2){
-            newMatrix[0][0] = 0;
-            newMatrix[3][0] = 2;
-        }
-        
-        if(matrix[0][3]==2){
-            newMatrix[0][3] = 0;
-            newMatrix[3][3] = 2;
-        } 
-        break;
+            handelDown(newMatrix);
+            break;
     }
-    
+
     return newMatrix;
 }
+
+const handelLeft = (matrix: Number[][]) => {
+    if (matrix[0][3] === 2) {
+        matrix[0][3] = 0;
+        matrix[0][0] = 2;
+    }
+    if (matrix[3][3] === 2) {
+        matrix[3][3] = 0;
+        matrix[3][0] = 2;
+    }
+}
+
+const handelRight = (matrix: Number[][]) => {
+    if (matrix[0][0] === 2) {
+        matrix[0][0] = 0;
+        matrix[0][3] = 2;
+    }
+
+    if (matrix[3][0] === 2) {
+        matrix[3][0] = 0;
+        matrix[3][3] = 2;
+    }
+}
+const handelUp = (matrix: Number[][]) => {
+    if (matrix[3][0] == 2) {
+        matrix[3][0] = 0;
+        matrix[0][0] = 2;
+    }
+
+    if (matrix[3][3] == 2) {
+        matrix[3][3] = 0;
+        matrix[0][3] = 2;
+    }
+}
+
+const handelDown = (matrix: Number[][]) => {
+    if (matrix[0][0] == 2) {
+        matrix[0][0] = 0;
+        matrix[3][0] = 2;
+    }
+
+    if (matrix[0][3] == 2) {
+        matrix[0][3] = 0;
+        matrix[3][3] = 2;
+    }
+}
+
+
+
 
