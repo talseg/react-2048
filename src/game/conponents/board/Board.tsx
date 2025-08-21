@@ -48,12 +48,13 @@ export const Board: React.FC = () => {
 
     const [boardData, setBoardData] = useState(
         [
-        [0,0,0,2],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
+        [8,4,2,2],
+        [16,32,64,128],
+        [2048,1024,512,256],
+        [4096,8192,16384,65536]
         ]
     )
+    
 
     // This is for testing visual of all fonts and colors
     /*
@@ -62,6 +63,11 @@ export const Board: React.FC = () => {
         [2048,1024,512,256],
         [4096,8192,16384,65536]
     */
+
+        // [0,0,0,2],
+        // [0,0,0,0],
+        // [0,0,0,0],
+        // [0,0,0,0]
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
