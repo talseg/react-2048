@@ -24,6 +24,7 @@ const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundCol
     align-items: center;
     justify-content: center;
     font-family: Arial;
+    user-select: none;
 `}`;
 
 // ToDo - change the colors a little bit
