@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
-import { getNewMatrixByDirection } from '../../logic/boardLogic';
+import { getNewMatrixByDirection, rowAfterRightSwipe } from '../../logic/boardLogic';
+
 
 const TilesMargin = 7;
 
@@ -52,7 +53,7 @@ export const Board: React.FC = () => {
         [0,0,0,0]
         ]
     )
-    
+    console.log(rowAfterRightSwipe([2,4,4,8,16,0,0,2,4]));
 
     // This is for testing visual of all fonts and colors
     /*
