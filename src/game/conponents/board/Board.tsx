@@ -32,10 +32,8 @@ const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
         for (let col = 0; col < matrix[row].length; col++) {
 
             const value = matrix[row][col];
-            if (value != 0) {
                 tiles.push(<TileStyled value={value} key={key++}
                 gridRow={row+1} gridColumn={col+1}/>);
-            }
         }
     }
   return tiles;
@@ -48,7 +46,7 @@ export const Board: React.FC = () => {
 
     const [boardData, setBoardData] = useState(
         [
-        [0,0,0,2],
+        [2,0,0,0],
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0]
@@ -64,10 +62,14 @@ export const Board: React.FC = () => {
         [4096,8192,16384,65536]
     */
 
-        // [0,0,0,2],
-        // [0,0,0,0],
-        // [0,0,0,0],
-        // [0,0,0,0]
+        /*
+
+        [0,0,0,2],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+
+        */
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
