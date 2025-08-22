@@ -40,40 +40,40 @@ const handelLeft = (board: number[][]) => {
 }
 
 const handelRight = (board: number[][]) => {
- 
-        if(board[0][0]!==0){
 
-            if(board[0][3]===0){
-                board[0][3] = board[0][0];
-                board[0][0] = 0;
-            }
-            
-            else if(board[0][0] === board[0][3]){
+    if (board[0][0] !== 0) {
+
+        if (board[0][3] === 0) {
+            board[0][3] = board[0][0];
+            board[0][0] = 0;
+        }
+
+        else if (board[0][0] === board[0][3]) {
             board[0][3] = board[0][0] + board[0][3];
             board[0][0] = 0;
-            }
-
-            else{
-                board[0][2] = board[0][0];
-                board[0][0] = 0;
-            }
         }
-        
-        //TODO let dad look at it
 
-        // else if (board[0][0] === board[0][3]) {
-        //     board[0][3] = board[0][0] + board[0][3];
-        //     board[0][0] = 0;
-        // }
-        // if (board[0][0] === board[0][3]) {
-        //     board[0][3] = board[0][0] + board[0][3];
-        //     board[0][0] = 0;
-        // }
+        else {
+            board[0][2] = board[0][0];
+            board[0][0] = 0;
+        }
+    }
 
-        // else if(board[0][3]!==0){
-        //     board[0][2] = board[0][0];
-        //     board[0][0] = 0;
-        // }
+    //TODO let dad look at it
+
+    // else if (board[0][0] === board[0][3]) {
+    //     board[0][3] = board[0][0] + board[0][3];
+    //     board[0][0] = 0;
+    // }
+    // if (board[0][0] === board[0][3]) {
+    //     board[0][3] = board[0][0] + board[0][3];
+    //     board[0][0] = 0;
+    // }
+
+    // else if(board[0][3]!==0){
+    //     board[0][2] = board[0][0];
+    //     board[0][0] = 0;
+    // }
 
 }
 
