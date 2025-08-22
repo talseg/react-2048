@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
-
-// test PR
+import { getNewMatrixByDirection } from '../../logic/boardLogic';
 
 const TilesMargin = 7;
 
@@ -11,10 +10,10 @@ const BoardWrapper = styled.div`
     grid-template-rows: repeat(4, ${TileSize}px);
     grid-template-columns: repeat(4, ${TileSize}px);
     gap: ${TilesMargin}px;
-    background-color: #aeaeae;
+    background-color: #bbada0;
     width: auto;
     padding: ${TilesMargin}px;
-    border-radius: 16px;
+    border-radius: 10px;
 `
 
 const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
@@ -24,47 +23,73 @@ const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
   `}
 `;
 
-export const Board: React.FC = () => {
+const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
+  const tiles: React.ReactElement[] = [];
+  
+  // ToDo - Explain to Inbar
+  var key = 0;
+  for (let row = 0; row < matrix.length; row++) {
+        for (let col = 0; col < matrix[row].length; col++) {
 
-    const [column, setColumn] = useState(1);
-    const [row, setRow] = useState(1);
-    const [tileValue, setTileValue] = useState(2);
+            const value = matrix[row][col];
+            if (value != 0) {
+                tiles.push(<TileStyled value={value} key={key++}
+                gridRow={row+1} gridColumn={col+1}/>);
+            }
+        }
+    }
+  return tiles;
+};
+
+export const Board: React.FC = () => {
 
     const [touchStartX, setTouchStartX] = useState(0); 
     const [touchStartY, setTouchStartY] = useState(0);
 
+    const [boardData, setBoardData] = useState(
+        [
+        [0,0,0,2],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+        ]
+    )
+    
+
+    // This is for testing visual of all fonts and colors
+    /*
+        [8,4,2,2],
+        [16,32,64,128],
+        [2048,1024,512,256],
+        [4096,8192,16384,65536]
+    */
+
+        // [0,0,0,2],
+        // [0,0,0,0],
+        // [0,0,0,0],
+        // [0,0,0,0]
 
     useEffect(() => {
             const handleKeyDown = (event: KeyboardEvent) => {
+            let newBoardData: number[][];
+
             switch (event.key) {
             case 'ArrowLeft':
-                if (column > 1) // swipe left
-                {
-                    setColumn(1);
-                    setTileValue(tileValue * 2);
-                }  
+                newBoardData = getNewMatrixByDirection(boardData, "left");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowRight':
-                if (column < 4) {
-                    setColumn(4);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "right");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowUp':
-                if (row > 1) // swipe up
-                {
-                    setRow(1);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "up");
+                setBoardData(newBoardData);
                 break;
             case 'ArrowDown':
-                if (row < 4) // swipe down
-                {
-                    setRow(4);
-                    setTileValue(tileValue * 2);
-                }
+                newBoardData = getNewMatrixByDirection(boardData, "down");
+                setBoardData(newBoardData);
                 break;
-            // Add cases for other arrow keys if needed
             default:
                 break;
             }
@@ -75,7 +100,7 @@ export const Board: React.FC = () => {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       }
-    }, [column, row, tileValue])
+    }, [boardData])
     
 
 
@@ -97,18 +122,20 @@ export const Board: React.FC = () => {
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
 
+        let newBoardData: number[][];
+
         if (swipeLengthX > swipeLengthY) {
         // There was an X swipe
             if (swipeLengthX > 50) { 
 
-                if (deltaX < 0 && column > 1) // swipe left
+                if (deltaX < 0) // swipe left
                 {
-                    setColumn(1);
-                    setTileValue((val) => val * 2);
+                    newBoardData = getNewMatrixByDirection(boardData, "left");
+                    setBoardData(newBoardData);
                 }   
-                else if (deltaX > 0 && column < 4) {    // swipe right
-                    setColumn(4);
-                    setTileValue((val) => val * 2);
+                else if (deltaX > 0) {    // swipe right
+                    newBoardData = getNewMatrixByDirection(boardData, "right");
+                    setBoardData(newBoardData);
                 }
             }
         }
@@ -116,14 +143,14 @@ export const Board: React.FC = () => {
         // There was a Y swipe
             if (swipeLengthY > 50) { 
 
-                if (deltaY < 0 && row > 1) // swipe up
+                if (deltaY < 0) // swipe up
                 {
-                    setRow(1);
-                    setTileValue((val) => val * 2);
+                    newBoardData = getNewMatrixByDirection(boardData, "up");
+                    setBoardData(newBoardData);
                 }   
-                else if (deltaY > 0 && row < 4) {    // swipe down
-                    setRow(4);
-                    setTileValue((val) => val * 2);
+                else if (deltaY > 0) {    // swipe down
+                    newBoardData = getNewMatrixByDirection(boardData, "down");
+                    setBoardData(newBoardData);
                 }
             }
         }
@@ -136,18 +163,7 @@ export const Board: React.FC = () => {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
-
-            <TileStyled value={tileValue} gridRow={row} gridColumn={column} backgroundColor="#50505055">
-            </TileStyled>
-
-            {/* <TileStyled value={12} gridRow={1} gridColumn={2}>
-            </TileStyled>
-
-            <TileStyled value={21} gridRow={2} gridColumn={1}>
-            </TileStyled>
-
-            <TileStyled value={22} gridRow={2} gridColumn={2}>
-            </TileStyled> */}
+            { mapMatrixToTiles(boardData) }
 
         </BoardWrapper>
     );
