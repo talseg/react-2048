@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
-import { getNewMatrixByDirection, getRowAfterLeftSwipe } from '../../logic/boardLogic';
-import { getCol, rowFlip } from '../../logic/matrixUtils';
+import { getNewMatrixByDirection} from '../../logic/boardLogic';
 
 
 const TilesMargin = 7;
@@ -48,10 +47,10 @@ export const Board: React.FC = () => {
 
     const [boardData, setBoardData] = useState(
         [
-            [2, 0, 0, 2],
+            [2, 0, 0, 0],
             [0, 0, 0, 0],
-            [0, 0, 4, 0],
-            [0, 8, 0, 0]
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
         ]
     )
 
