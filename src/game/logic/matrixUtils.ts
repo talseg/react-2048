@@ -20,30 +20,30 @@ export const getRow = (matrix: number[][], rowIndex: number): number[] => {
     return row;
 }
 
-
+// ToDo - Handle this
 // export const printMatrix = (matrix: number[][], header?: string) => {
 
 //     let output = header ? `${header}\n` : "";
 //     for (let row: number = 0; row < matrix.length; row++) {
-//         // for (let col: number = 0; col < matrix[row].length; col++) {
-//         //     output += matrix[row][col] + " ";
-//         // }
+//         for (let col: number = 0; col < matrix[row].length; col++) {
+//             output += matrix[row][col] + " ";
+//         }
 //         printRow(matrix[row],header);
 //         console.log("\n");
-//         //output += "\n";
+//         output += "\n";
 //     }
-//     //console.log(output);
-// }
-
-// export const printRow = (row: number[], header?: string) =>{
-
-//         let output = header ? `${header}\n` : "";
-//         for (let index: number = 0; index < row.length; index++) {
-//             output += row[index] + " ";
-//         }
-
 //     console.log(output);
 // }
+
+export const printRow = (row: number[], header?: string) =>{
+
+        let output = header ? `${header}\n` : "";
+        for (let index: number = 0; index < row.length; index++) {
+            output += row[index] + " ";
+        }
+
+    console.log(output);
+}
 
 
 
