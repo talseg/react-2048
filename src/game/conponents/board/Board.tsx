@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
-import { getNewMatrixByDirection, rowAfterRightSwipe } from '../../logic/boardLogic';
+import { getNewMatrixByDirection, getRowAfterLeftSwipe } from '../../logic/boardLogic';
 
 
 const TilesMargin = 7;
@@ -17,7 +17,7 @@ const BoardWrapper = styled.div`
     border-radius: 10px;
 `
 
-const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
+const TileStyled = styled(Tile) <{ gridRow: number; gridColumn: number }>`
     ${({ gridRow, gridColumn }) => css`
     grid-row: ${gridRow};
     grid-column: ${gridColumn};
@@ -25,35 +25,62 @@ const TileStyled = styled(Tile)<{ gridRow: number; gridColumn: number }>`
 `;
 
 const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
-  const tiles: React.ReactElement[] = [];
-  
-  // ToDo - Explain to Inbar
-  var key = 0;
-  for (let row = 0; row < matrix.length; row++) {
+    const tiles: React.ReactElement[] = [];
+
+    // ToDo - Explain to Inbar
+    var key = 0;
+    for (let row = 0; row < matrix.length; row++) {
         for (let col = 0; col < matrix[row].length; col++) {
 
             const value = matrix[row][col];
-                tiles.push(<TileStyled value={value} key={key++}
-                gridRow={row+1} gridColumn={col+1}/>);
+            tiles.push(<TileStyled value={value} key={key++}
+                gridRow={row + 1} gridColumn={col + 1} />);
         }
     }
-  return tiles;
+    return tiles;
 };
 
 export const Board: React.FC = () => {
 
-    const [touchStartX, setTouchStartX] = useState(0); 
+    const [touchStartX, setTouchStartX] = useState(0);
     const [touchStartY, setTouchStartY] = useState(0);
 
     const [boardData, setBoardData] = useState(
         [
-        [2,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
+            [4, 2, 2, 4],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
         ]
     )
-    console.log(rowAfterRightSwipe([2,4,4,8,16,0,0,2,4]));
+    // let arr = [0, 4, 2, 2, 0];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [2, 0, 2, 0, 4];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [0,4,2,2,8];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [2,0,4,2,16];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [0,0,2,0,0];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [32,2,4,0,2,0];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [2,0,0,0,0,0,0];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    // arr = [2,2,4,8,16,32];
+    // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
+
+    //TESTING for left swipe
+
+
+
 
     // This is for testing visual of all fonts and colors
     /*
@@ -63,52 +90,51 @@ export const Board: React.FC = () => {
         [4096,8192,16384,65536]
     */
 
-        /*
+    /*
 
-        [0,0,0,2],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
+    [0,0,0,2],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
 
-        */
+    */
 
     useEffect(() => {
-            const handleKeyDown = (event: KeyboardEvent) => {
+        const handleKeyDown = (event: KeyboardEvent) => {
             let newBoardData: number[][];
 
             switch (event.key) {
-            case 'ArrowLeft':
-                newBoardData = getNewMatrixByDirection(boardData, "left");
-                setBoardData(newBoardData);
-                break;
-            case 'ArrowRight':
-                newBoardData = getNewMatrixByDirection(boardData, "right");
-                setBoardData(newBoardData);
-                break;
-            case 'ArrowUp':
-                newBoardData = getNewMatrixByDirection(boardData, "up");
-                setBoardData(newBoardData);
-                break;
-            case 'ArrowDown':
-                newBoardData = getNewMatrixByDirection(boardData, "down");
-                setBoardData(newBoardData);
-                break;
-            default:
-                break;
+                case 'ArrowLeft':
+                    newBoardData = getNewMatrixByDirection(boardData, "left");
+                    setBoardData(newBoardData);
+                    break;
+                case 'ArrowRight':
+                    newBoardData = getNewMatrixByDirection(boardData, "right");
+                    setBoardData(newBoardData);
+                    break;
+                case 'ArrowUp':
+                    newBoardData = getNewMatrixByDirection(boardData, "up");
+                    setBoardData(newBoardData);
+                    break;
+                case 'ArrowDown':
+                    newBoardData = getNewMatrixByDirection(boardData, "down");
+                    setBoardData(newBoardData);
+                    break;
+                default:
+                    break;
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
-    
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
     }, [boardData])
-    
 
 
-    const handleClick = () =>
-    {
+
+    const handleClick = () => {
     }
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -121,21 +147,21 @@ export const Board: React.FC = () => {
         const currentY = e.changedTouches[0].screenY;
         const deltaX = currentX - touchStartX;
         const deltaY = currentY - touchStartY;
-        
+
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
 
         let newBoardData: number[][];
 
         if (swipeLengthX > swipeLengthY) {
-        // There was an X swipe
-            if (swipeLengthX > 50) { 
+            // There was an X swipe
+            if (swipeLengthX > 50) {
 
                 if (deltaX < 0) // swipe left
                 {
                     newBoardData = getNewMatrixByDirection(boardData, "left");
                     setBoardData(newBoardData);
-                }   
+                }
                 else if (deltaX > 0) {    // swipe right
                     newBoardData = getNewMatrixByDirection(boardData, "right");
                     setBoardData(newBoardData);
@@ -143,14 +169,14 @@ export const Board: React.FC = () => {
             }
         }
         else {
-        // There was a Y swipe
-            if (swipeLengthY > 50) { 
+            // There was a Y swipe
+            if (swipeLengthY > 50) {
 
                 if (deltaY < 0) // swipe up
                 {
                     newBoardData = getNewMatrixByDirection(boardData, "up");
                     setBoardData(newBoardData);
-                }   
+                }
                 else if (deltaY > 0) {    // swipe down
                     newBoardData = getNewMatrixByDirection(boardData, "down");
                     setBoardData(newBoardData);
@@ -166,7 +192,7 @@ export const Board: React.FC = () => {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
-            { mapMatrixToTiles(boardData) }
+            {mapMatrixToTiles(boardData)}
 
         </BoardWrapper>
     );
