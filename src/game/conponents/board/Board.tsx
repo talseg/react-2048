@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Tile, TileSize } from '../tile/Tile';
 import { getNewMatrixByDirection, getRowAfterLeftSwipe } from '../../logic/boardLogic';
+import { getCol, rowFlip } from '../../logic/matrixUtils';
 
 
 const TilesMargin = 7;
@@ -47,12 +48,17 @@ export const Board: React.FC = () => {
 
     const [boardData, setBoardData] = useState(
         [
-            [4, 2, 2, 4],
+            [2, 0, 0, 2],
             [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]
+            [0, 0, 4, 0],
+            [0, 8, 0, 0]
         ]
     )
+
+
+    //  let arr = [6, 0, 4, 2, 2, 0,0,5];
+    //  console.log("Before: " + arr + "\nAfter: " + rowFlip(arr));
+
     // let arr = [0, 4, 2, 2, 0];
     // console.log("Before: " + arr + "\nAfter: " + rowAfterLeftSwipe(arr));
 
