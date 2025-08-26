@@ -1,4 +1,4 @@
-import { getCol, getRow, mapMatrix, printMatrix, rowFlip } from "./matrixUtils";
+import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
