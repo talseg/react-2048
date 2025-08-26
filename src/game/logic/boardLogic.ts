@@ -9,22 +9,18 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     switch (direction) {
 
         case "left":
-            //handelLeft(newBoard);
             newBoard = getBoardAfterLeftwipe(newBoard);
             break;
 
         case "right":
-            // handelRight(newBoard);
             newBoard = getBoardAfterRightSwipe(newBoard);
             break;
 
         case "up":
-            // handelUp(newBoard);
             newBoard = getBoardAfterUpSwipe(newBoard);
             break;
 
         case "down":
-            //handelDown(newBoard);
             newBoard = getBoardAfterDownSwipe(newBoard);
             break;
     }
@@ -52,38 +48,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         newBoard[randomRow][randomCol] = 2;
         //random
     }
-
-
     return newBoard;
-}
-
-const handelLeft = (board: number[][]) => {
-
-    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-        let oldRow = getRow(board, rowIndex);
-        let newRow = getRowAfterLeftSwipe(oldRow);
-        // let newRow = getRowAfterLeftSwipe(board[rowIndex]);
-
-        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            board[rowIndex][colIndex] = newRow[colIndex];
-        }
-    }
-}
-
-const handelRight = (board: number[][]) => {
-
-    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-
-        let row = getRow(board, rowIndex);
-        let fliped = rowFlip(row);
-
-        let afterSwipe = getRowAfterLeftSwipe(fliped);
-        let flipedSwipe = rowFlip(afterSwipe);
-
-        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            board[rowIndex][colIndex] = flipedSwipe[colIndex];
-        }
-    }
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
@@ -97,10 +62,8 @@ const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
         let row = getRow(board, rowIndex);
-        // let fliped = rowFlip(row);
 
         let afterSwipe = getRowAfterLeftSwipe(row);
-        //let flipedSwipe = rowFlip(afterSwipe);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
             newBoard[rowIndex][colIndex] = afterSwipe[colIndex];
@@ -108,10 +71,7 @@ const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
     }
 
     return newBoard;
-
 }
-
-
 
 const getBoardAfterRightSwipe = (board: number[][]): number[][] => {
 
@@ -179,51 +139,10 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
             newBoard[rowIndex][colIndex] = flippedSwipe[rowIndex];
         }
     }
-
     return newBoard;
-    //TODO LOOK AT IT
-
 }
 
-
-
-const handelUp = (board: number[][]) => {
-
-    for (let colIndex = 0; colIndex < board.length; colIndex++) {
-
-        const col = getCol(board, colIndex);
-        const afterSwipe = getRowAfterLeftSwipe(col);
-
-        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-
-            board[rowIndex][colIndex] = afterSwipe[rowIndex];
-        }
-    }
-
-
-    //TODO LOOK AT IT
-    //LENGTH
-}
-
-const handelDown = (board: number[][]) => {
-
-
-    for (let colIndex = 0; colIndex < board.length; colIndex++) {
-
-        const col = getCol(board, colIndex);
-        const flip = rowFlip(col);
-        const afterSwipe = getRowAfterLeftSwipe(flip);
-        const flippedSwipe = rowFlip(afterSwipe);
-
-        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-
-            board[rowIndex][colIndex] = flippedSwipe[rowIndex];
-        }
-    }
-}
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
-
-
     const q = [];
     let last = 0;
 
