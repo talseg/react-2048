@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Tile, TileSize } from '../tile/Tile';
+import { Tile, TILE_SIZE } from '../tile/Tile';
 import { getNewMatrixByDirection} from '../../logic/boardLogic';
 
-
-const TilesMargin = 7;
+// TILE_SIZE is taken from the the Tile component
+const GRID_SIZE = 4;
+const TILE_MARGIN = 7;
+const SURFACE = GRID_SIZE * TILE_SIZE + (GRID_SIZE - 1) * TILE_SIZE; // inner playfield
 
 const BoardWrapper = styled.div`
     display: grid;
-    grid-template-rows: repeat(4, ${TileSize}px);
-    grid-template-columns: repeat(4, ${TileSize}px);
-    gap: ${TilesMargin}px;
+    grid-template-rows: repeat(4, ${TILE_SIZE}px);
+    grid-template-columns: repeat(4, ${TILE_SIZE}px);
+    gap: ${TILE_MARGIN}px;
     background-color: #bbada0;
-    width: auto;
-    padding: ${TilesMargin}px;
+    width: ${SURFACE + TILE_MARGIN * 2};
+    height: ${SURFACE + TILE_MARGIN * 2};
+    padding: ${TILE_MARGIN}px;
     border-radius: 10px;
+    position: relative;
 `
 
 const TileStyled = styled(Tile) <{ gridRow: number; gridColumn: number }>`

@@ -7,13 +7,13 @@ interface TileProps {
     className?: string;
 }
 
-export const TileSize: number = 64;
+export const TILE_SIZE: number = 64;
 
 // ToDO - background color
 const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundColor: string }>`
     ${({ color, fontSize, $backgroundColor }) => css`
-    width: ${TileSize}px;
-    height: ${TileSize}px;
+    width: ${TILE_SIZE}px;
+    height: ${TILE_SIZE}px;
     background-color: ${$backgroundColor};
     text-align: middle;
     border-radius: 6px;
