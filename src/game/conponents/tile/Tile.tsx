@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 
@@ -7,14 +7,14 @@ interface TileProps {
     className?: string;
 }
 
-export const TileSize: number  = 64;
+export const TILE_SIZE: number = 64;
 
 // ToDO - background color
-const TileWrapper = styled.div<{color: string, fontSize: number}>`
-    ${({  color, fontSize }) => css`
-    width: ${TileSize}px;
-    height: ${TileSize}px;
-    background-color: #e5b1b1;
+const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundColor: string }>`
+    ${({ color, fontSize, $backgroundColor }) => css`
+    width: ${TILE_SIZE}px;
+    height: ${TILE_SIZE}px;
+    background-color: ${$backgroundColor};
     text-align: middle;
     border-radius: 6px;
     color: ${color};
@@ -24,10 +24,11 @@ const TileWrapper = styled.div<{color: string, fontSize: number}>`
     align-items: center;
     justify-content: center;
     font-family: Arial;
+    user-select: none;
 `}`;
 
 // ToDo - change the colors a little bit
-const getTileColorByValue = (value: number) : string => {
+const getTileColorByValue = (value: number): string => {
 
     switch (value) {
         case 0:
@@ -76,15 +77,14 @@ const getTileColorByValue = (value: number) : string => {
     return "#e01313";
 }
 
-const getTextColorByValue = (color: number) : string => {
-    if (color <= 4) 
-    {
+const getTextColorByValue = (color: number): string => {
+    if (color <= 4) {
         return "#776e65";
     }
     return "#f7f5f4";
 }
 
-function getFontSizeByValue(value: number) : number {
+function getFontSizeByValue(value: number): number {
     if (value <= 8192)
         return 26;
     return 20;
@@ -93,16 +93,29 @@ function getFontSizeByValue(value: number) : number {
 
 export const Tile: React.FC<TileProps> = ({ value, className }) => {
 
-    const tileColor = getTileColorByValue(value);
-    const textColor = getTextColorByValue(value);
-    const fontSize = getFontSizeByValue(value);
 
-    // backgroundColor={tileColor}
+
+
+    const [tileValue, setTileValue] = useState(value);
+
+    useEffect(() => {
+        setTileValue(value);
+    }, [value]);
+
+    const tileColor = getTileColorByValue(tileValue);
+    const textColor = getTextColorByValue(tileValue);
+    const fontSize = getFontSizeByValue(tileValue);
 
     return (
-            <TileWrapper className={className}  color={textColor} fontSize={fontSize}>
-                {value}
-            </TileWrapper>
+        <TileWrapper
+            className={className} color={textColor} fontSize={fontSize}
+            $backgroundColor={tileColor}
+            //onClick={() => setTileValue(tileValue === 0 ? 2 : tileValue * 2)}
+        >
+            {tileValue === 0 ? "" : tileValue
+            /* ToDo show dad*/
+            }
+        </TileWrapper>
     );
 }
 
