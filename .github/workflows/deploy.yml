@@ -2,8 +2,8 @@ name: Deploy Vite app to GitHub Pages
 
 on:
   push:
-    branches: [ main ]     # change if your default branch isn't main
-  workflow_dispatch:       # allows manual runs from the Actions tab
+    branches: [ main ]    # deploy when main changes
+  workflow_dispatch:      # allow manual runs from Actions tab
 
 permissions:
   contents: read
@@ -18,23 +18,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'     # works great with Vite; keep in sync with your local
+          node-version: lts/*
+          cache: 'npm'
 
-      - name: Install deps
-        run: npm ci
-        # If you don't commit package-lock.json, replace with: npm i
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm i; fi
 
       - name: Build
         run: npm run build
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: dist             # <- where Vite outputs
+          path: ./dist   # Vite output folder
 
   deploy:
     needs: build
@@ -43,5 +49,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
