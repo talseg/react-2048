@@ -1,7 +1,7 @@
 import './App.css'
 import styled from 'styled-components'
-import { Board } from './game/conponents/board/Board'
 import FullscreenToggle from './game/conponents/fullScreenToggle';
+import { Game } from './game/conponents/Game/Game';
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -21,18 +21,19 @@ const InfoWrapper = styled.div`
 function App() {
 
   return (
-    <PageWrapper>
+    // <PageWrapper>
 
-      <FullscreenToggle/>
-      <h1 style={{ color: "black" }}>2048</h1>
+    //   <FullscreenToggle/>
+    //     <h1 style={{ color: "black" }}>2048</h1>
 
-      <Board/>
 
-      <InfoWrapper>
-        {"Game by Inbar and Tal Segal"}
-      </InfoWrapper>
+      <Game/>
 
-    </PageWrapper>
+    //   <InfoWrapper>
+    //     {"Game by Inbar and Tal Segal"}
+    //   </InfoWrapper>
+
+    // </PageWrapper>
   )
 }
 
