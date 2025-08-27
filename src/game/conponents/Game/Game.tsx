@@ -1,7 +1,23 @@
 import { useEffect, useState } from "react";
 import { Board } from "../board/Board";
 import { getNewMatrixByDirection } from "../../logic/boardLogic";
+import { styled } from "styled-components";
+import FullscreenToggle from "../fullScreenToggle";
 
+const PageWrapper = styled.div`
+  min-height: 90vh;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;  
+`;
+
+const InfoWrapper = styled.div`
+  margin-top: 20px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+`;
 
 export const Game: React.FC = () => {
 
@@ -79,12 +95,11 @@ export const Game: React.FC = () => {
             // There was a Y swipe
             if (swipeLengthY > 50) {
 
-                if (deltaY < 0)
-                {
+                if (deltaY < 0) {
                     newBoardData = getNewMatrixByDirection(boardData, "up");
                     setBoardData(newBoardData);
                 }
-                else if (deltaY > 0) { 
+                else if (deltaY > 0) {
                     newBoardData = getNewMatrixByDirection(boardData, "down");
                     setBoardData(newBoardData);
                 }
@@ -99,11 +114,24 @@ export const Game: React.FC = () => {
     }
 
     return (
-        <div
+
+        <PageWrapper
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}>
-            <Board boardData={boardData}
-            />
-        </div>
+
+             <h1 style={{ color: "black" }}>2048</h1>
+
+            <FullscreenToggle/>
+
+            <Board boardData={boardData} />
+
+            <InfoWrapper>
+                {"Game by Inbar and Tal Segal"}
+            </InfoWrapper>
+
+
+
+        </PageWrapper>
+
     );
 }

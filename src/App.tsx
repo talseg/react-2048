@@ -21,17 +21,19 @@ const InfoWrapper = styled.div`
 function App() {
 
   return (
-    <PageWrapper>
+    // <PageWrapper>
 
-      <FullscreenToggle/>
-        <h1 style={{ color: "black" }}>2048</h1>
+    //   <FullscreenToggle/>
+    //     <h1 style={{ color: "black" }}>2048</h1>
+
+
       <Game/>
 
-      <InfoWrapper>
-        {"Game by Inbar and Tal Segal"}
-      </InfoWrapper>
+    //   <InfoWrapper>
+    //     {"Game by Inbar and Tal Segal"}
+    //   </InfoWrapper>
 
-    </PageWrapper>
+    // </PageWrapper>
   )
 }
 
