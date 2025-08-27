@@ -32,6 +32,8 @@ jobs:
           if [ -f package-lock.json ]; then npm ci; else npm i; fi
 
       - name: Build
+        env: 
+          CI: 'false'
         run: npm run build
 
       - name: Configure GitHub Pages
