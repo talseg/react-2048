@@ -1,4 +1,3 @@
-// import { styled } from 'styled-components';
 import './App.css'
 import { Game } from './game/conponents/Game/Game';
 
