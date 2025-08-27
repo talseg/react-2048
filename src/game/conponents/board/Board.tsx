@@ -8,8 +8,8 @@ const SURFACE = GRID_SIZE * TILE_SIZE + (GRID_SIZE - 1) * TILE_SIZE; // inner pl
 
 const BoardWrapper = styled.div`
     display: grid;
-    grid-template-rows: repeat(4, ${TILE_SIZE}px);
-    grid-template-columns: repeat(4, ${TILE_SIZE}px);
+    grid-template-rows: repeat(GRID_SIZE, ${TILE_SIZE}px);
+    grid-template-columns: repeat(GRID_SIZE, ${TILE_SIZE}px);
     gap: ${TILE_MARGIN}px;
     background-color: #bbada0;
     width: ${SURFACE + TILE_MARGIN * 2};

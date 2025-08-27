@@ -19,18 +19,36 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-export const Game: React.FC = () => {
-
-    const [touchStartX, setTouchStartX] = useState(0);
-    const [touchStartY, setTouchStartY] = useState(0);
-    const [boardData, setBoardData] = useState(
-        [
+const initialBoardData =  [
             [2, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0]
-        ]
-    );
+        ];
+
+const LOCAL_STORAGE_DATA_KEY = "boardData";
+
+export const Game: React.FC = () => {
+
+    const [touchStartX, setTouchStartX] = useState(0);
+    const [touchStartY, setTouchStartY] = useState(0);
+    const [boardData, setBoardData] = useState<number[][]>([[]]);
+
+    const setData = (data: number[][]) => {
+        setBoardData(data);
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(data));
+    }
+
+    useEffect(() => {
+        const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
+        if (localData) {
+            setBoardData(JSON.parse(localData));
+        }
+        else {
+            setBoardData(initialBoardData);
+        }
+    }, [])
+
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -39,19 +57,19 @@ export const Game: React.FC = () => {
             switch (event.key) {
                 case 'ArrowLeft':
                     newBoardData = getNewMatrixByDirection(boardData, "left");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                     break;
                 case 'ArrowRight':
                     newBoardData = getNewMatrixByDirection(boardData, "right");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                     break;
                 case 'ArrowUp':
                     newBoardData = getNewMatrixByDirection(boardData, "up");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                     break;
                 case 'ArrowDown':
                     newBoardData = getNewMatrixByDirection(boardData, "down");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                     break;
                 default:
                     break;
@@ -83,11 +101,11 @@ export const Game: React.FC = () => {
                 if (deltaX < 0) // swipe left
                 {
                     newBoardData = getNewMatrixByDirection(boardData, "left");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                 }
                 else if (deltaX > 0) {    // swipe right
                     newBoardData = getNewMatrixByDirection(boardData, "right");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                 }
             }
         }
@@ -97,20 +115,21 @@ export const Game: React.FC = () => {
 
                 if (deltaY < 0) {
                     newBoardData = getNewMatrixByDirection(boardData, "up");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                 }
                 else if (deltaY > 0) {
                     newBoardData = getNewMatrixByDirection(boardData, "down");
-                    setBoardData(newBoardData);
+                    setData(newBoardData);
                 }
             }
         }
-
+        e.stopPropagation();
     }
 
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStartX(e.changedTouches[0].screenX);
         setTouchStartY(e.changedTouches[0].screenY);
+        e.stopPropagation();
     }
 
     return (
@@ -118,6 +137,12 @@ export const Game: React.FC = () => {
         <PageWrapper
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}>
+
+            <button style={{ background: "blue", color: "white" }}
+                onClick={() => {
+                    setData(initialBoardData);
+                }}
+            >restart</button> 
 
              <h1 style={{ color: "black" }}>2048</h1>
 
