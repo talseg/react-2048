@@ -93,9 +93,6 @@ function getFontSizeByValue(value: number): number {
 
 export const Tile: React.FC<TileProps> = ({ value, className }) => {
 
-
-
-
     const [tileValue, setTileValue] = useState(value);
 
     useEffect(() => {
@@ -108,7 +105,9 @@ export const Tile: React.FC<TileProps> = ({ value, className }) => {
 
     return (
         <TileWrapper
-            className={className} color={textColor} fontSize={fontSize}
+            // ToDO - check without the className
+            className={className} 
+            color={textColor} fontSize={fontSize}
             $backgroundColor={tileColor}
             //onClick={() => setTileValue(tileValue === 0 ? 2 : tileValue * 2)}
         >
