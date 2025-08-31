@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { Tile, TILE_SIZE } from '../tile/Tile';
+import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 
 // TILE_SIZE is taken from the the Tile component
 const GRID_SIZE = 4;
-const TILE_MARGIN = 7;
+const MARGIN_BETWEEN_TILES = 7;
 
-const SURFACE_SIZE = GRID_SIZE * TILE_SIZE + (GRID_SIZE - 1) * TILE_MARGIN;
+const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
+const BOARD_PADDING = MARGIN_BETWEEN_TILES;
 
 const BoardWrapper = styled.div`
     position: relative;
     background-color: #bbada0;
     width: ${SURFACE_SIZE}px;
     height: ${SURFACE_SIZE}px;
-    padding: ${TILE_MARGIN}px;
+    padding: ${BOARD_PADDING}px;
     border-radius: 10px;
 `
 
@@ -39,8 +40,8 @@ const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column
             const value = 0;
 
             if (true) {
-                const x = col * (TILE_SIZE + TILE_MARGIN);
-                const y = row * (TILE_SIZE + TILE_MARGIN);
+                const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+                const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
 
                 tiles.push(
                     <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
@@ -57,8 +58,8 @@ const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column
             const value = matrix[row][col];
 
             if (value != 0) {
-                const x = col * (TILE_SIZE + TILE_MARGIN);
-                const y = row * (TILE_SIZE + TILE_MARGIN);
+                const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+                const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
 
                 tiles.push(
                     <TileWrapper key={key++} x={x} y={y}>
