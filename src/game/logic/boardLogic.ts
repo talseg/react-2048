@@ -25,13 +25,13 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
             break;
     }
 
-    let wasSwipe = false;
+    //let wasSwipe = false;
     for (let row = 0; row < board.length; row++) {
 
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
-                wasSwipe = true;
+               //wasSwipe = true;
             }
         }
     }
