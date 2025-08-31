@@ -19,7 +19,7 @@ const BoardWrapper = styled.div`
 
 const TileWrapper = styled.div<{ x: number; y: number }>`
     position: absolute;
-    //transition: transform 300ms ease;
+    transition: transform 100ms ease;
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
