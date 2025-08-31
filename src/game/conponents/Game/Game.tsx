@@ -64,13 +64,11 @@ export const Game: React.FC = () => {
 
     const handleSwipe = (direction: Direction): undefined => {
 
-        //const { newBorad } = getNewMatrixByDirection(boardData, direction);
-        //const { theNewBoard: b } = getNewMatrixByDirection(boardData, direction);
         const data = getNewMatrixByDirection(boardData, direction);
         
 
-        setBoardData( data.board );
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(data.board));
+        setBoardData( data.newBoard );
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(data.newBoard));
     }
 
     useEffect(() => {
