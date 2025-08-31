@@ -20,6 +20,8 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
+const VERSION = 1.0;
+
 const initialBoardData =  [
             [2, 0, 0, 0],
             [0, 0, 0, 0],
@@ -151,7 +153,7 @@ export const Game: React.FC = () => {
             <Board boardData={boardData} onTileClick={handleTileClick}/>
 
             <InfoWrapper>
-                {"Game by Inbar and Tal Segal"}
+                {`Game by Inbar and Tal Segal version: ${VERSION}`}
             </InfoWrapper>
 
         </PageWrapper>
