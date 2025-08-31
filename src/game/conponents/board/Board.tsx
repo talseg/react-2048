@@ -18,7 +18,7 @@ const BoardWrapper = styled.div`
 
 const TileWrapper = styled.div<{ x: number; y: number }>`
     position: absolute;
-    transition: transform 300ms ease;
+    //transition: transform 300ms ease;
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
@@ -28,28 +28,30 @@ const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
-const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
+const mapMatrixToTiles = (matrix: number[][], onTileClick: (row: number, column: number) => undefined): 
+    React.ReactElement[] => {
     const tiles: React.ReactElement[] = [];
     let key = 0;
 
-
+    // Add empty tiles
     for (let row = 0; row < matrix.length; row++) {
         for (let col = 0; col < matrix[row].length; col++) {
-            const value = matrix[row][col];
+            const value = 0;
 
-            if (value === 0) {
+            if (true) {
                 const x = col * (TILE_SIZE + TILE_MARGIN);
                 const y = row * (TILE_SIZE + TILE_MARGIN);
 
                 tiles.push(
-                    <StaticTileWrapper key={-1} x={x} y={y}>
-                        <Tile value={value} />
+                    <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
+                        <Tile value={value} onClick={() => onTileClick(row, col)}/>
                     </StaticTileWrapper>
                 );
             }
         }
     }
 
+    // Add real tiles
     for (let row = 0; row < matrix.length; row++) {
         for (let col = 0; col < matrix[row].length; col++) {
             const value = matrix[row][col];
@@ -60,7 +62,7 @@ const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
 
                 tiles.push(
                     <TileWrapper key={key++} x={x} y={y}>
-                        <Tile value={value} />
+                        <Tile value={value} onClick={() => onTileClick(row, col)}/>
                     </TileWrapper>
                 );
             }
@@ -71,12 +73,13 @@ const mapMatrixToTiles = (matrix: number[][]): React.ReactElement[] => {
 
 interface BoardProps {
     boardData: number[][];
+    onTileClick: (row: number, column: number) => undefined;
 }
 
-export const Board: React.FC<BoardProps> = ({ boardData }) => {
+export const Board: React.FC<BoardProps> = ({ boardData, onTileClick }) => {
     return (
         <BoardWrapper>
-            {mapMatrixToTiles(boardData)}
+            {mapMatrixToTiles(boardData, onTileClick)}
         </BoardWrapper>
     );
 }

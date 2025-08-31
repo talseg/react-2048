@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Board } from "../board/Board";
-import { getNewMatrixByDirection } from "../../logic/boardLogic";
+import { getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
+import { mapMatrix } from "../../logic/matrixUtils";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -28,6 +29,17 @@ const initialBoardData =  [
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
+const getDirection = (eventString: string) : Direction => {
+    switch (eventString) {
+        case 'ArrowLeft': return "left";
+        case 'ArrowRight': return "right";
+        case 'ArrowUp': return "up";
+        case 'ArrowDown': return "down";
+    }
+    return "left";
+} 
+
+
 export const Game: React.FC = () => {
 
     const [touchStartX, setTouchStartX] = useState(0);
@@ -50,30 +62,15 @@ export const Game: React.FC = () => {
     }, [])
 
 
+    const handleSwipe = (direction: Direction): undefined => {
+        const newData = getNewMatrixByDirection(boardData, direction);
+        setBoardData(newData);
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newData));
+    }
+
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            let newBoardData: number[][];
-
-            switch (event.key) {
-                case 'ArrowLeft':
-                    newBoardData = getNewMatrixByDirection(boardData, "left");
-                    setData(newBoardData);
-                    break;
-                case 'ArrowRight':
-                    newBoardData = getNewMatrixByDirection(boardData, "right");
-                    setData(newBoardData);
-                    break;
-                case 'ArrowUp':
-                    newBoardData = getNewMatrixByDirection(boardData, "up");
-                    setData(newBoardData);
-                    break;
-                case 'ArrowDown':
-                    newBoardData = getNewMatrixByDirection(boardData, "down");
-                    setData(newBoardData);
-                    break;
-                default:
-                    break;
-            }
+            handleSwipe(getDirection(event.key));
         };
 
         window.addEventListener('keydown', handleKeyDown);
@@ -92,20 +89,15 @@ export const Game: React.FC = () => {
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
 
-        let newBoardData: number[][];
-
         if (swipeLengthX > swipeLengthY) {
-            // There was an X swipe
             if (swipeLengthX > 50) {
 
                 if (deltaX < 0) // swipe left
                 {
-                    newBoardData = getNewMatrixByDirection(boardData, "left");
-                    setData(newBoardData);
+                    handleSwipe("left");
                 }
                 else if (deltaX > 0) {    // swipe right
-                    newBoardData = getNewMatrixByDirection(boardData, "right");
-                    setData(newBoardData);
+                    handleSwipe("right");
                 }
             }
         }
@@ -114,12 +106,10 @@ export const Game: React.FC = () => {
             if (swipeLengthY > 50) {
 
                 if (deltaY < 0) {
-                    newBoardData = getNewMatrixByDirection(boardData, "up");
-                    setData(newBoardData);
+                    handleSwipe("up");
                 }
                 else if (deltaY > 0) {
-                    newBoardData = getNewMatrixByDirection(boardData, "down");
-                    setData(newBoardData);
+                    handleSwipe("down");
                 }
             }
         }
@@ -132,8 +122,18 @@ export const Game: React.FC = () => {
         e.stopPropagation();
     }
 
-    return (
+    const handleTileClick = (row: number, column: number): undefined => {
+        const newBoardData = mapMatrix(boardData);
+        const tileValue = newBoardData[row][column];
+        if (tileValue === 0)
+            newBoardData[row][column] = 2;
+        else
+            newBoardData[row][column] = tileValue * 2;
+        setData(newBoardData);
 
+    }
+
+    return (
         <PageWrapper
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}>
@@ -148,13 +148,11 @@ export const Game: React.FC = () => {
 
             <FullscreenToggle/>
 
-            <Board boardData={boardData} />
+            <Board boardData={boardData} onTileClick={handleTileClick}/>
 
             <InfoWrapper>
                 {"Game by Inbar and Tal Segal"}
             </InfoWrapper>
-
-
 
         </PageWrapper>
 

@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 
-interface TileProps {
-    value: number;
-    className?: string;
-}
 
 export const TILE_SIZE: number = 64;
 
@@ -91,7 +87,13 @@ function getFontSizeByValue(value: number): number {
 
 }
 
-export const Tile: React.FC<TileProps> = ({ value, className }) => {
+interface TileProps {
+    value: number;
+    className?: string;
+    onClick?: () => undefined;
+}
+
+export const Tile: React.FC<TileProps> = ({ value, className, onClick }) => {
 
     const [tileValue, setTileValue] = useState(value);
 
@@ -109,7 +111,7 @@ export const Tile: React.FC<TileProps> = ({ value, className }) => {
             className={className} 
             color={textColor} fontSize={fontSize}
             $backgroundColor={tileColor}
-            //onClick={() => setTileValue(tileValue === 0 ? 2 : tileValue * 2)}
+            onClick={onClick}
         >
             {tileValue === 0 ? "" : tileValue
             /* ToDo show dad*/
