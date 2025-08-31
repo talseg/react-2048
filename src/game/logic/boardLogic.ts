@@ -2,7 +2,7 @@ import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
-export const getNewMatrixByDirection = (board: number[][], direction: Direction): number[][] => {
+export const getNewMatrixByDirection = (board: number[][], direction: Direction): { board: number[][] } => {
 
     let newBoard: number[][] = mapMatrix(board);
 
@@ -36,7 +36,9 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         }
     }
 
-    return newBoard;
+    return (
+        { board: newBoard }
+    );
 }
 
 export const addRandomTile = (matrix: number[][]) => {
