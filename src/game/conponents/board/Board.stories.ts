@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const BoardElement: Story = {
   args: {
-    boardData: [[16,8,4,2],[256,128,64,32],[512,1024,2048,4096],[8192,16384,32768,65536]]
+    boardData: [[16,8,4,2],[256,128,64,32],[512,1024,2048,4096],[8192,16384,0,65536]]
   },
 };
 

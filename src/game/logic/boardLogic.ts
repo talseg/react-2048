@@ -2,7 +2,7 @@ import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
-export const getNewMatrixByDirection = (board: number[][], direction: Direction): number[][] => {
+export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][] } => {
 
     let newBoard: number[][] = mapMatrix(board);
 
@@ -36,19 +36,22 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         }
     }
 
-    if (wasSwipe) {
+    return (
+        { newBoard }
+    );
+}
+
+export const addRandomTile = (matrix: number[][]) => {
         let randomRow = Math.floor(Math.random() * 4);
         let randomCol = Math.floor(Math.random() * 4);
 
 
-        while (newBoard[randomRow][randomCol] !== 0) {
+        while (matrix[randomRow][randomCol] !== 0) {
             randomRow = Math.floor(Math.random() * 4);
             randomCol = Math.floor(Math.random() * 4);
         }
-        newBoard[randomRow][randomCol] = 2;
+        matrix[randomRow][randomCol] = 2;
         //random
-    }
-    return newBoard;
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {

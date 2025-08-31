@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 
-interface TileProps {
-    value: number;
-    className?: string;
-}
 
-export const TILE_SIZE: number = 64;
+export const TILE_PIXEL_SIZE: number = 64;
 
 // ToDO - background color
 const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundColor: string }>`
     ${({ color, fontSize, $backgroundColor }) => css`
-    width: ${TILE_SIZE}px;
-    height: ${TILE_SIZE}px;
+    width: ${TILE_PIXEL_SIZE}px;
+    height: ${TILE_PIXEL_SIZE}px;
     background-color: ${$backgroundColor};
     text-align: middle;
     border-radius: 6px;
@@ -91,10 +87,13 @@ function getFontSizeByValue(value: number): number {
 
 }
 
-export const Tile: React.FC<TileProps> = ({ value, className }) => {
+interface TileProps {
+    value: number;
+    className?: string;
+    onClick?: () => undefined;
+}
 
-
-
+export const Tile: React.FC<TileProps> = ({ value, className, onClick }) => {
 
     const [tileValue, setTileValue] = useState(value);
 
@@ -108,9 +107,11 @@ export const Tile: React.FC<TileProps> = ({ value, className }) => {
 
     return (
         <TileWrapper
-            className={className} color={textColor} fontSize={fontSize}
+            // ToDO - check without the className
+            className={className} 
+            color={textColor} fontSize={fontSize}
             $backgroundColor={tileColor}
-            //onClick={() => setTileValue(tileValue === 0 ? 2 : tileValue * 2)}
+            onClick={onClick}
         >
             {tileValue === 0 ? "" : tileValue
             /* ToDo show dad*/
