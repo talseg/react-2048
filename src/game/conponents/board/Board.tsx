@@ -52,9 +52,6 @@ const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column
         }
     }
 
-    const a = 5;
-
-
     // Add real tiles
     for (let row = 0; row < matrix.length; row++) {
         for (let col = 0; col < matrix[row].length; col++) {
