@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Board } from "../board/Board";
-import { getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
+import { addRandomTile, getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { mapMatrix } from "../../logic/matrixUtils";
@@ -20,7 +20,7 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-const VERSION = 1.0;
+const VERSION = 1.1;
 
 const initialBoardData =  [
             [2, 0, 0, 0],
@@ -65,7 +65,11 @@ export const Game: React.FC = () => {
 
 
     const handleSwipe = (direction: Direction): undefined => {
-        const { newBoard } = getNewMatrixByDirection(boardData, direction);
+        const { newBoard, wasSwipe } = getNewMatrixByDirection(boardData, direction);
+
+        if (wasSwipe) {
+            addRandomTile(newBoard);
+        }
         setBoardData( newBoard );
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }

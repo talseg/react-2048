@@ -2,7 +2,7 @@ import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 
-export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][] } => {
+export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][], wasSwipe: boolean } => {
 
     let newBoard: number[][] = mapMatrix(board);
 
@@ -25,19 +25,19 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
             break;
     }
 
-    //let wasSwipe = false;
+    let wasSwipe = false;
     for (let row = 0; row < board.length; row++) {
 
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
-               //wasSwipe = true;
+               wasSwipe = true;
             }
         }
     }
 
     return (
-        { newBoard }
+        { newBoard, wasSwipe }
     );
 }
 
@@ -164,7 +164,6 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 
         if (last !== 0) {
             q.push(last);
-            last = current;
         }
 
         last = current;
