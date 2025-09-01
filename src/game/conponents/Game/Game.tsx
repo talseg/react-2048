@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Board } from "../board/Board";
 import { addRandomTile, getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
@@ -20,7 +20,7 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-const VERSION = 1.1;
+const VERSION = "1.2";
 
 const initialBoardData =  [
             [2, 0, 0, 0],
@@ -63,8 +63,7 @@ export const Game: React.FC = () => {
         }
     }, [])
 
-
-    const handleSwipe = (direction: Direction): undefined => {
+    const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, wasSwipe } = getNewMatrixByDirection(boardData, direction);
 
         if (wasSwipe) {
@@ -72,7 +71,7 @@ export const Game: React.FC = () => {
         }
         setBoardData( newBoard );
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }
+    }, [boardData])
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -84,7 +83,7 @@ export const Game: React.FC = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [boardData]);
+    }, [handleSwipe]);
 
     const handleTouchEnd = (e: React.TouchEvent) => {
         const currentX = e.changedTouches[0].screenX;
