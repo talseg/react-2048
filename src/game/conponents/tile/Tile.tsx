@@ -67,7 +67,6 @@ const getTileColorByValue = (value: number): string => {
         case 16384:
         case 32768:
         case 65536:
-        case 131072:
             return "#3d3333";
     }
     return "#e01313";
@@ -91,9 +90,10 @@ interface TileProps {
     value: number;
     className?: string;
     onClick?: () => undefined;
+    onDoubleClick?: () => undefined;
 }
 
-export const Tile: React.FC<TileProps> = ({ value, className, onClick }) => {
+export const Tile: React.FC<TileProps> = ({ value, className, onClick, onDoubleClick }) => {
 
     const [tileValue, setTileValue] = useState(value);
 
@@ -112,6 +112,7 @@ export const Tile: React.FC<TileProps> = ({ value, className, onClick }) => {
             color={textColor} fontSize={fontSize}
             $backgroundColor={tileColor}
             onClick={onClick}
+            onDoubleClick={onDoubleClick}
         >
             {tileValue === 0 ? "" : tileValue
             /* ToDo show dad*/
