@@ -1,3 +1,4 @@
+import { GRID_SIZE } from "../conponents/board/Board";
 import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
@@ -42,13 +43,13 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 }
 
 export const addRandomTile = (matrix: number[][]) => {
-        let randomRow = Math.floor(Math.random() * 4);
-        let randomCol = Math.floor(Math.random() * 4);
+        let randomRow = Math.floor(Math.random() * GRID_SIZE);
+        let randomCol = Math.floor(Math.random() * GRID_SIZE);
 
 
         while (matrix[randomRow][randomCol] !== 0) {
-            randomRow = Math.floor(Math.random() * 4);
-            randomCol = Math.floor(Math.random() * 4);
+            randomRow = Math.floor(Math.random() * GRID_SIZE);
+            randomCol = Math.floor(Math.random() * GRID_SIZE);
         }
         matrix[randomRow][randomCol] = 2;
         //random
@@ -64,9 +65,9 @@ const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
 
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
-        let row = getRow(board, rowIndex);
+        const row = getRow(board, rowIndex);
 
-        let afterSwipe = getRowAfterLeftSwipe(row);
+        const afterSwipe = getRowAfterLeftSwipe(row);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
             newBoard[rowIndex][colIndex] = afterSwipe[colIndex];
@@ -86,11 +87,11 @@ const getBoardAfterRightSwipe = (board: number[][]): number[][] => {
 
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
-        let row = getRow(board, rowIndex);
-        let fliped = rowFlip(row);
+        const row = getRow(board, rowIndex);
+        const fliped = rowFlip(row);
 
-        let afterSwipe = getRowAfterLeftSwipe(fliped);
-        let flipedSwipe = rowFlip(afterSwipe);
+        const afterSwipe = getRowAfterLeftSwipe(fliped);
+        const flipedSwipe = rowFlip(afterSwipe);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
             newBoard[rowIndex][colIndex] = flipedSwipe[colIndex];
@@ -151,7 +152,7 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 
     for (let index = 0; index < row.length; index++) {
 
-        let current = row[index];
+        const current = row[index];
 
         if (current === 0)
             continue;
@@ -162,6 +163,11 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
             continue;
         }
 
+        // Inbar Note:
+        // If you want to make it shorter, instead of:
+        // last !== 0 && q.push(last);
+        // you can write:
+        // if (last !== 0) q.push(last);
         if (last !== 0) {
             q.push(last);
         }
@@ -169,7 +175,7 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         last = current;
     }
 
-    last !== 0 && q.push(last);
+    if (last !== 0) q.push(last);
 
     while (q.length !== row.length) {
         q.push(0);

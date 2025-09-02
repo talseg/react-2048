@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Board } from "../board/Board";
+import { Board, GRID_SIZE } from "../board/Board";
 import { addRandomTile, getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
-import { mapMatrix } from "../../logic/matrixUtils";
+import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -20,18 +20,17 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-const VERSION = "1.2";
+const VERSION = "1.3";
 
-const initialBoardData =  [
-            [2, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]
-        ];
+const createInitialBoardData = (): number[][] => {
+    const grid = createMatrix(GRID_SIZE, 0);
+    grid[0][0] = 2;
+    return grid;
+}
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
-const getDirection = (eventString: string) : Direction => {
+const getDirection = (eventString: string): Direction => {
     switch (eventString) {
         case 'ArrowLeft': return "left";
         case 'ArrowRight': return "right";
@@ -39,7 +38,7 @@ const getDirection = (eventString: string) : Direction => {
         case 'ArrowDown': return "down";
     }
     return "left";
-} 
+}
 
 
 export const Game: React.FC = () => {
@@ -59,7 +58,7 @@ export const Game: React.FC = () => {
             setBoardData(JSON.parse(localData));
         }
         else {
-            setBoardData(initialBoardData);
+            setBoardData(createInitialBoardData());
         }
     }, [])
 
@@ -69,7 +68,7 @@ export const Game: React.FC = () => {
         if (wasSwipe) {
             addRandomTile(newBoard);
         }
-        setBoardData( newBoard );
+        setBoardData(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData])
 
@@ -145,15 +144,15 @@ export const Game: React.FC = () => {
 
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
-                    setData(initialBoardData);
+                    setData(createInitialBoardData());
                 }}
-            >restart</button> 
+            >restart</button>
 
-             <h1 style={{ color: "black" }}>2048</h1>
+            <h1 style={{ color: "black" }}>2048</h1>
 
-            <FullscreenToggle/>
+            <FullscreenToggle />
 
-            <Board boardData={boardData} onTileClick={handleTileClick}/>
+            <Board boardData={boardData} onTileClick={handleTileClick} />
 
             <InfoWrapper>
                 {`Game by Inbar and Tal Segal version: ${VERSION}`}

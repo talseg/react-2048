@@ -1,17 +1,9 @@
 
-// ToDo - refactor with map
-export const mapMatrix = (matrix: number[][]): number[][] => {
+export const createMatrix = (gridSize: number, initialValue: number): number[][] =>
+  Array.from({ length: gridSize }, () => Array(gridSize).fill(initialValue));
 
-    // ToDo - Do this without hard logic
-    const newMatrix: number[][] = [[], [], [], []];
-
-    for (let row: number = 0; row < matrix.length; row++) {
-        for (let col: number = 0; col < matrix[row].length; col++) {
-            newMatrix[row].push(matrix[row][col]);
-        }
-    }
-    return newMatrix;
-};
+export const mapMatrix = (matrix: number[][]): number[][] =>
+  matrix.map(row => [...row]);
 
 export const getRow = (matrix: number[][], rowIndex: number): number[] => {
     const row = [];
