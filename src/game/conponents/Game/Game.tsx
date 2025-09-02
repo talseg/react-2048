@@ -20,8 +20,6 @@ const InfoWrapper = styled.div`
   font-weight: bold;
 `;
 
-const VERSION = "1.3";
-
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
     grid[0][0] = 2;
@@ -128,13 +126,17 @@ export const Game: React.FC = () => {
 
     const handleTileClick = (row: number, column: number): undefined => {
         const newBoardData = mapMatrix(boardData);
-        const tileValue = newBoardData[row][column];
-        if (tileValue === 0)
-            newBoardData[row][column] = 2;
-        else
-            newBoardData[row][column] = tileValue * 2;
+        const getNextTileValue = (value: number): number => {
+            return value == 0 ? 2 : value * 2;
+        }
+        newBoardData[row][column] = getNextTileValue(newBoardData[row][column]);
         setData(newBoardData);
+    }
 
+    const handleTileDoubleClick = (row: number, column: number): undefined => {
+        const newBoardData = mapMatrix(boardData);
+        newBoardData[row][column] = 0;
+        setData(newBoardData);
     }
 
     return (
@@ -152,10 +154,13 @@ export const Game: React.FC = () => {
 
             <FullscreenToggle />
 
-            <Board boardData={boardData} onTileClick={handleTileClick} />
+            <Board boardData={boardData}
+                onTileClick={handleTileClick}
+                onTileDoubleClick={handleTileDoubleClick}
+            />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: ${VERSION}`}
+                {`Game by Inbar and Tal Segal version: 1.4`}
             </InfoWrapper>
 
         </PageWrapper>
