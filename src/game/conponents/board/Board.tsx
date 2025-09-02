@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 
 // TILE_SIZE is taken from the the Tile component
-const GRID_SIZE = 4;
+export const GRID_SIZE = 3;
 const MARGIN_BETWEEN_TILES = 7;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
@@ -29,7 +29,7 @@ const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
-const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column: number) => undefined): 
+const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column: number) => undefined):
     React.ReactElement[] => {
     const tiles: React.ReactElement[] = [];
     let key = 0;
@@ -39,16 +39,14 @@ const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column
         for (let col = 0; col < matrix[row].length; col++) {
             const value = 0;
 
-            if (true) {
-                const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
-                const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+            const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+            const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
 
-                tiles.push(
-                    <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
-                        <Tile value={value} onClick={() => onTileClick?.(row, col)}/>
-                    </StaticTileWrapper>
-                );
-            }
+            tiles.push(
+                <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
+                    <Tile value={value} onClick={() => onTileClick?.(row, col)} />
+                </StaticTileWrapper>
+            );
         }
     }
 
@@ -63,7 +61,7 @@ const mapMatrixToTiles = (matrix: number[][], onTileClick?: (row: number, column
 
                 tiles.push(
                     <TileWrapper key={key++} x={x} y={y}>
-                        <Tile value={value} onClick={() => onTileClick?.(row, col)}/>
+                        <Tile value={value} onClick={() => onTileClick?.(row, col)} />
                     </TileWrapper>
                 );
             }
