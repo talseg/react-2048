@@ -7,6 +7,7 @@ import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
+import { useKeySwipe } from "../../hooks/useKeySwipe";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -32,17 +33,6 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
-const getDirection = (eventString: string): Direction => {
-    switch (eventString) {
-        case 'ArrowLeft': return "left";
-        case 'ArrowRight': return "right";
-        case 'ArrowUp': return "up";
-        case 'ArrowDown': return "down";
-    }
-    return "left";
-}
-
-
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
@@ -63,6 +53,7 @@ export const Game: React.FC = () => {
     }, [boardData]);
 
     const { onTouchStart, onTouchEnd } = useSwipe(handleSwipe);
+    useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
         setBoardData(data);
@@ -79,17 +70,6 @@ export const Game: React.FC = () => {
         }
     }, [])
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            handleSwipe(getDirection(event.key));
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        }
-    }, [handleSwipe]);
 
     const handleTileClick = (row: number, column: number): undefined => {
         const newBoardData = mapMatrix(boardData);
@@ -133,7 +113,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 1.5`}
+                {`Game by Inbar and Tal Segal version: 1.6`}
             </InfoWrapper>
 
         </PageWrapper>
