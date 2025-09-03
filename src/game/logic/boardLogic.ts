@@ -2,8 +2,15 @@ import { GRID_SIZE } from "../conponents/board/Board";
 import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
+export type Cell = { row: number, col: number};
+export type MovingTile = { from: Cell, to: Cell };
+export type AnimationPlan = {
+    staticTiles: Cell[];
+    movingTiles: MovingTile[];
+}
 
-export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][], wasSwipe: boolean } => {
+export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][], 
+    wasSwipe: boolean, plan?: AnimationPlan } => {
 
     let newBoard: number[][] = mapMatrix(board);
 
@@ -37,8 +44,16 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         }
     }
 
+    let plan: AnimationPlan | undefined = undefined;
+    if (wasSwipe) {
+        plan = {
+            staticTiles: [],
+            movingTiles: [{ from: { row: 0, col: 0 }, to: { row: 0, col: 3 }} ]
+        }
+    }
+
     return (
-        { newBoard, wasSwipe }
+        { newBoard, wasSwipe, plan }
     );
 }
 

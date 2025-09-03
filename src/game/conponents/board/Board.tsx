@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 
 // TILE_SIZE is taken from the the Tile component
-export const GRID_SIZE = 3;
+export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
@@ -81,12 +81,48 @@ interface BoardProps {
     boardData: number[][];
     onTileClick?: (row: number, column: number) => undefined;
     onTileDoubleClick?: (row: number, column: number) => undefined;
+    planStarted: boolean;
+    onPlanEnded: () => undefined;
 }
 
-export const Board: React.FC<BoardProps> = ({ boardData, onTileClick, onTileDoubleClick }) => {
+export const Board: React.FC<BoardProps> = ({
+    boardData,
+    onTileClick,
+    onTileDoubleClick, 
+    planStarted,
+    onPlanEnded,
+}) => {
+
+    //console.log("Board:planStarted ", planStarted)
+
+    const endPlan = () => {
+        onPlanEnded();
+    }
+
+
+    const renderPlan = () => {
+        console.log("Board:planStarted ", planStarted);
+        setTimeout(endPlan, 3000);
+        return (
+        <div style={{ width: "100px", height: "100px", backgroundColor: "red" }}>
+        </div>
+        );
+    }
+
+    const renderBoard = () => {
+        if (planStarted) {
+            console.log("Board:planStarted ", planStarted);
+            return renderPlan();
+        }
+        else {
+            return mapMatrixToTiles(boardData, onTileClick, onTileDoubleClick)
+        }
+    };
+
+
     return (
         <BoardWrapper>
-            {mapMatrixToTiles(boardData, onTileClick, onTileDoubleClick)}
+            { renderBoard() }
         </BoardWrapper>
     );
 }
