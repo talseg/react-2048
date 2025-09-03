@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
-import { addRandomTile, getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
+import { 
+    addRandomTile, 
+    getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
+import { useSwipe } from "../../hooks/useSwipe";
+import { useKeySwipe } from "../../hooks/useKeySwipe";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;  
+  justify-content: start;
+  background-color: #d9d9d9;
 `;
 
 const InfoWrapper = styled.div`
@@ -28,22 +33,27 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
-const getDirection = (eventString: string): Direction => {
-    switch (eventString) {
-        case 'ArrowLeft': return "left";
-        case 'ArrowRight': return "right";
-        case 'ArrowUp': return "up";
-        case 'ArrowDown': return "down";
-    }
-    return "left";
-}
-
-
 export const Game: React.FC = () => {
 
-    const [touchStartX, setTouchStartX] = useState(0);
-    const [touchStartY, setTouchStartY] = useState(0);
     const [boardData, setBoardData] = useState<number[][]>([[]]);
+    const [planStarted, setPlanStarted] = useState(false);
+
+    const handleSwipe = useCallback((direction: Direction): undefined => {
+        const { newBoard, wasSwipe, plan } = getNewMatrixByDirection(boardData, direction);
+        if (wasSwipe) {
+            addRandomTile(newBoard);
+            console.log("Game: was swipe plan: ", plan);
+            setPlanStarted(true);
+        }
+        else {
+            console.log("Game: no swip");
+        }
+        setBoardData(newBoard);
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
+    }, [boardData]);
+
+    const { onTouchStart, onTouchEnd } = useSwipe(handleSwipe);
+    useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
         setBoardData(data);
@@ -60,69 +70,6 @@ export const Game: React.FC = () => {
         }
     }, [])
 
-    const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, wasSwipe } = getNewMatrixByDirection(boardData, direction);
-
-        if (wasSwipe) {
-            addRandomTile(newBoard);
-        }
-        setBoardData(newBoard);
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData])
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            handleSwipe(getDirection(event.key));
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        }
-    }, [handleSwipe]);
-
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        const currentX = e.changedTouches[0].screenX;
-        const currentY = e.changedTouches[0].screenY;
-        const deltaX = currentX - touchStartX;
-        const deltaY = currentY - touchStartY;
-
-        const swipeLengthX = Math.abs(deltaX);
-        const swipeLengthY = Math.abs(deltaY);
-
-        if (swipeLengthX > swipeLengthY) {
-            if (swipeLengthX > 50) {
-
-                if (deltaX < 0) // swipe left
-                {
-                    handleSwipe("left");
-                }
-                else if (deltaX > 0) {    // swipe right
-                    handleSwipe("right");
-                }
-            }
-        }
-        else {
-            // There was a Y swipe
-            if (swipeLengthY > 50) {
-
-                if (deltaY < 0) {
-                    handleSwipe("up");
-                }
-                else if (deltaY > 0) {
-                    handleSwipe("down");
-                }
-            }
-        }
-        e.stopPropagation();
-    }
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStartX(e.changedTouches[0].screenX);
-        setTouchStartY(e.changedTouches[0].screenY);
-        e.stopPropagation();
-    }
 
     const handleTileClick = (row: number, column: number): undefined => {
         const newBoardData = mapMatrix(boardData);
@@ -138,17 +85,21 @@ export const Game: React.FC = () => {
         newBoardData[row][column] = 0;
         setData(newBoardData);
     }
+    const handlePlanEnded = (): undefined => {
+        setPlanStarted(false);
+    }
 
     return (
         <PageWrapper
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}>
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}>
 
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
                     setData(createInitialBoardData());
+                    setPlanStarted(false);
                 }}
-            >restart</button>
+            >Restart</button>
 
             <h1 style={{ color: "black" }}>2048</h1>
 
@@ -157,10 +108,12 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
+                planStarted={planStarted}
+                onPlanEnded={handlePlanEnded}
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 1.4`}
+                {`Game by Inbar and Tal Segal version: 1.6`}
             </InfoWrapper>
 
         </PageWrapper>
