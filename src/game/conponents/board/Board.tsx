@@ -34,11 +34,11 @@ const squareMove = keyframes`
 `;
 
 const MovingSquare = styled.div`
-position: absolute;
+  position: absolute;
   width: 100px;
   height: 100px;
   background: green;
-  animation: ${squareMove } ${SWIPE_TIME}ms ease forwards;
+  animation: ${squareMove} ${SWIPE_TIME}ms ease forwards;
 `;
 
 
@@ -123,7 +123,6 @@ export const Board: React.FC<BoardProps> = ({
     }
 
     const renderBoard = () => {
-        // eslint-disable-next-line no-constant-condition
         if (planStarted) {
             return renderPlan();
         }
