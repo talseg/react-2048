@@ -6,6 +6,7 @@ import {
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
+import { useSwipe } from "../../hooks/useSwipe";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -44,11 +45,24 @@ const getDirection = (eventString: string): Direction => {
 
 export const Game: React.FC = () => {
 
-    const [touchStartX, setTouchStartX] = useState(0);
-    const [touchStartY, setTouchStartY] = useState(0);
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [planStarted, setPlanStarted] = useState(false);
 
+    const handleSwipe = useCallback((direction: Direction): undefined => {
+        const { newBoard, wasSwipe, plan } = getNewMatrixByDirection(boardData, direction);
+        if (wasSwipe) {
+            addRandomTile(newBoard);
+            console.log("Game: was swipe plan: ", plan);
+            setPlanStarted(true);
+        }
+        else {
+            console.log("Game: no swip");
+        }
+        setBoardData(newBoard);
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
+    }, [boardData]);
+
+    const { onTouchStart, onTouchEnd } = useSwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
         setBoardData(data);
@@ -65,29 +79,6 @@ export const Game: React.FC = () => {
         }
     }, [])
 
-    const handleSwipe = useCallback((direction: Direction): undefined => {
-
-
-
-        const { newBoard, wasSwipe, plan } = getNewMatrixByDirection(boardData, direction);
-
-
-
-
-        if (wasSwipe) {
-            addRandomTile(newBoard);
-            console.log("Game: was swipe plan: ", plan);
-            setPlanStarted(true);
-        }
-        else {
-            console.log("Game: no swip");
-        }
-
-
-        setBoardData(newBoard);
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData])
-
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             handleSwipe(getDirection(event.key));
@@ -100,48 +91,6 @@ export const Game: React.FC = () => {
         }
     }, [handleSwipe]);
 
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        const currentX = e.changedTouches[0].screenX;
-        const currentY = e.changedTouches[0].screenY;
-        const deltaX = currentX - touchStartX;
-        const deltaY = currentY - touchStartY;
-
-        const swipeLengthX = Math.abs(deltaX);
-        const swipeLengthY = Math.abs(deltaY);
-
-        if (swipeLengthX > swipeLengthY) {
-            if (swipeLengthX > 50) {
-
-                if (deltaX < 0) // swipe left
-                {
-                    handleSwipe("left");
-                }
-                else if (deltaX > 0) {    // swipe right
-                    handleSwipe("right");
-                }
-            }
-        }
-        else {
-            // There was a Y swipe
-            if (swipeLengthY > 50) {
-
-                if (deltaY < 0) {
-                    handleSwipe("up");
-                }
-                else if (deltaY > 0) {
-                    handleSwipe("down");
-                }
-            }
-        }
-        e.stopPropagation();
-    }
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStartX(e.changedTouches[0].screenX);
-        setTouchStartY(e.changedTouches[0].screenY);
-        e.stopPropagation();
-    }
-
     const handleTileClick = (row: number, column: number): undefined => {
         const newBoardData = mapMatrix(boardData);
         const getNextTileValue = (value: number): number => {
@@ -151,8 +100,6 @@ export const Game: React.FC = () => {
         setData(newBoardData);
     }
 
-    
-    
     const handleTileDoubleClick = (row: number, column: number): undefined => {
         const newBoardData = mapMatrix(boardData);
         newBoardData[row][column] = 0;
@@ -164,8 +111,8 @@ export const Game: React.FC = () => {
 
     return (
         <PageWrapper
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}>
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}>
 
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {

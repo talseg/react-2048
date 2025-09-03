@@ -4,7 +4,7 @@ import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
-const SWIPE_TIME= 2200;
+const SWIPE_TIME= 250;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
@@ -118,19 +118,16 @@ export const Board: React.FC<BoardProps> = ({
 
 
     const renderPlan = () => {
-        console.log("Board:planStarted ", planStarted);
         setTimeout(endPlan, SWIPE_TIME);
         return <MovingSquare/>;
     }
 
     const renderBoard = () => {
+        // eslint-disable-next-line no-constant-condition
         if (planStarted) {
-            console.log("Board:planStarted ", planStarted);
             return renderPlan();
         }
-        else {
-            return mapMatrixToTiles(boardData, onTileClick, onTileDoubleClick)
-        }
+        return mapMatrixToTiles(boardData, onTileClick, onTileDoubleClick)
     };
 
 
