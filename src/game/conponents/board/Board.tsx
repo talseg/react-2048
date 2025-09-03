@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
+const SWIPE_TIME= 2200;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
@@ -22,6 +23,24 @@ const TileWrapper = styled.div<{ x: number; y: number }>`
     /* transition: transform 100ms ease; */
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
+
+const squareMove = keyframes`
+  from {
+    top: 100px;
+  }
+  to {
+    top: 200px
+  }
+`;
+
+const MovingSquare = styled.div`
+position: absolute;
+  width: 100px;
+  height: 100px;
+  background: green;
+  animation: ${squareMove } ${SWIPE_TIME}ms ease forwards;
+`;
+
 
 const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     position: absolute;
@@ -93,8 +112,6 @@ export const Board: React.FC<BoardProps> = ({
     onPlanEnded,
 }) => {
 
-    //console.log("Board:planStarted ", planStarted)
-
     const endPlan = () => {
         onPlanEnded();
     }
@@ -102,11 +119,8 @@ export const Board: React.FC<BoardProps> = ({
 
     const renderPlan = () => {
         console.log("Board:planStarted ", planStarted);
-        setTimeout(endPlan, 3000);
-        return (
-        <div style={{ width: "100px", height: "100px", backgroundColor: "red" }}>
-        </div>
-        );
+        setTimeout(endPlan, SWIPE_TIME);
+        return <MovingSquare/>;
     }
 
     const renderBoard = () => {

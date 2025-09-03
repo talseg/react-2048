@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
 import { 
-    // addRandomTile, 
+    addRandomTile, 
     getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
@@ -75,7 +75,7 @@ export const Game: React.FC = () => {
 
 
         if (wasSwipe) {
-            //addRandomTile(newBoard);
+            addRandomTile(newBoard);
             console.log("Game: was swipe plan: ", plan);
             setPlanStarted(true);
         }
