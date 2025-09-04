@@ -28,6 +28,8 @@ const InfoWrapper = styled.div`
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
     grid[0][0] = 2;
+    grid[0][1] = 2;
+    grid[0][3] = 4;
     return grid;
 }
 

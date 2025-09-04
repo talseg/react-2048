@@ -5,7 +5,7 @@ import type { AnimationPlan } from '../../logic/boardLogic';
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
-const SWIPE_TIME = 1000;
+const SWIPE_TIME = 100;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
