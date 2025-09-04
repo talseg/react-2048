@@ -36,11 +36,13 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     }
 
     let wasSwipe = false;
+    // const currentMovingTiles:MovingTile[]=[];
     for (let row = 0; row < board.length; row++) {
 
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
+                // currentMovingTiles.push();
                 wasSwipe = true;
             }
         }
@@ -64,6 +66,11 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
                 {
                     value: 4,
                     from: { row: 0, col: 3 },
+                    to: { row: 0, col: 2 },
+                },
+                {
+                    value: 8,
+                    from: { row: 0, col: 2 },
                     to: { row: 0, col: 1 },
                 }
             ]
@@ -182,6 +189,9 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
 }
 
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
+
+    // const currentMovingTiles:MovingTile[]=[];
+
     const q = [];
     let last = 0;
 
@@ -194,6 +204,7 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 
         if (current === last) {
             q.push(current * 2);
+            // currentMovingTiles.push();
             last = 0;
             continue;
         }
