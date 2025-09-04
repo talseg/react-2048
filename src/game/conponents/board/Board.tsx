@@ -5,7 +5,7 @@ import type { AnimationPlan } from '../../logic/boardLogic';
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
-const SWIPE_TIME = 100;
+const SWIPE_TIME = 1000;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
@@ -41,16 +41,12 @@ const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
-const mapMatrixToTiles = (matrix: number[][],
-    onTileClick?: (row: number, column: number) => undefined,
-    onTileDoubleClick?: (row: number, column: number) => undefined): React.ReactElement[] => {
+const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number, column: number) => undefined,
+    onTileDoubleClick?: (row: number, column: number) => undefined) => {
 
-    const tiles: React.ReactElement[] = [];
     let key = 0;
-
-    // Add empty tiles
-    for (let row = 0; row < matrix.length; row++) {
-        for (let col = 0; col < matrix[row].length; col++) {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
             const value = 0;
 
             const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
@@ -65,6 +61,17 @@ const mapMatrixToTiles = (matrix: number[][],
             );
         }
     }
+    return tiles;
+}
+
+const mapMatrixToTiles = (matrix: number[][],
+    onTileClick?: (row: number, column: number) => undefined,
+    onTileDoubleClick?: (row: number, column: number) => undefined): React.ReactElement[] => {
+
+    const tiles: React.ReactElement[] = [];
+    let key = 0;
+
+    pushEmptyTiles(tiles, onTileClick, onTileDoubleClick);
 
     // Add real tiles
     for (let row = 0; row < matrix.length; row++) {
@@ -117,8 +124,13 @@ export const Board: React.FC<BoardProps> = ({
         setTimeout(endPlan, SWIPE_TIME);
 
         if (plan !== undefined) {
+
+            const tileList: React.ReactElement[] = [];
+
+            pushEmptyTiles(tileList)
+
             const movingTiles = plan.movingTiles;
-            const tileList = [];
+            
 
             for (let index = 0; index < movingTiles.length; index++) {
 
