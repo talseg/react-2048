@@ -4,7 +4,7 @@ import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
 const MARGIN_BETWEEN_TILES = 7;
-const SWIPE_TIME= 250;
+const SWIPE_TIME = 1000;
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
@@ -24,23 +24,15 @@ const TileWrapper = styled.div<{ x: number; y: number }>`
     transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
 `;
 
-const squareMove = keyframes`
-  from {
-    top: 100px;
-  }
-  to {
-    top: 200px
-  }
+const createMove = (x0: number, x1: number) => keyframes`
+  from { left: ${x0}px; }
+  to   { left: ${x1}px; }
 `;
 
-const MovingSquare = styled.div`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background: green;
-  animation: ${squareMove} ${SWIPE_TIME}ms ease forwards;
+const HorizontalTileWrapper = styled.div<{ x0: number; x1: number }>`
+    position: absolute;
+    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms ease forwards;
 `;
-
 
 const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     position: absolute;
@@ -107,7 +99,7 @@ interface BoardProps {
 export const Board: React.FC<BoardProps> = ({
     boardData,
     onTileClick,
-    onTileDoubleClick, 
+    onTileDoubleClick,
     planStarted,
     onPlanEnded,
 }) => {
@@ -116,10 +108,24 @@ export const Board: React.FC<BoardProps> = ({
         onPlanEnded();
     }
 
+    const convertColToX = (col: number): number => {
+        return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+    }
 
     const renderPlan = () => {
         setTimeout(endPlan, SWIPE_TIME);
-        return <MovingSquare/>;
+
+        const col0 = 0;
+        const col1 = 3;
+
+        const x0 = convertColToX(col0);
+        const x1 = convertColToX(col1);
+
+        return (
+            <HorizontalTileWrapper x0={x0} x1={x1}>
+                <Tile value={2} />
+            </HorizontalTileWrapper>
+        );
     }
 
     const renderBoard = () => {
@@ -132,7 +138,7 @@ export const Board: React.FC<BoardProps> = ({
 
     return (
         <BoardWrapper>
-            { renderBoard() }
+            {renderBoard()}
         </BoardWrapper>
     );
 }
