@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
 import { 
-    addRandomTile, 
+    //addRandomTile, 
     getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
@@ -41,7 +41,7 @@ export const Game: React.FC = () => {
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, wasSwipe, plan } = getNewMatrixByDirection(boardData, direction);
         if (wasSwipe) {
-            addRandomTile(newBoard);
+            //addRandomTile(newBoard);
             console.log("Game: was swipe plan: ", plan);
             setPlanStarted(true);
         }
@@ -106,10 +106,19 @@ export const Game: React.FC = () => {
             <FullscreenToggle />
 
             <Board boardData={boardData}
-                onTileClick={handleTileClick}
-                onTileDoubleClick={handleTileDoubleClick}
-                planStarted={planStarted}
-                onPlanEnded={handlePlanEnded}
+            onTileClick={handleTileClick}
+            onTileDoubleClick={handleTileDoubleClick}
+            planStarted={planStarted}
+
+            onPlanEnded={handlePlanEnded} plan={{
+                staticTiles: [],
+                movingTiles: [
+                    { 
+                        from: { row: 0, col: 0 },
+                        to: { row: 0, col: 3 },
+                    }
+                ]
+            }}           
             />
 
             <InfoWrapper>

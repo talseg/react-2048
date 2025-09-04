@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
+import type { AnimationPlan } from '../../logic/boardLogic';
 
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
@@ -31,7 +32,7 @@ const createMove = (x0: number, x1: number) => keyframes`
 
 const HorizontalTileWrapper = styled.div<{ x0: number; x1: number }>`
     position: absolute;
-    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms ease forwards;
+    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
 `;
 
 const StaticTileWrapper = styled.div<{ x: number; y: number }>`
@@ -94,6 +95,7 @@ interface BoardProps {
     onTileDoubleClick?: (row: number, column: number) => undefined;
     planStarted: boolean;
     onPlanEnded: () => undefined;
+    plan: AnimationPlan;
 }
 
 export const Board: React.FC<BoardProps> = ({
@@ -102,6 +104,7 @@ export const Board: React.FC<BoardProps> = ({
     onTileDoubleClick,
     planStarted,
     onPlanEnded,
+    plan
 }) => {
 
     const endPlan = () => {
@@ -115,8 +118,14 @@ export const Board: React.FC<BoardProps> = ({
     const renderPlan = () => {
         setTimeout(endPlan, SWIPE_TIME);
 
-        const col0 = 0;
-        const col1 = 3;
+        const movingTiles = plan.movingTiles;
+
+        // if (movingTiles.length > 0) {
+
+        // }
+
+        const col0 = movingTiles[0].from.col;
+        const col1 = movingTiles[0].to.col;
 
         const x0 = convertColToX(col0);
         const x1 = convertColToX(col1);
