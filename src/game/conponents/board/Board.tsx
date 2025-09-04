@@ -112,7 +112,7 @@ export const Board: React.FC<BoardProps> = ({
     }
 
     const convertColToX = (col: number): number => {
-        return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+        return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
     }
 
     const renderPlan = () => {
@@ -124,16 +124,27 @@ export const Board: React.FC<BoardProps> = ({
 
         // }
 
-        const col0 = movingTiles[0].from.col;
-        const col1 = movingTiles[0].to.col;
+        const tileList = [];
 
-        const x0 = convertColToX(col0);
-        const x1 = convertColToX(col1);
+        for (let index = 0; index < movingTiles.length; index++) {
+
+            const tile = movingTiles[index];
+            const col0 = tile.from.col;
+            const col1 = tile.to.col;
+
+            const x0 = convertColToX(col0);
+            const x1 = convertColToX(col1);
+
+            tileList.push(
+                <HorizontalTileWrapper x0={x0} x1={x1}>
+                    <Tile value={tile.value} />
+                </HorizontalTileWrapper>
+            )
+        }
+
 
         return (
-            <HorizontalTileWrapper x0={x0} x1={x1}>
-                <Tile value={2} />
-            </HorizontalTileWrapper>
+            tileList
         );
     }
 

@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
-import { 
+import {
     //addRandomTile, 
-    getNewMatrixByDirection, type Direction } from "../../logic/boardLogic";
+    getNewMatrixByDirection, type Direction
+} from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
@@ -38,14 +39,16 @@ export const Game: React.FC = () => {
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [planStarted, setPlanStarted] = useState(false);
 
+
     const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, wasSwipe, plan } = getNewMatrixByDirection(boardData, direction);
-        if (wasSwipe) {
+        const { newBoard, /* wasSwipe, */ plan } = getNewMatrixByDirection(boardData, direction);
+        //if (wasSwipe) {
             //addRandomTile(newBoard);
             console.log("Game: was swipe plan: ", plan);
             setPlanStarted(true);
-        }
-        else {
+        //}
+        //else 
+        {
             console.log("Game: no swip");
         }
         setBoardData(newBoard);
@@ -106,19 +109,25 @@ export const Game: React.FC = () => {
             <FullscreenToggle />
 
             <Board boardData={boardData}
-            onTileClick={handleTileClick}
-            onTileDoubleClick={handleTileDoubleClick}
-            planStarted={planStarted}
+                onTileClick={handleTileClick}
+                onTileDoubleClick={handleTileDoubleClick}
+                planStarted={planStarted}
 
-            onPlanEnded={handlePlanEnded} plan={{
-                staticTiles: [],
-                movingTiles: [
-                    { 
-                        from: { row: 0, col: 0 },
-                        to: { row: 0, col: 3 },
-                    }
-                ]
-            }}           
+                onPlanEnded={handlePlanEnded} plan={{
+                    staticTiles: [],
+                    movingTiles: [
+                        {
+                            value: 4,
+                            from: { row: 0, col: 1},
+                            to: { row: 0, col: 0 },
+                        },
+                        {
+                            value: 2,
+                            from: { row: 0, col: 3 },
+                            to: { row: 0, col: 1 },
+                        }
+                    ]
+                }}
             />
 
             <InfoWrapper>

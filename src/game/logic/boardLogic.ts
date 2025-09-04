@@ -2,15 +2,17 @@ import { GRID_SIZE } from "../conponents/board/Board";
 import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
-export type Cell = { row: number, col: number};
-export type MovingTile = { from: Cell, to: Cell };
+export type Cell = { row: number, col: number };
+export type MovingTile = { value: number, from: Cell, to: Cell };
 export type AnimationPlan = {
     staticTiles: Cell[];
     movingTiles: MovingTile[];
 }
 
-export const getNewMatrixByDirection = (board: number[][], direction: Direction): { newBoard: number[][], 
-    wasSwipe: boolean, plan?: AnimationPlan } => {
+export const getNewMatrixByDirection = (board: number[][], direction: Direction): {
+    newBoard: number[][],
+    wasSwipe: boolean, plan?: AnimationPlan
+} => {
 
     let newBoard: number[][] = mapMatrix(board);
 
@@ -39,7 +41,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
-               wasSwipe = true;
+                wasSwipe = true;
             }
         }
     }
@@ -48,7 +50,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     if (wasSwipe) {
         plan = {
             staticTiles: [],
-            movingTiles: [{ from: { row: 0, col: 0 }, to: { row: 0, col: 3 }} ]
+            movingTiles: []
         }
     }
 
@@ -58,16 +60,16 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 }
 
 export const addRandomTile = (matrix: number[][]) => {
-        let randomRow = Math.floor(Math.random() * GRID_SIZE);
-        let randomCol = Math.floor(Math.random() * GRID_SIZE);
+    let randomRow = Math.floor(Math.random() * GRID_SIZE);
+    let randomCol = Math.floor(Math.random() * GRID_SIZE);
 
 
-        while (matrix[randomRow][randomCol] !== 0) {
-            randomRow = Math.floor(Math.random() * GRID_SIZE);
-            randomCol = Math.floor(Math.random() * GRID_SIZE);
-        }
-        matrix[randomRow][randomCol] = 2;
-        //random
+    while (matrix[randomRow][randomCol] !== 0) {
+        randomRow = Math.floor(Math.random() * GRID_SIZE);
+        randomCol = Math.floor(Math.random() * GRID_SIZE);
+    }
+    matrix[randomRow][randomCol] = 2;
+    //random
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
