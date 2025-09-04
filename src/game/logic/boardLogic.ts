@@ -11,7 +11,7 @@ export type AnimationPlan = {
 
 export const getNewMatrixByDirection = (board: number[][], direction: Direction): {
     newBoard: number[][],
-    wasSwipe: boolean, plan?: AnimationPlan
+    plan?: AnimationPlan
 } => {
 
     let newBoard: number[][] = mapMatrix(board);
@@ -50,12 +50,31 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     if (wasSwipe) {
         plan = {
             staticTiles: [],
-            movingTiles: []
+            movingTiles: [
+                {
+                    value: 2,
+                    from: { row: 0, col: 0 },
+                    to: { row: 0, col: 0 },
+                },
+                {
+                    value: 2,
+                    from: { row: 0, col: 1 },
+                    to: { row: 0, col: 0 },
+                },
+                {
+                    value: 4,
+                    from: { row: 0, col: 3 },
+                    to: { row: 0, col: 1 },
+                }
+            ]
         }
+    }
+    else {
+       plan = undefined;
     }
 
     return (
-        { newBoard, wasSwipe, plan }
+        { newBoard, plan }
     );
 }
 
@@ -69,7 +88,6 @@ export const addRandomTile = (matrix: number[][]) => {
         randomCol = Math.floor(Math.random() * GRID_SIZE);
     }
     matrix[randomRow][randomCol] = 2;
-    //random
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
@@ -185,6 +203,7 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         // last !== 0 && q.push(last);
         // you can write:
         // if (last !== 0) q.push(last);
+        // or if (last) 
         if (last !== 0) {
             q.push(last);
         }

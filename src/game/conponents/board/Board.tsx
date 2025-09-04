@@ -93,16 +93,14 @@ interface BoardProps {
     boardData: number[][];
     onTileClick?: (row: number, column: number) => undefined;
     onTileDoubleClick?: (row: number, column: number) => undefined;
-    planStarted: boolean;
     onPlanEnded: () => undefined;
-    plan: AnimationPlan;
+    plan: AnimationPlan | undefined;
 }
 
 export const Board: React.FC<BoardProps> = ({
     boardData,
     onTileClick,
     onTileDoubleClick,
-    planStarted,
     onPlanEnded,
     plan
 }) => {
@@ -118,38 +116,36 @@ export const Board: React.FC<BoardProps> = ({
     const renderPlan = () => {
         setTimeout(endPlan, SWIPE_TIME);
 
-        const movingTiles = plan.movingTiles;
+        if (plan !== undefined) {
+            const movingTiles = plan.movingTiles;
+            const tileList = [];
 
-        // if (movingTiles.length > 0) {
+            for (let index = 0; index < movingTiles.length; index++) {
 
-        // }
+                const tile = movingTiles[index];
+                const col0 = tile.from.col;
+                const col1 = tile.to.col;
 
-        const tileList = [];
+                const x0 = convertColToX(col0);
+                const x1 = convertColToX(col1);
 
-        for (let index = 0; index < movingTiles.length; index++) {
+                tileList.push(
+                    <HorizontalTileWrapper x0={x0} x1={x1}>
+                        <Tile value={tile.value} />
+                    </HorizontalTileWrapper>
+                )
+            }
 
-            const tile = movingTiles[index];
-            const col0 = tile.from.col;
-            const col1 = tile.to.col;
+            return tileList;
 
-            const x0 = convertColToX(col0);
-            const x1 = convertColToX(col1);
-
-            tileList.push(
-                <HorizontalTileWrapper x0={x0} x1={x1}>
-                    <Tile value={tile.value} />
-                </HorizontalTileWrapper>
-            )
         }
-
-
         return (
-            tileList
+            <></>
         );
     }
 
     const renderBoard = () => {
-        if (planStarted) {
+        if (plan) {
             return renderPlan();
         }
         return mapMatrixToTiles(boardData, onTileClick, onTileDoubleClick)

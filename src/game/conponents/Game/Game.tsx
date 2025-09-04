@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
 import {
-    //addRandomTile, 
-    getNewMatrixByDirection, type Direction
+    getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
@@ -37,20 +36,11 @@ const LOCAL_STORAGE_DATA_KEY = "boardData";
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [planStarted, setPlanStarted] = useState(false);
-
+    const [plan, setPlan] = useState<AnimationPlan | undefined>(undefined); 
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, /* wasSwipe, */ plan } = getNewMatrixByDirection(boardData, direction);
-        //if (wasSwipe) {
-            //addRandomTile(newBoard);
-            console.log("Game: was swipe plan: ", plan);
-            setPlanStarted(true);
-        //}
-        //else 
-        {
-            console.log("Game: no swip");
-        }
+        const { newBoard, plan: currentPlan } = getNewMatrixByDirection(boardData, direction);
+        if (currentPlan) setPlan(currentPlan);
         setBoardData(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
@@ -89,7 +79,7 @@ export const Game: React.FC = () => {
         setData(newBoardData);
     }
     const handlePlanEnded = (): undefined => {
-        setPlanStarted(false);
+        setPlan(undefined);
     }
 
     return (
@@ -100,7 +90,7 @@ export const Game: React.FC = () => {
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
                     setData(createInitialBoardData());
-                    setPlanStarted(false);
+                    setPlan(undefined);
                 }}
             >Restart</button>
 
@@ -111,23 +101,8 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                planStarted={planStarted}
-
-                onPlanEnded={handlePlanEnded} plan={{
-                    staticTiles: [],
-                    movingTiles: [
-                        {
-                            value: 4,
-                            from: { row: 0, col: 1},
-                            to: { row: 0, col: 0 },
-                        },
-                        {
-                            value: 2,
-                            from: { row: 0, col: 3 },
-                            to: { row: 0, col: 1 },
-                        }
-                    ]
-                }}
+                onPlanEnded={handlePlanEnded} 
+                plan={plan}
             />
 
             <InfoWrapper>
