@@ -77,7 +77,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         }
     }
     else {
-       plan = undefined;
+        plan = undefined;
     }
 
     return (
@@ -189,9 +189,6 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
 }
 
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
-
-    // const currentMovingTiles:MovingTile[]=[];
-
     const q = [];
     let last = 0;
 
@@ -204,7 +201,6 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 
         if (current === last) {
             q.push(current * 2);
-            // currentMovingTiles.push();
             last = 0;
             continue;
         }
@@ -214,7 +210,7 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         // last !== 0 && q.push(last);
         // you can write:
         // if (last !== 0) q.push(last);
-        // or if (last) 
+        // or if (last)
         if (last !== 0) {
             q.push(last);
         }
@@ -229,4 +225,78 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
     }
 
     return q;
+
+    // return getRowTilesAfterLeftSwipe(row).Newrow;
+}
+
+
+export const getRowTilesAfterLeftSwipe = (row: number[]): { Newrow: number[], newPlan: AnimationPlan | undefined } => {
+
+
+    const currentMovingTiles: MovingTile[] = [];
+
+    const q = [];
+    let last = 0;
+    let lastC = { value: 0, lastIndex: -1 };
+
+    for (let index = 0; index < row.length; index++) {
+
+        const current = row[index];
+
+        if (current === 0)
+            continue;
+
+        if (current === lastC.value) {
+            currentMovingTiles.push(
+                {
+                    value: current,
+                    from: { row: 0, col: index },
+                    to: { row: 0, col: q.length }
+                },
+
+                {
+                    value: current,
+                    from: { row: 0, col: lastC.lastIndex },
+                    to: { row: 0, col: q.length }
+                }
+            );
+            q.push(current * 2);
+            lastC = { value: 0, lastIndex: -1 };
+            continue;
+        }
+
+        // Inbar Note:
+        // If you want to make it shorter, instead of:
+        // last !== 0 && q.push(last);
+        // you can write:
+        // if (last !== 0) q.push(last);
+        // or if (last)
+
+        
+        if (last !== 0) {
+            q.push(lastC);
+        }
+
+        last = current;
+    }
+
+    if (last !== 0) q.push(lastC);
+
+    while (q.length !== row.length) {
+        q.push(0);
+    }
+
+    // return q;
+
+
+
+
+
+
+
+
+
+
+
+    return { Newrow: q, newPlan: undefined };
 }
