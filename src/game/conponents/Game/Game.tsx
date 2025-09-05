@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board, GRID_SIZE } from "../board/Board";
 import {
+    //addRandomTile,
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
@@ -43,7 +44,9 @@ export const Game: React.FC = () => {
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan: currentPlan } = getNewMatrixByDirection(boardData, direction);
         if (currentPlan) setPlan(currentPlan);
+
         setBoardData(newBoard);
+        //addRandomTile(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 

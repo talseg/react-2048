@@ -19,16 +19,12 @@ const BoardWrapper = styled.div`
     border-radius: 10px;
 `
 
-const StaticTileWrapper = styled.div<{ x: number; y: number }>`
+const StaticTile = styled(Tile) <{ x: number; y: number }>`
     position: absolute;
     ${({ x, y }) => css`
-        top: ${y}px; left: ${x}px;`
+        top: ${y}px; 
+        left: ${x}px;`
     }
-`;
-
-const MovingTileWrapper = styled.div<{ x0: number; x1: number }>`
-    position: absolute;
-    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
 `;
 
 const createMove = (x0: number, x1: number) => keyframes`
@@ -36,7 +32,10 @@ const createMove = (x0: number, x1: number) => keyframes`
   to   { left: ${x1}px; }
 `;
 
-
+const MovingTile = styled(Tile) <{ x0: number; x1: number }>`
+    position: absolute;
+    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
+`;
 
 const toPixels = (col: number): number => {
     return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
@@ -54,11 +53,9 @@ const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number,
             const y = toPixels(row);
 
             tiles.push(
-                <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
-                    <Tile value={value}
-                        onClick={() => onTileClick?.(row, col)}
-                        onDoubleClick={() => onTileDoubleClick?.(row, col)} />
-                </StaticTileWrapper>
+                <StaticTile value={value} x={x} y={y} key={`empty-tile-${key++}`}
+                    onClick={() => onTileClick?.(row, col)}
+                    onDoubleClick={() => onTileDoubleClick?.(row, col)} />
             );
         }
     }
@@ -84,12 +81,10 @@ const mapMatrixToTiles = (matrix: number[][],
                 const y = toPixels(row);
 
                 tiles.push(
-                    <StaticTileWrapper key={key++} x={x} y={y}>
-                        <Tile value={value}
-                            onClick={() => onTileClick?.(row, col)}
-                            onDoubleClick={() => onTileDoubleClick?.(row, col)}
-                        />
-                    </StaticTileWrapper>
+                    <StaticTile value={value} key={key++} x={x} y={y}
+                        onClick={() => onTileClick?.(row, col)}
+                        onDoubleClick={() => onTileDoubleClick?.(row, col)}
+                    />
                 );
             }
         }
@@ -131,7 +126,6 @@ export const Board: React.FC<BoardProps> = ({
 
             const movingTiles = plan.movingTiles;
 
-
             for (let index = 0; index < movingTiles.length; index++) {
 
                 const tile = movingTiles[index];
@@ -142,9 +136,7 @@ export const Board: React.FC<BoardProps> = ({
                 const x1 = toPixels(col1);
 
                 tileList.push(
-                    <MovingTileWrapper x0={x0} x1={x1}>
-                        <Tile value={tile.value} />
-                    </MovingTileWrapper>
+                    <MovingTile value={tile.value} x0={x0} x1={x1} />
                 )
             }
 
