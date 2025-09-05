@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Board, GRID_SIZE } from "../board/Board";
+import { Board } from "../board/Board";
 import {
+    addRandomTile,
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
@@ -8,6 +9,7 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
+import { GRID_SIZE } from "../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -38,12 +40,14 @@ const LOCAL_STORAGE_DATA_KEY = "boardData";
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [plan, setPlan] = useState<AnimationPlan | undefined>(undefined); 
+    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined); 
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, plan: currentPlan } = getNewMatrixByDirection(boardData, direction);
-        if (currentPlan) setPlan(currentPlan);
+        const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
+        if (plan) setAnimationPlan(plan);
+
         setBoardData(newBoard);
+        addRandomTile(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
@@ -80,9 +84,6 @@ export const Game: React.FC = () => {
         newBoardData[row][column] = 0;
         setData(newBoardData);
     }
-    const handlePlanEnded = (): undefined => {
-        setPlan(undefined);
-    }
 
     return (
         <PageWrapper
@@ -92,7 +93,7 @@ export const Game: React.FC = () => {
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
                     setData(createInitialBoardData());
-                    setPlan(undefined);
+                    setAnimationPlan(undefined);
                 }}
             >Restart</button>
 
@@ -103,12 +104,12 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                onPlanEnded={handlePlanEnded} 
-                plan={plan}
+                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }} 
+                animationPlan={animationPlan}
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 1.6`}
+                {`Game by Inbar and Tal Segal version: 1.7`}
             </InfoWrapper>
 
         </PageWrapper>
