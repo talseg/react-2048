@@ -1,7 +1,7 @@
 import { css, keyframes, styled } from "styled-components";
 import { Tile, TILE_PIXEL_SIZE } from "../game/conponents/tile/Tile";
 import type { MovingTile } from "../game/logic/boardLogic";
-import { GRID_SIZE, MARGIN_BETWEEN_TILES, SWIPE_TIME } from "./globals";
+import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from "./globals";
 
 const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
     position: absolute;
@@ -18,7 +18,7 @@ const createMove = (x0: number, x1: number) => keyframes`
 
 const MovingTileStyled = styled(Tile) <{ x0: number; x1: number }>`
     position: absolute;
-    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
+    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${ANIMATION_DURATION}ms forwards;
 `;
 
 const toPixels = (col: number): number => {

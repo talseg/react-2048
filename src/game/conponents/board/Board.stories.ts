@@ -26,8 +26,8 @@ type Story = StoryObj<typeof meta>;
 export const BoardElement: Story = {
   args: {
     boardData: [[16,8,4,2],[256,128,64,32],[512,1024,2048,4096],[8192,16384,0,65536]],
-    onPlanEnded: () => {},
-    plan: undefined
+    onAnimationPlanEnded: () => {},
+    animationPlan: undefined
   },
 };
 
