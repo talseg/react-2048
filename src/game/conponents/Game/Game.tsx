@@ -9,7 +9,7 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE } from "../../../utilities/globals";
+import { GRID_SIZE } from "../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -109,7 +109,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 1.6`}
+                {`Game by Inbar and Tal Segal version: 1.7`}
             </InfoWrapper>
 
         </PageWrapper>

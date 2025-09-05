@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { TILE_PIXEL_SIZE } from '../tile/Tile';
 import type { AnimationPlan } from '../../logic/boardLogic';
-import { pushBoardTiles, pushEmptyTiles, pushMovingTiles } from '../../../utilities/mapTileUtils';
-import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from '../../../utilities/globals';
+import { pushBoardTiles, pushEmptyTiles, pushMovingTiles } from '../../utilities/mapTileUtils';
+import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from '../../utilities/globals';
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
 const BOARD_PADDING = MARGIN_BETWEEN_TILES;
