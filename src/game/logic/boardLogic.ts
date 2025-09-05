@@ -50,11 +50,11 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 
     let plan: AnimationPlan | undefined = undefined;
     if (wasSwipe) {
-        if(direction==="left"){
-            plan=getRowTilesAfterLeftSwipe(getRow(board,0)).newPlan;
+        if (direction === "left") {
+            plan = getRowTilesAfterLeftSwipe(getRow(board, 0)).newPlan;
         }
 
-        else{
+        else {
 
             plan = {
                 staticTiles: [],
@@ -196,40 +196,40 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
 }
 
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
-    const q = [];
-    let last = 0;
+    // const q = [];
+    // let last = 0;
 
-    for (let index = 0; index < row.length; index++) {
+    // for (let index = 0; index < row.length; index++) {
 
-        const current = row[index];
+    //     const current = row[index];
 
-        if (current === 0)
-            continue;
+    //     if (current === 0)
+    //         continue;
 
-        if (current === last) {
-            q.push(current * 2);
-            last = 0;
-            continue;
-        }
+    //     if (current === last) {
+    //         q.push(current * 2);
+    //         last = 0;
+    //         continue;
+    //     }
 
-        // Inbar Note:
-        // If you want to make it shorter, instead of:
-        // last !== 0 && q.push(last);
-        // you can write:
-        // if (last !== 0) q.push(last);
-        // or if (last)
-        if (last !== 0) {
-            q.push(last);
-        }
+    //     // Inbar Note:
+    //     // If you want to make it shorter, instead of:
+    //     // last !== 0 && q.push(last);
+    //     // you can write:
+    //     // if (last !== 0) q.push(last);
+    //     // or if (last)
+    //     if (last !== 0) {
+    //         q.push(last);
+    //     }
 
-        last = current;
-    }
+    //     last = current;
+    // }
 
-    if (last !== 0) q.push(last);
+    // if (last !== 0) q.push(last);
 
-    while (q.length !== row.length) {
-        q.push(0);
-    }
+    // while (q.length !== row.length) {
+    //     q.push(0);
+    // }
 
     // return q;
 
@@ -244,7 +244,7 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
 
     const q: number[] = [];
     // let last = 0;
-    let lastC = { value: 0, lastIndex: -1 };
+    let lastTile = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
 
@@ -253,7 +253,7 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
         if (current === 0)
             continue;
 
-        if (current === lastC.value) {
+        if (current === lastTile.value) {
             currentTiles.push(
                 {
                     value: current,
@@ -263,12 +263,12 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
 
                 {
                     value: current,
-                    from: { row: 0, col: lastC.lastIndex },
+                    from: { row: 0, col: lastTile.lastIndex },
                     to: { row: 0, col: q.length }
                 }
             );
             q.push(current * 2);
-            lastC = { value: 0, lastIndex: -1 };
+            lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
 
@@ -280,45 +280,40 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
         // or if (last)
 
 
-        if (lastC.value !== 0) {
+        if (lastTile.value !== 0) {
             currentTiles.push(
                 {
-                    value: lastC.value,
-                    from: { row: 0, col: index },
+                    value: lastTile.value,
+                    from: { row: 0, col: lastTile.lastIndex },
                     to: { row: 0, col: q.length }
                 },);
-            q.push(current);
+            q.push(lastTile.value);
         }
 
-        lastC = { value: current, lastIndex: index };
+        lastTile = { value: current, lastIndex: index };
 
     }
 
-    if (lastC.value !== 0) {
-                    currentTiles.push(
-                {
-                    value: lastC.value,
-                    from: { row: 0, col: lastC.lastIndex},
-                    to: { row: 0, col: q.length }
-                },);
-        q.push(lastC.value);
+    if (lastTile.value !== 0) {
+        currentTiles.push(
+            {
+                value: lastTile.value,
+                from: { row: 0, col: lastTile.lastIndex },
+                to: { row: 0, col: q.length }
+            },);
+        q.push(lastTile.value);
     }
 
     while (q.length !== row.length) {
         q.push(0);
     }
 
-    // return q;
-
-
-
-
-
-
-
-
-
-
-
-    return { newrow: q, newPlan: {movingTiles:currentTiles,staticTiles:[]} };
+    return {
+        newrow: q,
+        newPlan:
+        {
+            movingTiles: currentTiles,
+            staticTiles: []
+        }
+    };
 }
