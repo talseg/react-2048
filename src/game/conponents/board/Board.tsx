@@ -41,7 +41,8 @@ const toPixels = (col: number): number => {
     return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
 }
 
-const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number, column: number) => undefined,
+const pushEmptyTiles = (tiles: React.ReactElement[], 
+    onTileClick?: (row: number, column: number) => undefined,
     onTileDoubleClick?: (row: number, column: number) => undefined) => {
 
     let key = 0;
@@ -62,26 +63,37 @@ const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number,
     return tiles;
 }
 
-const mapMatrixToTiles = (matrix: number[][],
+const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
+    for (let index = 0; index < tiles.length; index++) {
+
+        const tile = tiles[index];
+        const col0 = tile.from.col;
+        const col1 = tile.to.col;
+
+        const x0 = toPixels(col0);
+        const x1 = toPixels(col1);
+
+        tileList.push(
+            <MovingTileStyled key={`moving-tile-${index}`} value={tile.value} x0={x0} x1={x1} />
+        )
+    }
+}
+
+const pushBoardTiles = (board: number[][], 
+    tileList: React.ReactElement[],
     onTileClick?: (row: number, column: number) => undefined,
-    onTileDoubleClick?: (row: number, column: number) => undefined): React.ReactElement[] => {
-
-    const tiles: React.ReactElement[] = [];
+    onTileDoubleClick?: (row: number, column: number) => undefined) => {
     let key = 0;
-
-    pushEmptyTiles(tiles, onTileClick, onTileDoubleClick);
-
-    // Add real tiles
-    for (let row = 0; row < matrix.length; row++) {
-        for (let col = 0; col < matrix[row].length; col++) {
-            const value = matrix[row][col];
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+            const value = board[row][col];
 
             if (value != 0) {
                 const x = toPixels(col);
                 const y = toPixels(row);
 
-                tiles.push(
-                    <StaticTileStyled value={value} key={key++} x={x} y={y}
+                tileList.push(
+                    <StaticTileStyled value={value} key={`board-tile-${key++}`} x={x} y={y}
                         onClick={() => onTileClick?.(row, col)}
                         onDoubleClick={() => onTileDoubleClick?.(row, col)}
                     />
@@ -89,6 +101,16 @@ const mapMatrixToTiles = (matrix: number[][],
             }
         }
     }
+}
+
+
+const mapMatrixToTiles = (matrix: number[][],
+    onTileClick?: (row: number, column: number) => undefined,
+    onTileDoubleClick?: (row: number, column: number) => undefined): React.ReactElement[] => {
+
+    const tiles: React.ReactElement[] = [];
+    pushEmptyTiles(tiles, onTileClick, onTileDoubleClick);
+    pushBoardTiles(matrix, tiles, onTileClick, onTileDoubleClick);
     return tiles;
 };
 
@@ -109,21 +131,6 @@ export const Board: React.FC<BoardProps> = ({
     plan
 }) => {
 
-    const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
-            for (let index = 0; index < tiles.length; index++) {
-
-                const tile = tiles[index];
-                const col0 = tile.from.col;
-                const col1 = tile.to.col;
-
-                const x0 = toPixels(col0);
-                const x1 = toPixels(col1);
-
-                tileList.push(
-                    <MovingTileStyled key={`moving-tile-${index}`} value={tile.value} x0={x0} x1={x1} />
-                )
-            }
-    }
 
 
     const renderPlan = () => {
