@@ -4,8 +4,9 @@ import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
+export type StaticTile = { value: number, position: Cell };
 export type AnimationPlan = {
-    staticTiles: Cell[];
+    staticTiles: StaticTile[];
     movingTiles: MovingTile[];
 }
 

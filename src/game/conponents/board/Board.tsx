@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
 import type { AnimationPlan } from '../../logic/boardLogic';
 
@@ -19,10 +19,16 @@ const BoardWrapper = styled.div`
     border-radius: 10px;
 `
 
-const TileWrapper = styled.div<{ x: number; y: number }>`
+const StaticTileWrapper = styled.div<{ x: number; y: number }>`
     position: absolute;
-    /* transition: transform 100ms ease; */
-    transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
+    ${({ x, y }) => css`
+        top: ${y}px; left: ${x}px;`
+    }
+`;
+
+const MovingTileWrapper = styled.div<{ x0: number; x1: number }>`
+    position: absolute;
+    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
 `;
 
 const createMove = (x0: number, x1: number) => keyframes`
@@ -30,16 +36,11 @@ const createMove = (x0: number, x1: number) => keyframes`
   to   { left: ${x1}px; }
 `;
 
-const HorizontalTileWrapper = styled.div<{ x0: number; x1: number }>`
-    position: absolute;
-    animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
-`;
 
-const StaticTileWrapper = styled.div<{ x: number; y: number }>`
-    position: absolute;
-    /* transition: transform 1500ms ease; */
-    transform: ${({ x, y }) => `translate(${x}px, ${y}px)`};
-`;
+
+const toPixels = (col: number): number => {
+    return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
+}
 
 const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number, column: number) => undefined,
     onTileDoubleClick?: (row: number, column: number) => undefined) => {
@@ -49,8 +50,8 @@ const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number,
         for (let col = 0; col < GRID_SIZE; col++) {
             const value = 0;
 
-            const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
-            const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+            const x = toPixels(col);
+            const y = toPixels(row);
 
             tiles.push(
                 <StaticTileWrapper key={`zero-${key++}`} x={x} y={y}>
@@ -79,22 +80,23 @@ const mapMatrixToTiles = (matrix: number[][],
             const value = matrix[row][col];
 
             if (value != 0) {
-                const x = col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
-                const y = row * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES);
+                const x = toPixels(col);
+                const y = toPixels(row);
 
                 tiles.push(
-                    <TileWrapper key={key++} x={x} y={y}>
+                    <StaticTileWrapper key={key++} x={x} y={y}>
                         <Tile value={value}
                             onClick={() => onTileClick?.(row, col)}
                             onDoubleClick={() => onTileDoubleClick?.(row, col)}
                         />
-                    </TileWrapper>
+                    </StaticTileWrapper>
                 );
             }
         }
     }
     return tiles;
 };
+
 
 interface BoardProps {
     boardData: number[][];
@@ -116,9 +118,7 @@ export const Board: React.FC<BoardProps> = ({
         onPlanEnded();
     }
 
-    const convertColToX = (col: number): number => {
-        return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
-    }
+
 
     const renderPlan = () => {
         setTimeout(endPlan, SWIPE_TIME);
@@ -130,7 +130,7 @@ export const Board: React.FC<BoardProps> = ({
             pushEmptyTiles(tileList)
 
             const movingTiles = plan.movingTiles;
-            
+
 
             for (let index = 0; index < movingTiles.length; index++) {
 
@@ -138,13 +138,13 @@ export const Board: React.FC<BoardProps> = ({
                 const col0 = tile.from.col;
                 const col1 = tile.to.col;
 
-                const x0 = convertColToX(col0);
-                const x1 = convertColToX(col1);
+                const x0 = toPixels(col0);
+                const x1 = toPixels(col1);
 
                 tileList.push(
-                    <HorizontalTileWrapper x0={x0} x1={x1}>
+                    <MovingTileWrapper x0={x0} x1={x1}>
                         <Tile value={tile.value} />
-                    </HorizontalTileWrapper>
+                    </MovingTileWrapper>
                 )
             }
 
