@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 import { Tile, TILE_PIXEL_SIZE } from '../tile/Tile';
-import type { AnimationPlan } from '../../logic/boardLogic';
+import type { AnimationPlan, MovingTile } from '../../logic/boardLogic';
 
 // TILE_SIZE is taken from the the Tile component
 export const GRID_SIZE = 4;
@@ -19,7 +19,7 @@ const BoardWrapper = styled.div`
     border-radius: 10px;
 `
 
-const StaticTile = styled(Tile) <{ x: number; y: number }>`
+const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
     position: absolute;
     ${({ x, y }) => css`
         top: ${y}px; 
@@ -32,7 +32,7 @@ const createMove = (x0: number, x1: number) => keyframes`
   to   { left: ${x1}px; }
 `;
 
-const MovingTile = styled(Tile) <{ x0: number; x1: number }>`
+const MovingTileStyled = styled(Tile) <{ x0: number; x1: number }>`
     position: absolute;
     animation: ${({ x0, x1 }) => createMove(x0, x1)} ${SWIPE_TIME}ms forwards;
 `;
@@ -53,7 +53,7 @@ const pushEmptyTiles = (tiles: React.ReactElement[], onTileClick?: (row: number,
             const y = toPixels(row);
 
             tiles.push(
-                <StaticTile value={value} x={x} y={y} key={`empty-tile-${key++}`}
+                <StaticTileStyled value={value} x={x} y={y} key={`empty-tile-${key++}`}
                     onClick={() => onTileClick?.(row, col)}
                     onDoubleClick={() => onTileDoubleClick?.(row, col)} />
             );
@@ -81,7 +81,7 @@ const mapMatrixToTiles = (matrix: number[][],
                 const y = toPixels(row);
 
                 tiles.push(
-                    <StaticTile value={value} key={key++} x={x} y={y}
+                    <StaticTileStyled value={value} key={key++} x={x} y={y}
                         onClick={() => onTileClick?.(row, col)}
                         onDoubleClick={() => onTileDoubleClick?.(row, col)}
                     />
@@ -109,26 +109,10 @@ export const Board: React.FC<BoardProps> = ({
     plan
 }) => {
 
-    const endPlan = () => {
-        onPlanEnded();
-    }
+    const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
+            for (let index = 0; index < tiles.length; index++) {
 
-
-
-    const renderPlan = () => {
-        setTimeout(endPlan, SWIPE_TIME);
-
-        if (plan !== undefined) {
-
-            const tileList: React.ReactElement[] = [];
-
-            pushEmptyTiles(tileList)
-
-            const movingTiles = plan.movingTiles;
-
-            for (let index = 0; index < movingTiles.length; index++) {
-
-                const tile = movingTiles[index];
+                const tile = tiles[index];
                 const col0 = tile.from.col;
                 const col1 = tile.to.col;
 
@@ -136,16 +120,22 @@ export const Board: React.FC<BoardProps> = ({
                 const x1 = toPixels(col1);
 
                 tileList.push(
-                    <MovingTile value={tile.value} x0={x0} x1={x1} />
+                    <MovingTileStyled key={`moving-tile-${index}`} value={tile.value} x0={x0} x1={x1} />
                 )
             }
+    }
 
+
+    const renderPlan = () => {
+        setTimeout(onPlanEnded, SWIPE_TIME);
+
+        if (plan) {
+            const tileList: React.ReactElement[] = [];
+            pushEmptyTiles(tileList);
+            pushMovingTiles(plan.movingTiles, tileList);
             return tileList;
-
         }
-        return (
-            <></>
-        );
+        return <></>;
     }
 
     const renderBoard = () => {
