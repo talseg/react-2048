@@ -40,11 +40,11 @@ const LOCAL_STORAGE_DATA_KEY = "boardData";
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [plan, setPlan] = useState<AnimationPlan | undefined>(undefined); 
+    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined); 
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, plan: currentPlan } = getNewMatrixByDirection(boardData, direction);
-        if (currentPlan) setPlan(currentPlan);
+        const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
+        if (plan) setAnimationPlan(plan);
 
         setBoardData(newBoard);
         addRandomTile(newBoard);
@@ -84,9 +84,6 @@ export const Game: React.FC = () => {
         newBoardData[row][column] = 0;
         setData(newBoardData);
     }
-    const handlePlanEnded = (): undefined => {
-        setPlan(undefined);
-    }
 
     return (
         <PageWrapper
@@ -96,7 +93,7 @@ export const Game: React.FC = () => {
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
                     setData(createInitialBoardData());
-                    setPlan(undefined);
+                    setAnimationPlan(undefined);
                 }}
             >Restart</button>
 
@@ -107,8 +104,8 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                onPlanEnded={handlePlanEnded} 
-                plan={plan}
+                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }} 
+                animationPlan={animationPlan}
             />
 
             <InfoWrapper>
