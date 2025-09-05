@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Board, GRID_SIZE } from "../board/Board";
+import { Board } from "../board/Board";
 import {
     addRandomTile,
     getNewMatrixByDirection, type AnimationPlan, type Direction
@@ -9,6 +9,7 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
+import { GRID_SIZE } from "../../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
