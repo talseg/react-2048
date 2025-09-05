@@ -50,30 +50,37 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 
     let plan: AnimationPlan | undefined = undefined;
     if (wasSwipe) {
-        plan = {
-            staticTiles: [],
-            movingTiles: [
-                {
-                    value: 2,
-                    from: { row: 0, col: 0 },
-                    to: { row: 0, col: 0 },
-                },
-                {
-                    value: 2,
-                    from: { row: 0, col: 1 },
-                    to: { row: 0, col: 0 },
-                },
-                {
-                    value: 4,
-                    from: { row: 0, col: 3 },
-                    to: { row: 0, col: 2 },
-                },
-                {
-                    value: 8,
-                    from: { row: 0, col: 2 },
-                    to: { row: 0, col: 1 },
-                }
-            ]
+        if(direction==="left"){
+            plan=getRowTilesAfterLeftSwipe(getRow(board,0)).newPlan;
+        }
+
+        else{
+
+            plan = {
+                staticTiles: [],
+                movingTiles: [
+                    {
+                        value: 2,
+                        from: { row: 0, col: 0 },
+                        to: { row: 0, col: 0 },
+                    },
+                    {
+                        value: 2,
+                        from: { row: 0, col: 1 },
+                        to: { row: 0, col: 0 },
+                    },
+                    {
+                        value: 4,
+                        from: { row: 0, col: 3 },
+                        to: { row: 0, col: 2 },
+                    },
+                    {
+                        value: 8,
+                        from: { row: 0, col: 2 },
+                        to: { row: 0, col: 1 },
+                    }
+                ]
+            }
         }
     }
     else {
@@ -224,19 +231,19 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         q.push(0);
     }
 
-    return q;
+    // return q;
 
-    // return getRowTilesAfterLeftSwipe(row).Newrow;
+    return getRowTilesAfterLeftSwipe(row).newrow;
 }
 
 
-export const getRowTilesAfterLeftSwipe = (row: number[]): { Newrow: number[], newPlan: AnimationPlan | undefined } => {
+export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], newPlan: AnimationPlan | undefined } => {
 
 
-    const currentMovingTiles: MovingTile[] = [];
+    const currentTiles: MovingTile[] = [];
 
-    const q = [];
-    let last = 0;
+    const q: number[] = [];
+    // let last = 0;
     let lastC = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
@@ -247,7 +254,7 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { Newrow: number[], ne
             continue;
 
         if (current === lastC.value) {
-            currentMovingTiles.push(
+            currentTiles.push(
                 {
                     value: current,
                     from: { row: 0, col: index },
@@ -272,15 +279,30 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { Newrow: number[], ne
         // if (last !== 0) q.push(last);
         // or if (last)
 
-        
-        if (last !== 0) {
-            q.push(lastC);
+
+        if (lastC.value !== 0) {
+            currentTiles.push(
+                {
+                    value: lastC.value,
+                    from: { row: 0, col: index },
+                    to: { row: 0, col: q.length }
+                },);
+            q.push(current);
         }
 
-        last = current;
+        lastC = { value: current, lastIndex: index };
+
     }
 
-    if (last !== 0) q.push(lastC);
+    if (lastC.value !== 0) {
+                    currentTiles.push(
+                {
+                    value: lastC.value,
+                    from: { row: 0, col: lastC.lastIndex},
+                    to: { row: 0, col: q.length }
+                },);
+        q.push(lastC.value);
+    }
 
     while (q.length !== row.length) {
         q.push(0);
@@ -298,5 +320,5 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { Newrow: number[], ne
 
 
 
-    return { Newrow: q, newPlan: undefined };
+    return { newrow: q, newPlan: {movingTiles:currentTiles,staticTiles:[]} };
 }
