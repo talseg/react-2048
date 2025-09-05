@@ -1,4 +1,4 @@
-import { GRID_SIZE } from "../../utilities/globals";
+import { GRID_SIZE } from "../utilities/globals";
 import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
