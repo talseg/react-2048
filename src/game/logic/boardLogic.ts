@@ -37,11 +37,13 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     }
 
     let wasSwipe = false;
+    // const currentMovingTiles:MovingTile[]=[];
     for (let row = 0; row < board.length; row++) {
 
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
+                // currentMovingTiles.push();
                 wasSwipe = true;
             }
         }
@@ -49,29 +51,41 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 
     let plan: AnimationPlan | undefined = undefined;
     if (wasSwipe) {
-        plan = {
-            staticTiles: [],
-            movingTiles: [
-                {
-                    value: 2,
-                    from: { row: 0, col: 0 },
-                    to: { row: 0, col: 0 },
-                },
-                {
-                    value: 2,
-                    from: { row: 0, col: 1 },
-                    to: { row: 0, col: 0 },
-                },
-                {
-                    value: 4,
-                    from: { row: 0, col: 3 },
-                    to: { row: 0, col: 1 },
-                }
-            ]
+        if (direction === "left") {
+            plan = getRowTilesAfterLeftSwipe(getRow(board, 0)).newPlan;
+        }
+
+        else {
+
+            plan = {
+                staticTiles: [],
+                movingTiles: [
+                    {
+                        value: 2,
+                        from: { row: 0, col: 0 },
+                        to: { row: 0, col: 0 },
+                    },
+                    {
+                        value: 2,
+                        from: { row: 0, col: 1 },
+                        to: { row: 0, col: 0 },
+                    },
+                    {
+                        value: 4,
+                        from: { row: 0, col: 3 },
+                        to: { row: 0, col: 2 },
+                    },
+                    {
+                        value: 8,
+                        from: { row: 0, col: 2 },
+                        to: { row: 0, col: 1 },
+                    }
+                ]
+            }
         }
     }
     else {
-       plan = undefined;
+        plan = undefined;
     }
 
     return (
@@ -183,8 +197,55 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
 }
 
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
-    const q = [];
-    let last = 0;
+    // const q = [];
+    // let last = 0;
+
+    // for (let index = 0; index < row.length; index++) {
+
+    //     const current = row[index];
+
+    //     if (current === 0)
+    //         continue;
+
+    //     if (current === last) {
+    //         q.push(current * 2);
+    //         last = 0;
+    //         continue;
+    //     }
+
+    //     // Inbar Note:
+    //     // If you want to make it shorter, instead of:
+    //     // last !== 0 && q.push(last);
+    //     // you can write:
+    //     // if (last !== 0) q.push(last);
+    //     // or if (last)
+    //     if (last !== 0) {
+    //         q.push(last);
+    //     }
+
+    //     last = current;
+    // }
+
+    // if (last !== 0) q.push(last);
+
+    // while (q.length !== row.length) {
+    //     q.push(0);
+    // }
+
+    // return q;
+
+    return getRowTilesAfterLeftSwipe(row).newrow;
+}
+
+
+export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], newPlan: AnimationPlan | undefined } => {
+
+
+    const currentTiles: MovingTile[] = [];
+
+    const q: number[] = [];
+    // let last = 0;
+    let lastTile = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
 
@@ -193,9 +254,22 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         if (current === 0)
             continue;
 
-        if (current === last) {
+        if (current === lastTile.value) {
+            currentTiles.push(
+                {
+                    value: current,
+                    from: { row: 0, col: index },
+                    to: { row: 0, col: q.length }
+                },
+
+                {
+                    value: current,
+                    from: { row: 0, col: lastTile.lastIndex },
+                    to: { row: 0, col: q.length }
+                }
+            );
             q.push(current * 2);
-            last = 0;
+            lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
 
@@ -204,19 +278,43 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
         // last !== 0 && q.push(last);
         // you can write:
         // if (last !== 0) q.push(last);
-        // or if (last) 
-        if (last !== 0) {
-            q.push(last);
+        // or if (last)
+
+
+        if (lastTile.value !== 0) {
+            currentTiles.push(
+                {
+                    value: lastTile.value,
+                    from: { row: 0, col: lastTile.lastIndex },
+                    to: { row: 0, col: q.length }
+                },);
+            q.push(lastTile.value);
         }
 
-        last = current;
+        lastTile = { value: current, lastIndex: index };
+
     }
 
-    if (last !== 0) q.push(last);
+    if (lastTile.value !== 0) {
+        currentTiles.push(
+            {
+                value: lastTile.value,
+                from: { row: 0, col: lastTile.lastIndex },
+                to: { row: 0, col: q.length }
+            },);
+        q.push(lastTile.value);
+    }
 
     while (q.length !== row.length) {
         q.push(0);
     }
 
-    return q;
+    return {
+        newrow: q,
+        newPlan:
+        {
+            movingTiles: currentTiles,
+            staticTiles: []
+        }
+    };
 }
