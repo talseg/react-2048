@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board } from "../board/Board";
 import {
-    addRandomTile,
+    //addRandomTile,
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
@@ -30,8 +30,7 @@ const InfoWrapper = styled.div`
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
     grid[0][0] = 2;
-    grid[0][1] = 2;
-    grid[0][3] = 4;
+    grid[0][3] = 2;
     return grid;
 }
 
@@ -47,7 +46,7 @@ export const Game: React.FC = () => {
         if (plan) setAnimationPlan(plan);
 
         setBoardData(newBoard);
-        addRandomTile(newBoard);
+        //addRandomTile(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
