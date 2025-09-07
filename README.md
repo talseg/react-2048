@@ -1,3 +1,6 @@
-# This + Is + My + Readme
+# 2048 Forever
 
-This is my readme
+[![Open issues][issues-badge]][issues-url]
+[![CI][lint-badge]][lint-url]
+[![CI][test-badge]][test-url]
+[![TypeScript][typescript-badge]][typescript-url]
