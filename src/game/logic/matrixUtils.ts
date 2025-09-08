@@ -100,3 +100,16 @@ export const printMatrix = (matrix: number[][], header?: string) => {
     }
     console.log(output);
 }
+
+export const getNumZeros = (matrix: number[][]) => {
+
+    let count = 0;
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix.length; j++) {
+            if (matrix[i][j] === 0) {
+                count++;
+            }
+        }
+    }
+    return count;
+}

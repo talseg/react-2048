@@ -6,10 +6,10 @@ import {
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
-import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
+import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -36,6 +36,19 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
+const isSwipePossible = (boardData: number[][]) : boolean => {
+    const canSwipe = (direction: Direction) : boolean => {
+        const { plan } = 
+            getNewMatrixByDirection(boardData, direction);
+        return plan !== undefined;
+    }
+    return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
+}
+
+const canAddTiles = (boardData: number[][]): boolean => 
+    getNumZeros(boardData) > 0;
+
+
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
@@ -43,10 +56,19 @@ export const Game: React.FC = () => {
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        if (plan) setAnimationPlan(plan);
+        if (plan) { 
+            setAnimationPlan(plan);
+        }
 
         setBoardData(newBoard);
-        addRandomTile(newBoard);
+
+        if (canAddTiles(newBoard)) {
+           addRandomTile(newBoard);
+        }
+
+        if (!isSwipePossible(newBoard)) {
+            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
+        }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
@@ -108,7 +130,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 2.0`}
+                {`Game by Inbar and Tal Segal version: 2.1`}
             </InfoWrapper>
 
         </PageWrapper>
