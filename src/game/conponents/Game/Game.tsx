@@ -83,12 +83,12 @@ export const Game: React.FC = () => {
 
     useEffect(() => {
         const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
-        // if (localData) {
-        //     setBoardData(JSON.parse(localData));
-        // }
-        // else {
+        if (localData) {
+            setBoardData(JSON.parse(localData));
+        }
+        else {
             setBoardData(createInitialBoardData());
-        // }
+        }
     }, [])
 
 
