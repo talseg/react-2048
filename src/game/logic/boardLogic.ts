@@ -1,6 +1,6 @@
 import { GRID_SIZE } from "../utilities/globals";
-import { getBoardAnimationLeftSwipe } from "./AnimationLogic";
-import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
+import { getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe } from "./AnimationLogic";
+import { getCol, getRow, mapMatrix, /*printMatrix, horizontalBoardFlip,*/ rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
@@ -52,9 +52,26 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 
     let plan: AnimationPlan | undefined = undefined;
     if (wasSwipe) {
+
+        // const testBoard = [
+        //     [4, 0, 2, 1],
+        //     [0, 4, 6, 2],
+        //     [1, 5, 22, 2],
+        //     [11, 18, 2, 6]];
+        // const horizontalFlip= horizontalBoardFlip(testBoard);
+        
+        // printMatrix(testBoard, "regular");
+        // printMatrix(horizontalFlip, "flip");
+
         if (direction === "left") {
             // plan = getRowTilesAfterLeftSwipe(getRow(board, 1)).newPlan;
-            plan= getBoardAnimationLeftSwipe(board);
+            plan = getBoardAnimationLeftSwipe(board);
+        }
+
+
+        else if(direction==="right"){
+
+            plan= getBoardAnimationRightSwipe(board);
         }
 
         else {

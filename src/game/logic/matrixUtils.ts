@@ -1,9 +1,10 @@
+// import { Board } from "../conponents/board/Board";
 
 export const createMatrix = (gridSize: number, initialValue: number): number[][] =>
-  Array.from({ length: gridSize }, () => Array(gridSize).fill(initialValue));
+    Array.from({ length: gridSize }, () => Array(gridSize).fill(initialValue));
 
 export const mapMatrix = (matrix: number[][]): number[][] =>
-  matrix.map(row => [...row]);
+    matrix.map(row => [...row]);
 
 export const getRow = (matrix: number[][], rowIndex: number): number[] => {
     const row = [];
@@ -33,6 +34,36 @@ export const rowFlip = (row: number[]): number[] => {
         flipedRow[index] = row[length - index - 1];
     }
     return flipedRow;
+}
+
+export const horizontalBoardFlip = (Board: number[][]): number[][] => {
+
+
+    const length = Board.length;
+    const newBoard:number[][] = [];
+    
+    for (let rowIndex = 0; rowIndex < length; rowIndex++) {
+    newBoard[rowIndex]= new Array(length).fill(0);
+    
+    
+    }
+
+    // const newBoard = new Array(length).fill(new Array(length).fill(0));
+
+
+    //TODO: go through it, and it creates a square not rectangle board
+
+    for (let rowIndex = 0; rowIndex < length; rowIndex++) {
+
+        const flipedRow = rowFlip(getRow(Board, rowIndex));
+
+        // newBoard.push(flipedRow);
+        for (let colIndex = 0; colIndex < length; colIndex++) {
+            newBoard[rowIndex][colIndex] = flipedRow[colIndex];
+        }
+    }
+
+    return newBoard;
 }
 
 export const printRow = (row: number[], header?: string) => {
