@@ -6,7 +6,7 @@ import {
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
-import { createMatrix, mapMatrix } from "../../logic/matrixUtils";
+import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { GRID_SIZE } from "../../utilities/globals";
@@ -36,6 +36,19 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
+const isSwipePossible = (boardData: number[][]) : boolean => {
+    const canSwipe = (direction: Direction) : boolean => {
+        const { plan } = 
+            getNewMatrixByDirection(boardData, direction);
+        return plan !== undefined;
+    }
+    return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
+}
+
+const canAddTiles = (boardData: number[][]): boolean => 
+    getNumZeros(boardData) > 0;
+
+
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
@@ -43,10 +56,19 @@ export const Game: React.FC = () => {
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        if (plan) setAnimationPlan(plan);
+        if (plan) { 
+            setAnimationPlan(plan);
+        }
 
         setBoardData(newBoard);
-        addRandomTile(newBoard);
+
+        if (isSwipePossible(newBoard) && canAddTiles(newBoard)) {
+           addRandomTile(newBoard);
+        }
+        else {
+            alert("Game Over");
+        }
+        
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
@@ -60,12 +82,12 @@ export const Game: React.FC = () => {
 
     useEffect(() => {
         const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
-        if (localData) {
-            setBoardData(JSON.parse(localData));
-        }
-        else {
+        // if (localData) {
+        //     setBoardData(JSON.parse(localData));
+        // }
+        // else {
             setBoardData(createInitialBoardData());
-        }
+        // }
     }, [])
 
 

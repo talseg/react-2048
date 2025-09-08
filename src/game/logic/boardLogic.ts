@@ -1,6 +1,6 @@
 import { GRID_SIZE } from "../utilities/globals";
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
-import { getCol, getRow, mapMatrix, arrayFlip } from "./matrixUtils";
+import { getCol, getRow, mapMatrix, arrayFlip, getNumZeros } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
@@ -65,35 +65,6 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         else if (direction === "down") {
             plan = getBoardAnimationDownSwipe(board);
         }
-        
-        else {
-
-            plan = {
-                staticTiles: [],
-                movingTiles: [
-                    {
-                        value: 2,
-                        from: { row: 0, col: 0 },
-                        to: { row: 0, col: 0 },
-                    },
-                    {
-                        value: 2,
-                        from: { row: 0, col: 1 },
-                        to: { row: 0, col: 0 },
-                    },
-                    {
-                        value: 4,
-                        from: { row: 0, col: 3 },
-                        to: { row: 0, col: 2 },
-                    },
-                    {
-                        value: 8,
-                        from: { row: 0, col: 2 },
-                        to: { row: 0, col: 1 },
-                    }
-                ]
-            }
-        }
     }
     else {
         plan = undefined;
@@ -105,9 +76,15 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 }
 
 export const addRandomTile = (matrix: number[][]) => {
+
+    const numZeros = getNumZeros(matrix);
+    if (numZeros == 0) {
+        // ToDo - check the error message
+        throw new Error(`addRandomTile requested to add random tile to empty board ${matrix}`)
+    }
+
     let randomRow = Math.floor(Math.random() * GRID_SIZE);
     let randomCol = Math.floor(Math.random() * GRID_SIZE);
-
 
     while (matrix[randomRow][randomCol] !== 0) {
         randomRow = Math.floor(Math.random() * GRID_SIZE);
