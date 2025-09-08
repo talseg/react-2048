@@ -1,5 +1,6 @@
 import type { AnimationPlan, MovingTile } from "./boardLogic";
-import { getRow, horizontalBoardFlip } from "./matrixUtils";
+import { clockwiseBoardRotation, getRow, horizontalBoardFlip } from "./matrixUtils";
+import {getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
 
 const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): AnimationPlan => {
 
@@ -102,41 +103,18 @@ export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => 
 }
 
 
-export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan | undefined => {
-
-    // const finalPlan: AnimationPlan | undefined = {
-    //     movingTiles: [],
-    //     staticTiles: []
-    // };
+export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan => {
 
     const plan = getBoardAnimationLeftSwipe(horizontalBoardFlip(board));
 
-    return getBoardAnimationHorizontalFlip(plan, board.length);
+    return  getBoardAnimationHorizontalFlip(plan, board.length);
 }
 
 
-export const getBoardAnimationHorizontalFlip = (plan: AnimationPlan, Boardlength: number): AnimationPlan => {
+export const getBoardAnimationUpSwipe = (board: number[][]): AnimationPlan => {
 
-    const newPlan: AnimationPlan = {
-        movingTiles: [],
-        staticTiles: []
-    };
+    const plan = getBoardAnimationRightSwipe(clockwiseBoardRotation(board));
 
-        const currentAnimations= plan.movingTiles;
-    
-    for(let index=0; index< currentAnimations.length; index++){
-        const currentMove= currentAnimations[index];
+    return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
 
-        const newMove: MovingTile= {
-            from: {row: currentMove.from.row, col: Boardlength- currentMove.from.col-1},
-            to: {row: currentMove.to.row, col: Boardlength- currentMove.to.col-1},
-            value: currentMove.value
-        };
-
-        newPlan.movingTiles.push(newMove);
-    }
-
-    return newPlan;
 }
-
-

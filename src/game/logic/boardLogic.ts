@@ -1,6 +1,6 @@
 import { GRID_SIZE } from "../utilities/globals";
-import { getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe } from "./AnimationLogic";
-import { getCol, getRow, mapMatrix, /*printMatrix, horizontalBoardFlip,*/ rowFlip } from "./matrixUtils";
+import { getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
+import { getCol, getRow, mapMatrix, arrayFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
@@ -55,13 +55,13 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 
         // const testBoard = [
         //     [4, 0, 2, 1],
-        //     [0, 4, 6, 2],
-        //     [1, 5, 22, 2],
+        //     [0, 4, 27, 2],
+        //     [1, 6, 22, 2],
         //     [11, 18, 2, 6]];
-        // const horizontalFlip= horizontalBoardFlip(testBoard);
-        
+        // const rotateTest = clockwiseBoardRotation(testBoard);
+
         // printMatrix(testBoard, "regular");
-        // printMatrix(horizontalFlip, "flip");
+        // printMatrix(rotateTest, "roate");
 
         if (direction === "left") {
             // plan = getRowTilesAfterLeftSwipe(getRow(board, 1)).newPlan;
@@ -69,11 +69,16 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
         }
 
 
-        else if(direction==="right"){
+        else if (direction === "right") {
 
-            plan= getBoardAnimationRightSwipe(board);
+            plan = getBoardAnimationRightSwipe(board);
         }
 
+          else if (direction === "up") {
+
+            plan = getBoardAnimationUpSwipe(board);
+        }
+        
         else {
 
             plan = {
@@ -157,10 +162,10 @@ const getBoardAfterRightSwipe = (board: number[][]): number[][] => {
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
         const row = getRow(board, rowIndex);
-        const fliped = rowFlip(row);
+        const fliped = arrayFlip(row);
 
         const afterSwipe = getRowAfterLeftSwipe(fliped);
-        const flipedSwipe = rowFlip(afterSwipe);
+        const flipedSwipe = arrayFlip(afterSwipe);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
             newBoard[rowIndex][colIndex] = flipedSwipe[colIndex];
@@ -203,9 +208,9 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
     for (let colIndex = 0; colIndex < board.length; colIndex++) {
 
         const col = getCol(board, colIndex);
-        const flip = rowFlip(col);
+        const flip = arrayFlip(col);
         const afterSwipe = getRowAfterLeftSwipe(flip);
-        const flippedSwipe = rowFlip(afterSwipe);
+        const flippedSwipe = arrayFlip(afterSwipe);
 
         for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 

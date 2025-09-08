@@ -24,40 +24,62 @@ export const getCol = (matrix: number[][], colIndex: number): number[] => {
     return row;
 }
 
-export const rowFlip = (row: number[]): number[] => {
+export const arrayFlip = (row: number[]): number[] => {
 
     const length = row.length;
-    const flipedRow = new Array(length).fill(0);
+    const flipedArray = new Array(length).fill(0);
 
     for (let index = 0; index < length; index++) {
 
-        flipedRow[index] = row[length - index - 1];
+        flipedArray[index] = row[length - index - 1];
     }
-    return flipedRow;
+    return flipedArray;
+}
+
+export const clockwiseBoardRotation = (Board: number[][]): number[][] => {
+
+    const length = Board.length;
+    const newBoard: number[][] = [];
+
+    for (let rowIndex = 0; rowIndex < length; rowIndex++) {
+        newBoard[rowIndex] = new Array(length).fill(0);
+    }
+
+    for (let colIndex = 0; colIndex < length; colIndex++) {
+
+
+
+        const flippedCol = getCol(Board, colIndex);
+        const finalCol= arrayFlip(flippedCol);
+
+        for (let rowIndex = 0; rowIndex < length; rowIndex++) {
+            newBoard[colIndex][rowIndex] = finalCol[rowIndex];
+        }
+    }
+
+
+    //TODO: change varible Names
+
+    return newBoard;
 }
 
 export const horizontalBoardFlip = (Board: number[][]): number[][] => {
 
 
     const length = Board.length;
-    const newBoard:number[][] = [];
-    
-    for (let rowIndex = 0; rowIndex < length; rowIndex++) {
-    newBoard[rowIndex]= new Array(length).fill(0);
-    
-    
-    }
+    const newBoard: number[][] = [];
 
-    // const newBoard = new Array(length).fill(new Array(length).fill(0));
+    for (let rowIndex = 0; rowIndex < length; rowIndex++) {
+        newBoard[rowIndex] = new Array(length).fill(0);
+    }
 
 
     //TODO: go through it, and it creates a square not rectangle board
 
     for (let rowIndex = 0; rowIndex < length; rowIndex++) {
 
-        const flipedRow = rowFlip(getRow(Board, rowIndex));
+        const flipedRow = arrayFlip(getRow(Board, rowIndex));
 
-        // newBoard.push(flipedRow);
         for (let colIndex = 0; colIndex < length; colIndex++) {
             newBoard[rowIndex][colIndex] = flipedRow[colIndex];
         }
