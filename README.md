@@ -7,9 +7,9 @@
 ![Extra Terms](https://img.shields.io/badge/Extra-Non--Commercial-orange.svg)
 
 A modern implementation of the classic **2048 game**, built with **React + TypeScript**.  
-This version challenges you to go **beyond 2048 all the way to 65,536** — using as few undos as possible, with optional hints to guide you along the way.
+This version challenges you to go **beyond 2048 all the way to 65,536**.
 <br/>
-Built with ❤️ by Inbar and Tal Segal. October 2025.
+Built with ❤️ by Inbar and Tal Segal. August 2025.
 
 ---
 
@@ -19,11 +19,12 @@ Built with ❤️ by Inbar and Tal Segal. October 2025.
 ---
 
 ## 🎮 Features
+- Clean React + TypeScript structure.
 - Swipe support (keyboard and touch).
 - Smooth tile animations.
-- Undo system — but the fewer you use, the higher your score.
+- Undo system.
 - Optional hints to help with strategy.
-- Clean React + TypeScript structure.
+- **Storybook integration** for developing UI components in isolation.
 - 100% open code for learning and contributions.
 
 ---
@@ -71,5 +72,5 @@ This project is released under the [MIT License](./LICENSE) with additional term
 
 ## 🙏 Acknowledgments
 - Inspired by the original [2048 game](https://play2048.co/) by [Gabriele Cirulli](https://github.com/gabrielecirulli) (MIT License).  
-- Built with [Vite](https://vitejs.dev/).
+- Built with [Vite](https://vitejs.dev/) and [Storybook](https://storybook.js.org/).
 - Built by Tal and Inbar Segal using React and TypeScript.
