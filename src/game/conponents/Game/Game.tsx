@@ -9,7 +9,7 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -67,7 +67,7 @@ export const Game: React.FC = () => {
         }
 
         if (!isSwipePossible(newBoard)) {
-            alert("Game Over");
+            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
         }
         
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
