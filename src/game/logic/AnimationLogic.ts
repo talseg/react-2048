@@ -79,17 +79,25 @@ export const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): 
 
 
 export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan | undefined => {
+    const finalPlan:AnimationPlan|undefined= {
+        movingTiles:[],
+        staticTiles:[]
+    }; 
+    for(let rowIndex=0; rowIndex<board.length; rowIndex++){
+        
+            const row = getRow(board, rowIndex);
+            const rowPlan = getRowAnimationLeftSwipe(row);
+        
+            if (!rowPlan) {
+                return undefined;
+            }
+            const rowMovement = rowPlan.movingTiles;
+            for (let index = 0; index < rowMovement.length; index++) {
+                rowMovement[index].from.row=rowIndex;
+                rowMovement[index].to.row=rowIndex;
+                finalPlan.movingTiles.push(rowMovement[index]);
+            }
 
-    const row = getRow(board, 1);
-    const rowPlan = getRowAnimationLeftSwipe(row);
-
-    if (!rowPlan) {
-        return undefined;
     }
-    const array = rowPlan.movingTiles;
-    for (let index = 0; index < array.length; index++) {
-        array[index].from.row=0;
-        array[index].to.row=0;
-    }
-    return rowPlan;
+    return finalPlan;
 }

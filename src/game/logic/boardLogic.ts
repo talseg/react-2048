@@ -1,4 +1,5 @@
 import { GRID_SIZE } from "../utilities/globals";
+import { getBoardAnimationLeftSwipe } from "./AnimationLogic";
 import { getCol, getRow, mapMatrix, rowFlip } from "./matrixUtils";
 
 export type Direction = "left" | "right" | "up" | "down";
@@ -52,7 +53,8 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     let plan: AnimationPlan | undefined = undefined;
     if (wasSwipe) {
         if (direction === "left") {
-            plan = getRowTilesAfterLeftSwipe(getRow(board, 0)).newPlan;
+            // plan = getRowTilesAfterLeftSwipe(getRow(board, 1)).newPlan;
+            plan= getBoardAnimationLeftSwipe(board);
         }
 
         else {
