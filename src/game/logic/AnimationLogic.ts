@@ -1,8 +1,8 @@
 import type { AnimationPlan, MovingTile } from "./boardLogic";
 import { clockwiseBoardRotation, getRow, horizontalBoardFlip } from "./matrixUtils";
-import {getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
+import { getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
 
-const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): AnimationPlan => {
+const getRowAnimationLeftSwipe = (row: number[]): AnimationPlan => {
 
     const currentTiles: MovingTile[] = [];
 
@@ -34,14 +34,6 @@ const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): Animati
             lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
-
-        // Inbar Note:
-        // If you want to make it shorter, instead of:
-        // last !== 0 && q.push(last);
-        // you can write:
-        // if (last !== 0) q.push(last);
-        // or if (last)
-
 
         if (lastTile.value !== 0) {
             currentTiles.push(
@@ -87,11 +79,8 @@ export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => 
 
         const row = getRow(board, rowIndex);
         const rowPlan = getRowAnimationLeftSwipe(row);
-
-        // if (!rowPlan) {
-        //     return undefined;
-        // }//needed?
         const rowMovement = rowPlan.movingTiles;
+
         for (let index = 0; index < rowMovement.length; index++) {
             rowMovement[index].from.row = rowIndex;
             rowMovement[index].to.row = rowIndex;
@@ -107,7 +96,7 @@ export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan =>
 
     const plan = getBoardAnimationLeftSwipe(horizontalBoardFlip(board));
 
-    return  getBoardAnimationHorizontalFlip(plan, board.length);
+    return getBoardAnimationHorizontalFlip(plan, board.length);
 }
 
 

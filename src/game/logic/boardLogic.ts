@@ -1,7 +1,6 @@
 import { GRID_SIZE } from "../utilities/globals";
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
 import { getCol, getRow, mapMatrix, arrayFlip } from "./matrixUtils";
-
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
@@ -38,13 +37,11 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     }
 
     let wasSwipe = false;
-    // const currentMovingTiles:MovingTile[]=[];
     for (let row = 0; row < board.length; row++) {
 
         for (let col = 0; col < board[row].length; col++) {
 
             if (board[row][col] != newBoard[row][col]) {
-                // currentMovingTiles.push();
                 wasSwipe = true;
             }
         }
@@ -54,23 +51,18 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     if (wasSwipe) {
 
         if (direction === "left") {
-            // plan = getRowTilesAfterLeftSwipe(getRow(board, 1)).newPlan;
             plan = getBoardAnimationLeftSwipe(board);
         }
 
-
         else if (direction === "right") {
-
             plan = getBoardAnimationRightSwipe(board);
         }
 
           else if (direction === "up") {
-
             plan = getBoardAnimationUpSwipe(board);
         }
 
         else if (direction === "down") {
-
             plan = getBoardAnimationDownSwipe(board);
         }
         
@@ -216,42 +208,6 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
 }
 
 export const getRowAfterLeftSwipe = (row: number[]): number[] => {
-    // const q = [];
-    // let last = 0;
-
-    // for (let index = 0; index < row.length; index++) {
-
-    //     const current = row[index];
-
-    //     if (current === 0)
-    //         continue;
-
-    //     if (current === last) {
-    //         q.push(current * 2);
-    //         last = 0;
-    //         continue;
-    //     }
-
-    //     // Inbar Note:
-    //     // If you want to make it shorter, instead of:
-    //     // last !== 0 && q.push(last);
-    //     // you can write:
-    //     // if (last !== 0) q.push(last);
-    //     // or if (last)
-    //     if (last !== 0) {
-    //         q.push(last);
-    //     }
-
-    //     last = current;
-    // }
-
-    // if (last !== 0) q.push(last);
-
-    // while (q.length !== row.length) {
-    //     q.push(0);
-    // }
-
-    // return q;
 
     return getRowTilesAfterLeftSwipe(row).newrow;
 }
@@ -263,7 +219,6 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
     const currentTiles: MovingTile[] = [];
 
     const q: number[] = [];
-    // let last = 0;
     let lastTile = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
@@ -291,14 +246,6 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
             lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
-
-        // Inbar Note:
-        // If you want to make it shorter, instead of:
-        // last !== 0 && q.push(last);
-        // you can write:
-        // if (last !== 0) q.push(last);
-        // or if (last)
-
 
         if (lastTile.value !== 0) {
             currentTiles.push(

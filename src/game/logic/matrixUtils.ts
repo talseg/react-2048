@@ -1,5 +1,3 @@
-// import { Board } from "../conponents/board/Board";
-
 export const createMatrix = (gridSize: number, initialValue: number): number[][] =>
     Array.from({ length: gridSize }, () => Array(gridSize).fill(initialValue));
 
@@ -47,8 +45,6 @@ export const clockwiseBoardRotation = (Board: number[][]): number[][] => {
 
     for (let colIndex = 0; colIndex < length; colIndex++) {
 
-
-
         const flippedCol = getCol(Board, colIndex);
         const finalCol= arrayFlip(flippedCol);
 
@@ -56,8 +52,6 @@ export const clockwiseBoardRotation = (Board: number[][]): number[][] => {
             newBoard[colIndex][rowIndex] = finalCol[rowIndex];
         }
     }
-
-
     //TODO: change varible Names
 
     return newBoard;
@@ -65,14 +59,12 @@ export const clockwiseBoardRotation = (Board: number[][]): number[][] => {
 
 export const horizontalBoardFlip = (Board: number[][]): number[][] => {
 
-
     const length = Board.length;
     const newBoard: number[][] = [];
 
     for (let rowIndex = 0; rowIndex < length; rowIndex++) {
         newBoard[rowIndex] = new Array(length).fill(0);
     }
-
 
     //TODO: go through it, and it creates a square not rectangle board
 

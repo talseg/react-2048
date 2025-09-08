@@ -25,14 +25,12 @@ export const getBoardAnimationHorizontalFlip = (plan: AnimationPlan, Boardlength
     return newPlan;
 }
 
-
 export const getBoardAnimationClockwiseRotaion = (plan: AnimationPlan, Boardlength: number): AnimationPlan => {
 
     const newPlan: AnimationPlan = {
         movingTiles: [],
         staticTiles: []
     };
-
 
     const currentAnimations = plan.movingTiles;
 
@@ -51,15 +49,13 @@ export const getBoardAnimationClockwiseRotaion = (plan: AnimationPlan, Boardleng
     return newPlan;
 }
 
-
 export const getBoardAnimationCounterClockwiseRotaion = (plan: AnimationPlan, Boardlength: number): AnimationPlan => {
-
 
     let newPlan = plan;
     for (let i = 0; i < 3; i++) {
         newPlan = getBoardAnimationClockwiseRotaion(newPlan, Boardlength);
 
     }
-    
+
     return newPlan;
 }
