@@ -118,3 +118,12 @@ export const getBoardAnimationUpSwipe = (board: number[][]): AnimationPlan => {
     return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
 
 }
+
+
+export const getBoardAnimationDownSwipe = (board: number[][]): AnimationPlan => {
+
+    const plan = getBoardAnimationLeftSwipe(clockwiseBoardRotation(board));
+
+    return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
+
+}
