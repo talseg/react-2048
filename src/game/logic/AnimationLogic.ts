@@ -1,12 +1,12 @@
 import type { AnimationPlan, MovingTile } from "./boardLogic";
-import { getRow } from "./matrixUtils";
+import { clockwiseBoardRotation, getRow, horizontalBoardFlip } from "./matrixUtils";
+import { getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
 
-export const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): AnimationPlan | undefined => {
+const getRowAnimationLeftSwipe = (row: number[]): AnimationPlan => {
 
     const currentTiles: MovingTile[] = [];
 
     const q: number[] = [];
-    // let last = 0;
     let lastTile = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
@@ -34,14 +34,6 @@ export const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): 
             lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
-
-        // Inbar Note:
-        // If you want to make it shorter, instead of:
-        // last !== 0 && q.push(last);
-        // you can write:
-        // if (last !== 0) q.push(last);
-        // or if (last)
-
 
         if (lastTile.value !== 0) {
             currentTiles.push(
@@ -78,18 +70,49 @@ export const getRowAnimationLeftSwipe = (row: number[]/*, rowIndex?: number*/): 
 }
 
 
-export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan | undefined => {
+export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => {
+    const finalPlan: AnimationPlan = {
+        movingTiles: [],
+        staticTiles: []
+    };
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
-    const row = getRow(board, 1);
-    const rowPlan = getRowAnimationLeftSwipe(row);
+        const row = getRow(board, rowIndex);
+        const rowPlan = getRowAnimationLeftSwipe(row);
+        const rowMovement = rowPlan.movingTiles;
 
-    if (!rowPlan) {
-        return undefined;
+        for (let index = 0; index < rowMovement.length; index++) {
+            rowMovement[index].from.row = rowIndex;
+            rowMovement[index].to.row = rowIndex;
+            finalPlan.movingTiles.push(rowMovement[index]);
+        }
+
     }
-    const array = rowPlan.movingTiles;
-    for (let index = 0; index < array.length; index++) {
-        array[index].from.row=0;
-        array[index].to.row=0;
-    }
-    return rowPlan;
+    return finalPlan;
+}
+
+
+export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan => {
+
+    const plan = getBoardAnimationLeftSwipe(horizontalBoardFlip(board));
+
+    return getBoardAnimationHorizontalFlip(plan, board.length);
+}
+
+
+export const getBoardAnimationUpSwipe = (board: number[][]): AnimationPlan => {
+
+    const plan = getBoardAnimationRightSwipe(clockwiseBoardRotation(board));
+
+    return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
+
+}
+
+
+export const getBoardAnimationDownSwipe = (board: number[][]): AnimationPlan => {
+
+    const plan = getBoardAnimationLeftSwipe(clockwiseBoardRotation(board));
+
+    return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
+
 }
