@@ -62,10 +62,11 @@ export const Game: React.FC = () => {
 
         setBoardData(newBoard);
 
-        if (isSwipePossible(newBoard) && canAddTiles(newBoard)) {
+        if (canAddTiles(newBoard)) {
            addRandomTile(newBoard);
         }
-        else {
+
+        if (!isSwipePossible(newBoard)) {
             alert("Game Over");
         }
         
