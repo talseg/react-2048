@@ -71,5 +71,5 @@ This project is released under the [MIT License](./LICENSE) with additional term
 
 ## 🙏 Acknowledgments
 - Inspired by the original [2048 game](https://play2048.co/) by [Gabriele Cirulli](https://github.com/gabrielecirulli) (MIT License).  
-- Extended with the **65k challenge** for advanced players.  
+- Built with [Vite](https://vitejs.dev/).
 - Built by Tal and Inbar Segal using React and TypeScript.
