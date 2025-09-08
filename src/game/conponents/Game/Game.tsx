@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Board } from "../board/Board";
 import {
-    //addRandomTile,
+    addRandomTile,
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
@@ -46,7 +46,7 @@ export const Game: React.FC = () => {
         if (plan) setAnimationPlan(plan);
 
         setBoardData(newBoard);
-        //addRandomTile(newBoard);
+        addRandomTile(newBoard);
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
@@ -108,7 +108,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 1.8`}
+                {`Game by Inbar and Tal Segal version: 2.0`}
             </InfoWrapper>
 
         </PageWrapper>
