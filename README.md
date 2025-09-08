@@ -1,69 +1,76 @@
-# React + TypeScript + Vite
+<h1>
+  <span style="color:#f2b179;">2048</span> to 
+  <span style="color:#edc22e;">65k</span>
+</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Extra Terms](https://img.shields.io/badge/Extra-Non--Commercial-orange.svg)
 
-Currently, two official plugins are available:
+A modern implementation of the classic **2048 game**, built with **React + TypeScript**.  
+This version challenges you to go **beyond 2048 all the way to 65,536**.
+<br/>
+Built with ❤️ by Inbar and Tal Segal. August 2025.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+🎮 **Play it now in your browser:**  
+👉 [2048 to 65k on GitHub Pages](https://talseg.github.io/react-2048/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🎮 Features
+- Clean React + TypeScript structure.
+- Swipe support (keyboard and touch).
+- Smooth tile animations.
+- Undo system.
+- Optional hints to help with strategy.
+- **Storybook integration** for developing UI components in isolation.
+- 100% open code for learning and contributions.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Getting Started
+
+### Prerequisites
+- [git](https://git-scm.com/)
+- [Node.js LTS](https://nodejs.org/)
+- yarn (Optional)
+
+### Installation
+```bash
+# Clone the repo
+git clone https://github.com/talseg/react-2048.git
+cd react-2048
+
+
+# Install dependencies
+npm install
+# or
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Run locally
+```bash
+npm run dev
+# or
+yarn dev
 ```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 📜 License
+
+This project is released under the [MIT License](./LICENSE) with additional terms described in [LICENSE_EXTRA.md](./LICENSE_EXTRA.md).
+
+- ✅ Free for personal use, learning, and contributions.  
+- 🚫 Not allowed without permission: publishing as an app on Google Play, Apple App Store, or similar platforms.  
+- 🚫 Not allowed without permission: using for commercial purposes (selling, licensing, monetizing).
+
+---
+
+## 🙏 Acknowledgments
+- Inspired by the original [2048 game](https://play2048.co/) by [Gabriele Cirulli](https://github.com/gabrielecirulli) (MIT License).  
+- Built with [Vite](https://vitejs.dev/) and [Storybook](https://storybook.js.org/).
+- Built by Tal and Inbar Segal using React and TypeScript.
