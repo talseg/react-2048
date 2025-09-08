@@ -131,7 +131,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 2.0`}
+                {`Game by Inbar and Tal Segal version: 2.1`}
             </InfoWrapper>
 
         </PageWrapper>
