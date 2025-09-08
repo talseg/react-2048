@@ -33,12 +33,14 @@ Built with ❤️ by Inbar and Tal Segal. October 2025.
 ### Prerequisites
 - [git](https://git-scm.com/)
 - [Node.js LTS](https://nodejs.org/)
+- yarn (Optional)
 
 ### Installation
 ```bash
 # Clone the repo
 git clone https://github.com/talseg/react-2048.git
 cd react-2048
+
 
 # Install dependencies
 npm install
@@ -57,23 +59,13 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🤝 Contributing
-Contributions are welcome!  
-Fork the repo, create a branch, make your changes, and submit a pull request.  
-
-By contributing, you agree to the project’s licensing terms (see below).
-
----
-
 ## 📜 License
 
 This project is released under the [MIT License](./LICENSE) with additional terms described in [LICENSE_EXTRA.md](./LICENSE_EXTRA.md).
 
 - ✅ Free for personal use, learning, and contributions.  
 - 🚫 Not allowed without permission: publishing as an app on Google Play, Apple App Store, or similar platforms.  
-- 🚫 Not allowed without permission: using for commercial purposes (selling, licensing, monetizing).  
-
-For details, see [LICENSE](./LICENSE) and [LICENSE_EXTRA.md](./LICENSE_EXTRA.md).
+- 🚫 Not allowed without permission: using for commercial purposes (selling, licensing, monetizing).
 
 ---
 
