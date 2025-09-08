@@ -69,7 +69,6 @@ export const Game: React.FC = () => {
         if (!isSwipePossible(newBoard)) {
             setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
         }
-        
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
