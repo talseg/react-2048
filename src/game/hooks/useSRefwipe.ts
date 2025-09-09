@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef } from "react";
 import type { Direction } from "../logic/boardLogic";
 import { SWIPE_DISTANCE } from "../utilities/globals";
 
@@ -7,24 +7,24 @@ export interface UseSwipeProps {
     onTouchMove: (e: React.TouchEvent) => void;
 }
 
-export const useSwipe = (onSwipe: (direction: Direction) => undefined): UseSwipeProps => {
+export const useRefSwipe = (onSwipe: (direction: Direction) => undefined): UseSwipeProps => {
 
-    const [touchStartX, setTouchStartX] = useState(0);
-    const [touchStartY, setTouchStartY] = useState(0);
-    const [isInSwipe, setIsInSwipe] = useState(false);
+    const touchStartX = useRef(0);
+    const touchStartY = useRef(0);
+    const isInSwipe = useRef(false);
 
-    const handleSwipeEnd = (direction: Direction) => {
-        onSwipe(direction);
-        setIsInSwipe(false);
-    }
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
 
-    const handleTouchMove = (e: React.TouchEvent) => {
+        const handleSwipeEnd = (direction: Direction) => {
+            onSwipe(direction);
+            isInSwipe.current = false;
+        }
 
-        if (!isInSwipe) 
+        if (!isInSwipe.current) 
             return;
 
-        const deltaX = e.changedTouches[0].screenX - touchStartX;
-        const deltaY = e.changedTouches[0].screenY - touchStartY;
+        const deltaX = e.touches[0].screenX - touchStartX.current;
+        const deltaY = e.touches[0].screenY - touchStartY.current;
 
         const swipeLengthX = Math.abs(deltaX);
         const swipeLengthY = Math.abs(deltaY);
@@ -43,12 +43,12 @@ export const useSwipe = (onSwipe: (direction: Direction) => undefined): UseSwipe
                 else if (deltaY > 0) handleSwipeEnd("down");
             }
         }
-    }
+    }, [onSwipe]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStartX(e.changedTouches[0].screenX);
-        setTouchStartY(e.changedTouches[0].screenY);
-        setIsInSwipe(true);
+        touchStartX.current = e.touches[0].screenX;
+        touchStartY.current = e.touches[0].screenY;
+        isInSwipe.current = true;
     }
 
     return { onTouchStart: handleTouchStart, onTouchMove: handleTouchMove }

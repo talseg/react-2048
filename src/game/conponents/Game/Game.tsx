@@ -7,9 +7,10 @@ import {
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
-import { useSwipe } from "../../hooks/useSwipe";
+// import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE, VERSION } from "../../utilities/globals";
+import { useRefSwipe } from "../../hooks/useSRefwipe";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -36,34 +37,34 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
-const isSwipePossible = (boardData: number[][]) : boolean => {
-    const canSwipe = (direction: Direction) : boolean => {
-        const { plan } = 
+const isSwipePossible = (boardData: number[][]): boolean => {
+    const canSwipe = (direction: Direction): boolean => {
+        const { plan } =
             getNewMatrixByDirection(boardData, direction);
         return plan !== undefined;
     }
     return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
 }
 
-const canAddTiles = (boardData: number[][]): boolean => 
+const canAddTiles = (boardData: number[][]): boolean =>
     getNumZeros(boardData) > 0;
 
 
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined); 
+    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        if (plan) { 
+        if (plan) {
             setAnimationPlan(plan);
         }
 
         setBoardData(newBoard);
 
         if (canAddTiles(newBoard)) {
-           addRandomTile(newBoard);
+            addRandomTile(newBoard);
         }
 
         if (!isSwipePossible(newBoard)) {
@@ -72,7 +73,7 @@ export const Game: React.FC = () => {
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
-    const { onTouchStart, onTouchEnd } = useSwipe(handleSwipe);
+    const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
@@ -109,7 +110,7 @@ export const Game: React.FC = () => {
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}>
+            onTouchMove={onTouchMove}>
 
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
@@ -125,12 +126,12 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }} 
+                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }}
                 animationPlan={animationPlan}
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 2.1`}
+                {`Game by Inbar and Tal Segal version: ${VERSION}`}
             </InfoWrapper>
 
         </PageWrapper>
