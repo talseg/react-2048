@@ -9,7 +9,7 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
 import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE, VERSION } from "../../utilities/globals";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -72,7 +72,7 @@ export const Game: React.FC = () => {
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
-    const { onTouchStart, onTouchEnd, onTouchMove } = useSwipe(handleSwipe);
+    const { onTouchStart, onTouchMove } = useSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
@@ -109,7 +109,6 @@ export const Game: React.FC = () => {
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
             onTouchMove={onTouchMove}>
 
             <button style={{ background: "blue", color: "white" }}
@@ -131,7 +130,7 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: 2.1`}
+                {`Game by Inbar and Tal Segal version: ${VERSION}`}
             </InfoWrapper>
 
         </PageWrapper>
