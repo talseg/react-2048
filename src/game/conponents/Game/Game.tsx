@@ -36,34 +36,34 @@ const createInitialBoardData = (): number[][] => {
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
 
-const isSwipePossible = (boardData: number[][]) : boolean => {
-    const canSwipe = (direction: Direction) : boolean => {
-        const { plan } = 
+const isSwipePossible = (boardData: number[][]): boolean => {
+    const canSwipe = (direction: Direction): boolean => {
+        const { plan } =
             getNewMatrixByDirection(boardData, direction);
         return plan !== undefined;
     }
     return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
 }
 
-const canAddTiles = (boardData: number[][]): boolean => 
+const canAddTiles = (boardData: number[][]): boolean =>
     getNumZeros(boardData) > 0;
 
 
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined); 
+    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        if (plan) { 
+        if (plan) {
             setAnimationPlan(plan);
         }
 
         setBoardData(newBoard);
 
         if (canAddTiles(newBoard)) {
-           addRandomTile(newBoard);
+            addRandomTile(newBoard);
         }
 
         if (!isSwipePossible(newBoard)) {
@@ -72,7 +72,7 @@ export const Game: React.FC = () => {
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
-    const { onTouchStart, onTouchEnd } = useSwipe(handleSwipe);
+    const { onTouchStart, onTouchEnd, onTouchMove } = useSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
@@ -109,7 +109,8 @@ export const Game: React.FC = () => {
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}>
+            onTouchEnd={onTouchEnd}
+            onTouchMove={onTouchMove}>
 
             <button style={{ background: "blue", color: "white" }}
                 onClick={() => {
@@ -125,7 +126,7 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }} 
+                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }}
                 animationPlan={animationPlan}
             />
 
