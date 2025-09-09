@@ -7,9 +7,10 @@ import {
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
-import { useSwipe } from "../../hooks/useSwipe";
+// import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { ANIMATION_DURATION, GRID_SIZE, VERSION } from "../../utilities/globals";
+import { useRefSwipe } from "../../hooks/useSRefwipe";
 
 const PageWrapper = styled.div`
   min-height: 90vh;  
@@ -72,7 +73,7 @@ export const Game: React.FC = () => {
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData]);
 
-    const { onTouchStart, onTouchMove } = useSwipe(handleSwipe);
+    const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
