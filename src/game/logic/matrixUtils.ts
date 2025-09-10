@@ -1,8 +1,9 @@
 export const createMatrix = (gridSize: number, initialValue: number): number[][] =>
     Array.from({ length: gridSize }, () => Array(gridSize).fill(initialValue));
 
-export const mapMatrix = (matrix: number[][]): number[][] =>
+export const copyMatrix = (matrix: number[][]): number[][] =>
     matrix.map(row => [...row]);
+
 
 export const getRow = (matrix: number[][], rowIndex: number): number[] => {
     const row = [];
