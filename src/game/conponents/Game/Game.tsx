@@ -6,7 +6,7 @@ import {
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggle from "../fullScreenToggle";
-import { createMatrix, getNumZeros, mapMatrix } from "../../logic/matrixUtils";
+import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
 // import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { ANIMATION_DURATION, GRID_SIZE, VERSION } from "../../utilities/globals";
@@ -93,7 +93,7 @@ export const Game: React.FC = () => {
 
 
     const handleTileClick = (row: number, column: number): undefined => {
-        const newBoardData = mapMatrix(boardData);
+        const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
             return value == 0 ? 2 : value * 2;
         }
@@ -102,7 +102,7 @@ export const Game: React.FC = () => {
     }
 
     const handleTileDoubleClick = (row: number, column: number): undefined => {
-        const newBoardData = mapMatrix(boardData);
+        const newBoardData = copyMatrix(boardData);
         newBoardData[row][column] = 0;
         setData(newBoardData);
     }

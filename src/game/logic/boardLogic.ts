@@ -1,6 +1,6 @@
 import { GRID_SIZE } from "../utilities/globals";
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
-import { getCol, getRow, mapMatrix, arrayFlip, getNumZeros } from "./matrixUtils";
+import { getCol, getRow, copyMatrix, arrayFlip, getNumZeros } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
@@ -15,7 +15,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     plan?: AnimationPlan
 } => {
 
-    let newBoard: number[][] = mapMatrix(board);
+    let newBoard: number[][] = copyMatrix(board);
 
     switch (direction) {
 
@@ -76,21 +76,31 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
 }
 
 export const addRandomTile = (matrix: number[][]) => {
+    const cell = getRandomTilePosition(matrix);
+    matrix[cell.row][cell.col] = 2;
+}
 
+export const getRandomTilePosition = (matrix: number[][]): Cell => {
     const numZeros = getNumZeros(matrix);
     if (numZeros == 0) {
         // ToDo - check the error message
         throw new Error(`addRandomTile requested to add random tile to empty board ${matrix}`)
     }
+    let randomRow = 0;
+    let randomCol = 0;
+    //const emptyCells: Cell[] = mapMatrixToArray(matrix, (item) => { item !== 0} );
 
-    let randomRow = Math.floor(Math.random() * GRID_SIZE);
-    let randomCol = Math.floor(Math.random() * GRID_SIZE);
+
+
 
     while (matrix[randomRow][randomCol] !== 0) {
         randomRow = Math.floor(Math.random() * GRID_SIZE);
         randomCol = Math.floor(Math.random() * GRID_SIZE);
     }
-    matrix[randomRow][randomCol] = 2;
+
+    return (
+        { row: randomRow, col: randomCol }
+    );
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {

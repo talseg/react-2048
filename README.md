@@ -8,6 +8,7 @@
 
 A modern implementation of the classic **2048 game**, built with **React + TypeScript**.  
 This version challenges you to go **beyond 2048 all the way to 65,536**.
+Exercise clean code
 <br/>
 Built with ❤️ by Inbar and Tal Segal. August 2025.
 
@@ -19,9 +20,10 @@ Built with ❤️ by Inbar and Tal Segal. August 2025.
 ---
 
 ## 🎮 Features
+- Supports Destop and phone browsers.
 - Clean React + TypeScript structure.
+- Clean code + no warnings + no junk in the developer tools
 - Swipe support (keyboard and touch).
-- Smooth tile animations.
 - Undo system.
 - Optional hints to help with strategy.
 - **Storybook integration** for developing UI components in isolation.
