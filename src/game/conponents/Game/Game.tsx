@@ -9,8 +9,10 @@ import FullscreenToggle from "../fullScreenToggle";
 import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
 // import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { ANIMATION_DURATION, GRID_SIZE, VERSION } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
+import pkg from "../../../../package.json"
+const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
   min-height: 90vh;  

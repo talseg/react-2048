@@ -6,7 +6,7 @@ on:
   workflow_dispatch:      # allow manual runs from Actions tab
 
 permissions:
-  contents: read
+  contents: write          # changed to write so version bump can commit
   pages: write
   id-token: write
 
@@ -54,3 +54,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Bump version patch in package.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          npm version patch -m "ci: bump version to %s [skip ci]"
+          git push --follow-tags
