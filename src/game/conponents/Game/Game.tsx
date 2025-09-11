@@ -5,9 +5,8 @@ import {
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
-import FullscreenToggle, { IconRestart, IconUndo } from "../fullScreenToggle";
+import FullscreenToggle, { IconRestart, IconUndo } from "../FullScreenToggleButton";
 import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
-// import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
