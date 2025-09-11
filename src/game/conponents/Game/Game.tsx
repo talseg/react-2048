@@ -5,13 +5,14 @@ import {
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
-import FullscreenToggle, { IconRestart, IconUndo } from "../FullScreenToggleButton";
+import FullscreenToggleButton from "../FullScreenToggleButton";
 import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
+import { IconRestart, IconUndo } from "../../../assets/Icons";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -121,7 +122,7 @@ export const Game: React.FC = () => {
                 margin: "20px"
             }}>
 
-                <FullscreenToggle />
+                <FullscreenToggleButton />
 
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
@@ -138,10 +139,7 @@ export const Game: React.FC = () => {
 
             </div>
 
-
-
             <h1 style={{ color: "black" }}>2048 to 65k</h1>
-
 
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
