@@ -5,13 +5,14 @@ import {
     getNewMatrixByDirection, type AnimationPlan, type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
-import FullscreenToggle from "../fullScreenToggle";
+import FullscreenToggleButton from "../FullScreenToggleButton";
 import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
-// import { useSwipe } from "../../hooks/useSwipe";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
+import { SmallButton } from "../../elements/SmallButton";
+import { IconRestart, IconUndo } from "../../../assets/Icons";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -114,16 +115,31 @@ export const Game: React.FC = () => {
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}>
 
-            <button style={{ background: "blue", color: "white" }}
-                onClick={() => {
+            <div style={{
+                display: "flex",
+                alignSelf: "start",
+                gap: "20px",
+                margin: "20px"
+            }}>
+
+                <FullscreenToggleButton />
+
+                <SmallButton onClick={() => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
-                }}
-            >Restart</button>
+                }}>
+                    <IconRestart/>
+                </SmallButton>
 
-            <h1 style={{ color: "black" }}>2048</h1>
+                <SmallButton onClick={() => {
+                    alert("undo not implemented yet")
+                }}>
+                    <IconUndo/>
+                </SmallButton>
 
-            <FullscreenToggle />
+            </div>
+
+            <h1 style={{ color: "black" }}>2048 to 65k</h1>
 
             <Board boardData={boardData}
                 onTileClick={handleTileClick}

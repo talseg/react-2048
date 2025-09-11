@@ -1,7 +1,7 @@
 {
   "name": "react-2048",
   "private": true,
-  "version": "2.2.0",
+  "version": "2.2.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "start": "vite --host & sleep 1 && open http://localhost:5173/",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "bump-version": "npm version patch -m \"release: bump patch to %s\" && git push --follow-tags"
   },
   "dependencies": {
     "react": "^19.1.1",
