@@ -1,6 +1,5 @@
-import { GRID_SIZE } from "../utilities/globals";
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
-import { getCol, getRow, copyMatrix, arrayFlip, getNumZeros } from "./matrixUtils";
+import { getCol, getRow, copyMatrix, arrayFlip } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
@@ -58,7 +57,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
             plan = getBoardAnimationRightSwipe(board);
         }
 
-          else if (direction === "up") {
+        else if (direction === "up") {
             plan = getBoardAnimationUpSwipe(board);
         }
 
@@ -75,32 +74,31 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
     );
 }
 
-export const addRandomTile = (matrix: number[][]) => {
+export const addRandomTile = (matrix: number[][], tileValue: number) => {
     const cell = getRandomTilePosition(matrix);
-    matrix[cell.row][cell.col] = 2;
+    matrix[cell.row][cell.col] = tileValue;
 }
 
-export const getRandomTilePosition = (matrix: number[][]): Cell => {
-    const numZeros = getNumZeros(matrix);
-    if (numZeros == 0) {
-        // ToDo - check the error message
-        throw new Error(`addRandomTile requested to add random tile to empty board ${matrix}`)
+const getTiles = (matrix: number[][]): StaticTile[] => 
+  matrix.flatMap((row, rowIndex) =>
+    row.map((value, colIndex) => ({
+      value,
+      position: { row: rowIndex, col: colIndex },
+    }))
+  );
+
+const getEmptyTiles = (matrix: number[][]): StaticTile[] =>
+    getTiles(matrix).filter((cell) => cell.value === 0) 
+
+const getRandomTilePosition = (matrix: number[][]): Cell => {
+    const emptyTiles = getEmptyTiles(matrix);
+    const numEmptyTiles = emptyTiles.length;
+    if (numEmptyTiles === 0) {
+        // ToDo handle exceptions
+        throw new Error(`addRandomTile requested to add random tile to empty board:\n${JSON.stringify(matrix)}`)
     }
-    let randomRow = 0;
-    let randomCol = 0;
-    //const emptyCells: Cell[] = mapMatrixToArray(matrix, (item) => { item !== 0} );
-
-
-
-
-    while (matrix[randomRow][randomCol] !== 0) {
-        randomRow = Math.floor(Math.random() * GRID_SIZE);
-        randomCol = Math.floor(Math.random() * GRID_SIZE);
-    }
-
-    return (
-        { row: randomRow, col: randomCol }
-    );
+    const itemIndex = Math.floor(Math.random() * numEmptyTiles);
+    return emptyTiles[itemIndex].position;
 }
 
 const getBoardAfterLeftwipe = (board: number[][]): number[][] => {
