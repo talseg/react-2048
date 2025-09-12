@@ -33,8 +33,7 @@ const InfoWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
-    grid[0][0] = 2;
-    grid[0][3] = 2;
+    addRandomTile(grid, 2);
     return grid;
 }
 
@@ -57,6 +56,7 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
+    const [lastBoard, setLastBoard] = useState<number[][]>([[]]);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -64,6 +64,7 @@ export const Game: React.FC = () => {
             setAnimationPlan(plan);
         }
 
+        setLastBoard(boardData);
         setBoardData(newBoard);
 
         if (canAddTiles(newBoard)) {
@@ -91,7 +92,9 @@ export const Game: React.FC = () => {
             setBoardData(JSON.parse(localData));
         }
         else {
-            setBoardData(createInitialBoardData());
+            const initialBoard = createInitialBoardData();
+            setBoardData(initialBoard);
+            setLastBoard(initialBoard)
         }
     }, [])
 
@@ -133,7 +136,7 @@ export const Game: React.FC = () => {
                 </SmallButton>
 
                 <SmallButton onClick={() => {
-                    alert("undo not implemented yet")
+                    setData(lastBoard);
                 }}>
                     <IconUndo/>
                 </SmallButton>
