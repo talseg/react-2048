@@ -13,6 +13,7 @@ import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
+import { MAX_TILE_VALUE } from "../tile/Tile";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -110,6 +111,7 @@ export const Game: React.FC = () => {
 
         const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
+            if (value >= MAX_TILE_VALUE) return 0;
             return value == 0 ? 2 : value * 2;
         }
         newBoardData[row][column] = getNextTileValue(newBoardData[row][column]);
@@ -129,22 +131,27 @@ export const Game: React.FC = () => {
         accent-color: #636363;
     `;
 
-    // const ButtonsWrapper = styled.div`
-        
-    // `;
+    const CheckboxWrapper = styled.div`
+        display: flex; 
+        margin-left: auto; 
+        flex-direction: column; 
+        align-items: center;
+    `;
+
+    const ButtonsWrapper = styled.div`
+        display: flex;
+        align-self: start;
+        gap: 20px;
+        margin: 20px;
+        width: 90vw;
+    `;
 
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}>
 
-            <div style={{
-                display: "flex",
-                alignSelf: "start",
-                gap: "20px",
-                margin: "20px",
-                width: "90vw",
-            }}>
+            <ButtonsWrapper>
 
                 <FullscreenToggleButton />
 
@@ -161,16 +168,15 @@ export const Game: React.FC = () => {
                     <IconUndo />
                 </SmallButton>
 
-                <div style={{ display: "flex", marginLeft: "auto", flexDirection: "column", alignItems: "center" }}>
+                <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allowTileChange}
                         onChange={(e) => setAllowTileChange(e.target.checked)}>
                     </CheckboxStyled>
                     <div>allow change</div>
+                </CheckboxWrapper>
 
-                </div>
-
-            </div>
+            </ButtonsWrapper>
 
             <h1 style={{ color: "black" }}>2048 to 65k</h1>
 

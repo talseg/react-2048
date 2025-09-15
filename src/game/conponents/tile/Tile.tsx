@@ -23,6 +23,8 @@ const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundCol
     user-select: none;
 `}`;
 
+export const MAX_TILE_VALUE = 65536;
+
 // ToDo - change the colors a little bit
 const getTileColorByValue = (value: number): string => {
 
@@ -59,7 +61,7 @@ const getTileColorByValue = (value: number): string => {
             return "#ee9b2e";
         case 32768:
             return "#ee812e";
-        case 65536:
+        case MAX_TILE_VALUE:
             return "#3d3333";
     }
     return "#ff0000";
