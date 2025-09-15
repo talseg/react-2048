@@ -34,6 +34,7 @@ const InfoWrapper = styled.div`
   color: #000000;
   font-size: 20px;
   font-weight: bold;
+  max-width: 260px;
 `;
 
 const createInitialBoardData = (): number[][] => {
