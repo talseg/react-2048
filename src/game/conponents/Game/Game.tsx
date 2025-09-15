@@ -16,12 +16,16 @@ import { IconRestart, IconUndo } from "../../../assets/Icons";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
-  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   background-color: #d9d9d9;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100vw;
 `;
 
 const InfoWrapper = styled.div`
