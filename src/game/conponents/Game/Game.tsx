@@ -61,6 +61,7 @@ export const Game: React.FC = () => {
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [lastBoard, setLastBoard] = useState<number[][]>([[]]);
+    const [allowTileChange, setAllowTileChange] = useState(false);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -104,6 +105,9 @@ export const Game: React.FC = () => {
 
 
     const handleTileClick = (row: number, column: number): undefined => {
+
+        if (!allowTileChange) return
+
         const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
             return value == 0 ? 2 : value * 2;
@@ -118,6 +122,17 @@ export const Game: React.FC = () => {
         setData(newBoardData);
     }
 
+
+    const CheckboxStyled = styled.input`
+        width: 38px;
+        height: 38px;
+        accent-color: #636363;
+    `;
+
+    // const ButtonsWrapper = styled.div`
+        
+    // `;
+
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
@@ -127,7 +142,8 @@ export const Game: React.FC = () => {
                 display: "flex",
                 alignSelf: "start",
                 gap: "20px",
-                margin: "20px"
+                margin: "20px",
+                width: "90vw",
             }}>
 
                 <FullscreenToggleButton />
@@ -136,14 +152,23 @@ export const Game: React.FC = () => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
                 }}>
-                    <IconRestart/>
+                    <IconRestart />
                 </SmallButton>
 
                 <SmallButton onClick={() => {
                     setData(lastBoard);
                 }}>
-                    <IconUndo/>
+                    <IconUndo />
                 </SmallButton>
+
+                <div style={{ display: "flex", marginLeft: "auto", flexDirection: "column", alignItems: "center" }}>
+                    <CheckboxStyled type="checkbox"
+                        checked={allowTileChange}
+                        onChange={(e) => setAllowTileChange(e.target.checked)}>
+                    </CheckboxStyled>
+                    <div>allow change</div>
+
+                </div>
 
             </div>
 
