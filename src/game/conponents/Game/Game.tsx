@@ -13,15 +13,20 @@ import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
+import { MAX_TILE_VALUE } from "../tile/Tile";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
-  min-height: 90vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   background-color: #d9d9d9;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100vw;
 `;
 
 const InfoWrapper = styled.div`
@@ -29,6 +34,7 @@ const InfoWrapper = styled.div`
   color: #000000;
   font-size: 20px;
   font-weight: bold;
+  max-width: 260px;
 `;
 
 const createInitialBoardData = (): number[][] => {
@@ -57,6 +63,7 @@ export const Game: React.FC = () => {
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [lastBoard, setLastBoard] = useState<number[][]>([[]]);
+    const [allowTileChange, setAllowTileChange] = useState(false);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -100,8 +107,12 @@ export const Game: React.FC = () => {
 
 
     const handleTileClick = (row: number, column: number): undefined => {
+
+        if (!allowTileChange) return
+
         const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
+            if (value >= MAX_TILE_VALUE) return 0;
             return value == 0 ? 2 : value * 2;
         }
         newBoardData[row][column] = getNextTileValue(newBoardData[row][column]);
@@ -114,17 +125,34 @@ export const Game: React.FC = () => {
         setData(newBoardData);
     }
 
+
+    const CheckboxStyled = styled.input`
+        width: 38px;
+        height: 38px;
+        accent-color: #636363;
+    `;
+
+    const CheckboxWrapper = styled.div`
+        display: flex; 
+        margin-left: auto; 
+        flex-direction: column; 
+        align-items: center;
+    `;
+
+    const ButtonsWrapper = styled.div`
+        display: flex;
+        align-self: start;
+        gap: 20px;
+        margin: 20px;
+        width: 90vw;
+    `;
+
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}>
 
-            <div style={{
-                display: "flex",
-                alignSelf: "start",
-                gap: "20px",
-                margin: "20px"
-            }}>
+            <ButtonsWrapper>
 
                 <FullscreenToggleButton />
 
@@ -132,16 +160,24 @@ export const Game: React.FC = () => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
                 }}>
-                    <IconRestart/>
+                    <IconRestart />
                 </SmallButton>
 
                 <SmallButton onClick={() => {
                     setData(lastBoard);
                 }}>
-                    <IconUndo/>
+                    <IconUndo />
                 </SmallButton>
 
-            </div>
+                <CheckboxWrapper>
+                    <CheckboxStyled type="checkbox"
+                        checked={allowTileChange}
+                        onChange={(e) => setAllowTileChange(e.target.checked)}>
+                    </CheckboxStyled>
+                    <div>allow change</div>
+                </CheckboxWrapper>
+
+            </ButtonsWrapper>
 
             <h1 style={{ color: "black" }}>2048 to 65k</h1>
 
