@@ -14,6 +14,7 @@ import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
 import { MAX_TILE_VALUE } from "../tile/Tile";
+import { useUndo } from "../../hooks/useUndo";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -62,8 +63,8 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [lastBoard, setLastBoard] = useState<number[][]>([[]]);
     const [allowTileChange, setAllowTileChange] = useState(false);
+    const { onUndo, updateUndoBoard } = useUndo();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -71,7 +72,7 @@ export const Game: React.FC = () => {
             setAnimationPlan(plan);
         }
 
-        setLastBoard(boardData);
+        updateUndoBoard(boardData)
         setBoardData(newBoard);
 
         if (canAddTiles(newBoard)) {
@@ -101,7 +102,7 @@ export const Game: React.FC = () => {
         else {
             const initialBoard = createInitialBoardData();
             setBoardData(initialBoard);
-            setLastBoard(initialBoard)
+            updateUndoBoard(initialBoard);
         }
     }, [])
 
@@ -147,6 +148,11 @@ export const Game: React.FC = () => {
         width: 90vw;
     `;
 
+    function handleUndo(): void {
+        const prevBoard = onUndo();
+        setData(prevBoard);
+    } 
+
     return (
         <PageWrapper
             onTouchStart={onTouchStart}
@@ -163,9 +169,7 @@ export const Game: React.FC = () => {
                     <IconRestart />
                 </SmallButton>
 
-                <SmallButton onClick={() => {
-                    setData(lastBoard);
-                }}>
+                <SmallButton onClick={handleUndo}>
                     <IconUndo />
                 </SmallButton>
 
