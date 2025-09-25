@@ -6,10 +6,12 @@ export interface UseUndoProps {
     onUndo: () => number[][];
     updateUndoBoard: (board: number[][]) => void;
 }
-
-// onUndo - return the board after an undo
+ 
+// ToDo - limit the number of undo's
+//      - Clear the undo stack
+//      - Create a Stack data structure to make the code more readable
 export const useUndo = (): UseUndoProps => {
-    // Stack of boards (list of 2D arrays)
+
     const [undoStack, setUndoStack] = useState<number[][][]>([
         createMatrix(GRID_SIZE, 0)
     ]);
@@ -25,8 +27,8 @@ export const useUndo = (): UseUndoProps => {
     }, [undoStack]);
 
     const updateUndoBoard = (board: number[][]): void => {
-        const newBoardStack = [...undoStack];  // clone first
-        newBoardStack.push(board);             // now it's safe to mutate
+        const newBoardStack = [...undoStack];
+        newBoardStack.push(board);
         setUndoStack(newBoardStack);
     };
 
