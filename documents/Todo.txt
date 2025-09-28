@@ -5,3 +5,5 @@ Implement merge tile animation
 Refactor Inbar's code
 Implement Menu
 Implement regular 2048 mode
+Install Whatsup Web
+Install vsCode chatgpt extension
