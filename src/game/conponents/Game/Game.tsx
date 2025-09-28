@@ -84,7 +84,7 @@ export const Game: React.FC = () => {
             setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData]);
+    }, [boardData, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
@@ -104,7 +104,7 @@ export const Game: React.FC = () => {
             setBoardData(initialBoard);
             updateUndoBoard(initialBoard);
         }
-    }, [])
+    }, [updateUndoBoard])
 
 
     const handleTileClick = (row: number, column: number): undefined => {

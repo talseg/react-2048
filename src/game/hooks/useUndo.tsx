@@ -26,11 +26,11 @@ export const useUndo = (): UseUndoProps => {
         return topItem;
     }, [undoStack]);
 
-    const updateUndoBoard = (board: number[][]): void => {
+    const updateUndoBoard = useCallback((board: number[][]): void => {
         const newBoardStack = [...undoStack];
         newBoardStack.push(board);
         setUndoStack(newBoardStack);
-    };
+    }, [undoStack]);
 
     return { onUndo, updateUndoBoard };
 };

@@ -1,1 +1,7 @@
-keep going
+Disable swipe when Allow change is on
+Check about useCallback
+Implement new tile animation
+Implement merge tile animation
+Refactor Inbar's code
+Implement Menu
+Implement regular 2048 mode
