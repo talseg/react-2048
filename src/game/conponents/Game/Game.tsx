@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { Board } from "../board/Board";
 import {
     addRandomTile,
-    getNewMatrixByDirection, type AnimationPlan, type Direction
+    getNewMatrixByDirection,
+    getRandomTilePosition,
+    type AnimationPlan,
+    type Cell,
+    type Direction,
+    type MovingTile
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
@@ -72,13 +77,26 @@ export const Game: React.FC = () => {
             setAnimationPlan(plan);
         }
 
-        updateUndoBoard(boardData)
-        setBoardData(newBoard);
-
         if (canAddTiles(newBoard)) {
             const newTileValue = 2;
-            addRandomTile(newBoard, newTileValue);
+
+            const randomTilePosition: Cell = getRandomTilePosition(newBoard);
+            const newRandomTile: MovingTile = {
+                value: newTileValue,
+                from: randomTilePosition,
+                to: randomTilePosition,
+                tileType: "poping"
+            }
+
+            if (plan) {
+                plan.movingTiles.push(newRandomTile);
+            }
+
+            newBoard[randomTilePosition.row][randomTilePosition.col] = 2;
         }
+
+        updateUndoBoard(boardData);
+        setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
             setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
@@ -151,7 +169,7 @@ export const Game: React.FC = () => {
     function handleUndo(): void {
         const prevBoard = onUndo();
         setData(prevBoard);
-    } 
+    }
 
     return (
         <PageWrapper

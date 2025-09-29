@@ -11,6 +11,19 @@ const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
     }
 `;
 
+const createPop = () => keyframes`
+  0%   { transform: scale(0); }
+  100% { transform: scale(1); }
+`;
+
+const PopingTileStyled = styled(Tile) <{ x: number; y: number }>`
+    position: absolute;
+    animation: ${createPop()} ${ANIMATION_DURATION}ms forwards;
+    top: ${({ y }) => { return `${y}px` }};
+    left: ${({ x }) => { return `${x}px` }};
+`;
+
+
 const createHorizontalMove = (x0: number, x1: number) => keyframes`
   from { left: ${x0}px; }
   to   { left: ${x1}px; }
@@ -64,7 +77,14 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
 
         const tile = tiles[index];
         // Horizontal movement
-        if (tile.from.row === tile.to.row) {
+        if (tile.tileType === "poping") {
+            const x = toPixels(tile.from.col);
+            const y = toPixels(tile.from.row);
+            tileList.push(
+                <PopingTileStyled key={`moving-tile-${index}`} value={tile.value} x={x} y={y} />
+            );
+        }
+        else if (tile.from.row === tile.to.row) {
 
             const x0 = toPixels(tile.from.col);
             const x1 = toPixels(tile.to.col);
