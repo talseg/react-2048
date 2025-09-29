@@ -1,8 +1,11 @@
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
 import { getCol, getRow, copyMatrix, arrayFlip } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
+export type TileType = "static" | "moving" | "merging" | "poping";
 export type Cell = { row: number, col: number };
-export type MovingTile = { value: number, from: Cell, to: Cell };
+export type MovingTile = { value: number, from: Cell, to: Cell, tileType?: TileType };
+
+// ToDo - implement  static tile handling
 export type StaticTile = { value: number, position: Cell };
 export type AnimationPlan = {
     staticTiles: StaticTile[];
@@ -90,7 +93,7 @@ const getTiles = (matrix: number[][]): StaticTile[] =>
 const getEmptyTiles = (matrix: number[][]): StaticTile[] =>
     getTiles(matrix).filter((cell) => cell.value === 0) 
 
-const getRandomTilePosition = (matrix: number[][]): Cell => {
+export const getRandomTilePosition = (matrix: number[][]): Cell => {
     const emptyTiles = getEmptyTiles(matrix);
     const numEmptyTiles = emptyTiles.length;
     if (numEmptyTiles === 0) {
