@@ -8,3 +8,4 @@ Implement regular 2048 mode
 Install Whatsup Web
 Install vsCode chatgpt extension
 check Computer fans
+Implement plan when there are no swips. remove undefined plan
