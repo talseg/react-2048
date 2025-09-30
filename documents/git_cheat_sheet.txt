@@ -75,3 +75,8 @@ npx npm-check-updates
 
 # update all packages
 # npx npm-check-updates -u
+
+# delete remote branch:
+# > git branch -r       // show remote branches
+# remotes/origin/branch-name
+git push origin --delete branch-name

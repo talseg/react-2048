@@ -23,24 +23,45 @@ import { useUndo } from "../../hooks/useUndo";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  background-color: #d9d9d9;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  height: 100vh;
-  width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #d9d9d9;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
 `;
 
 const InfoWrapper = styled.div`
-  margin-top: 20px;
-  color: #000000;
-  font-size: 20px;
-  font-weight: bold;
-  max-width: 260px;
+    margin-top: 20px;
+    color: #000000;
+    font-size: 20px;
+    font-weight: bold;
+    max-width: 260px;
+`;
+
+const CheckboxStyled = styled.input`
+    width: 38px;
+    height: 38px;
+    accent-color: #636363;
+    `;
+
+const CheckboxWrapper = styled.div`
+    display: flex; 
+    margin-left: auto; 
+    flex-direction: column; 
+    align-items: center;
+`;
+
+const ButtonsWrapper = styled.div`
+    display: flex;
+    align-self: start;
+    gap: 20px;
+    margin: 20px;
+    width: 90vw;
 `;
 
 const createInitialBoardData = (): number[][] => {
@@ -145,26 +166,7 @@ export const Game: React.FC = () => {
     }
 
 
-    const CheckboxStyled = styled.input`
-        width: 38px;
-        height: 38px;
-        accent-color: #636363;
-    `;
 
-    const CheckboxWrapper = styled.div`
-        display: flex; 
-        margin-left: auto; 
-        flex-direction: column; 
-        align-items: center;
-    `;
-
-    const ButtonsWrapper = styled.div`
-        display: flex;
-        align-self: start;
-        gap: 20px;
-        margin: 20px;
-        width: 90vw;
-    `;
 
     function handleUndo(): void {
         const prevBoard = onUndo();
