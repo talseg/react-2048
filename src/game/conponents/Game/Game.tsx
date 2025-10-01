@@ -216,7 +216,7 @@ export const Game: React.FC = () => {
 
             <InfoWrapper>
                 {`Game by Inbar and Tal Segal version: ${VERSION}`}
-                {` on IOS: ${isOnIOS() ? "Yes" : "No"}`}
+                {`userAgent: "${navigator.userAgent}"`}
             </InfoWrapper>
 
         </PageWrapper>
