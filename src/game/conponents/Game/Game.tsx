@@ -33,6 +33,7 @@ const PageWrapper = styled.div`
     left: 0px;
     height: 100vh;
     width: 100vw;
+    touch-action: none;
 `;
 
 const InfoWrapper = styled.div`
