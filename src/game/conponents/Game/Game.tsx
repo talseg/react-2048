@@ -20,6 +20,7 @@ import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
 import { MAX_TILE_VALUE } from "../tile/Tile";
 import { useUndo } from "../../hooks/useUndo";
+import { isOnIOS } from "../../utilities/utilities";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -215,6 +216,7 @@ export const Game: React.FC = () => {
 
             <InfoWrapper>
                 {`Game by Inbar and Tal Segal version: ${VERSION}`}
+                {` on IOS: ${isOnIOS() ? "Yes" : "No"}`}
             </InfoWrapper>
 
         </PageWrapper>
