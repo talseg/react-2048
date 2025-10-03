@@ -20,6 +20,7 @@ import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
 import { MAX_TILE_VALUE } from "../tile/Tile";
 import { useUndo } from "../../hooks/useUndo";
+import { isOnIOS } from "../../utilities/utilities";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -61,8 +62,8 @@ const ButtonsWrapper = styled.div`
     display: flex;
     align-self: start;
     gap: 20px;
-    margin: 20px;
     width: 90vw;
+    margin:10px 0px 0px 10px;
 `;
 
 const createInitialBoardData = (): number[][] => {
@@ -85,6 +86,12 @@ const isSwipePossible = (boardData: number[][]): boolean => {
 const canAddTiles = (boardData: number[][]): boolean =>
     getNumZeros(boardData) > 0;
 
+const HeaderStyled = styled.div`
+    color: black;
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: 500;
+`;
 
 export const Game: React.FC = () => {
 
@@ -166,9 +173,6 @@ export const Game: React.FC = () => {
         setData(newBoardData);
     }
 
-
-
-
     function handleUndo(): void {
         const prevBoard = onUndo();
         setData(prevBoard);
@@ -181,7 +185,7 @@ export const Game: React.FC = () => {
 
             <ButtonsWrapper>
 
-                <FullscreenToggleButton />
+                {!isOnIOS() && <FullscreenToggleButton />}
 
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
@@ -199,12 +203,12 @@ export const Game: React.FC = () => {
                         checked={allowTileChange}
                         onChange={(e) => setAllowTileChange(e.target.checked)}>
                     </CheckboxStyled>
-                    <div>allow change</div>
+                    <div>change</div>
                 </CheckboxWrapper>
 
             </ButtonsWrapper>
 
-            <h1 style={{ color: "black" }}>2048 to 65k</h1>
+            <HeaderStyled>2048 to 65k</HeaderStyled>
 
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
@@ -215,7 +219,6 @@ export const Game: React.FC = () => {
 
             <InfoWrapper>
                 {`Game by Inbar and Tal Segal version: ${VERSION}`}
-                {`userAgent: "${navigator.userAgent}"`}
             </InfoWrapper>
 
         </PageWrapper>
