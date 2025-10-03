@@ -1,3 +1,4 @@
+Fix time of final merge animation
 Disable swipe when Allow change is on
 Check about useCallback
 Implement new tile animation
@@ -9,3 +10,4 @@ Install Whatsup Web
 Install vsCode chatgpt extension
 check Computer fans
 Implement plan when there are no swips. remove undefined plan
+
