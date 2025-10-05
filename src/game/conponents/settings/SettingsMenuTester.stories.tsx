@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SettingsMenu } from './SettingsMenu';
+import { OPEN_MENU_ANIMATION_TIME, SettingsMenuBody } from './SettingsMenu';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 
@@ -22,8 +22,8 @@ const SettingsMenuTester = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [allow4, setAllow4] = useState(false);
-  const [classicMode, setclassicMode] = useState(false);
-  
+  const [classicMode, setclassicMode] = useState(true);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   return (
     <Wrapper>
@@ -35,7 +35,11 @@ const SettingsMenuTester = () => {
           width: "100px",
           height: "20px"
         }}
-          onClick={() => setIsMenuOpen(value => !value)}
+          onClick={() => {
+            setIsMenuVisible(true);
+            setTimeout(
+              () => setIsMenuOpen(value => !value), 0);
+          }}
         >open menu</button>
 
         <div style={{ color: "white" }}>{`Allow4: ${allow4}`}</div>
@@ -44,9 +48,15 @@ const SettingsMenuTester = () => {
 
       </ContentWrapper>
 
-      {<SettingsMenu
+      {isMenuVisible && <SettingsMenuBody
         isOpen={isMenuOpen}
-        onIsOpenClick={() => setIsMenuOpen(value => !value)}
+        onIsOpenChanged={
+          () => 
+          {
+            setIsMenuOpen(value => !value);
+            setTimeout(() => setIsMenuVisible(false), OPEN_MENU_ANIMATION_TIME+200);
+          }
+        }
 
         allow4={allow4}
         onAllow4Changed={value => setAllow4(value)}
@@ -54,7 +64,7 @@ const SettingsMenuTester = () => {
         classicMode={classicMode}
         onClassicModeChange={value => setclassicMode(value)}
 
-      ></SettingsMenu>}
+      ></SettingsMenuBody>}
 
     </Wrapper>
   );

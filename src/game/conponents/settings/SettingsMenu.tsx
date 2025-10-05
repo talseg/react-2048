@@ -3,17 +3,17 @@ import { CheckboxStyled } from "../Game/Game";
 
 export interface SettingsMenuProps {
     isOpen: boolean;
-    onIsOpenClick: () => void;
+    onIsOpenChanged: () => void;
     allow4: boolean;
     onAllow4Changed: (allow: boolean) => void;
     classicMode: boolean;
     onClassicModeChange: (isClassic: boolean) => void;
 }
 
-const OPEN_MENU_ANIMATION_TIME = 600;
+export const OPEN_MENU_ANIMATION_TIME = 600;
 
 const MenuWrapper = styled.div<{ open: boolean }>`
-    background-color: red;
+    background-color: #baada1;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -33,8 +33,9 @@ export const CheckboxWrapper = styled.div`
     gap: 10px;
 `;
 
-export const SettingsMenu: React.FC<SettingsMenuProps> = ({
-    isOpen, onIsOpenClick: onIsOpenCHanged,
+
+export const SettingsMenuBody: React.FC<SettingsMenuProps> = ({
+    isOpen, onIsOpenChanged,
     allow4, onAllow4Changed,
     classicMode, onClassicModeChange
 }) => {
@@ -45,7 +46,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             <ItemsWrapper>
                 <button
                     style={{ width: "70px" }}
-                    onClick={onIsOpenCHanged}>
+                    onClick={onIsOpenChanged}>
                     close
                 </button>
 
