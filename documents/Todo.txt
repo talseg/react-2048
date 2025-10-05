@@ -1,3 +1,4 @@
+Fix time of final merge animation
 Disable swipe when Allow change is on
 Check about useCallback
 Implement new tile animation
