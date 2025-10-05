@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { OPEN_MENU_ANIMATION_TIME, SettingsMenuBody } from './SettingsMenu';
+import { SettingsMenu } from './SettingsMenu';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 
@@ -23,11 +23,9 @@ const SettingsMenuTester = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [allow4, setAllow4] = useState(false);
   const [classicMode, setclassicMode] = useState(true);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-
+  
   return (
     <Wrapper>
-
       <ContentWrapper>
         <button style={{
           gridRow: 1,
@@ -36,9 +34,7 @@ const SettingsMenuTester = () => {
           height: "20px"
         }}
           onClick={() => {
-            setIsMenuVisible(true);
-            setTimeout(
-              () => setIsMenuOpen(value => !value), 0);
+            setIsMenuOpen(true);
           }}
         >open menu</button>
 
@@ -48,13 +44,12 @@ const SettingsMenuTester = () => {
 
       </ContentWrapper>
 
-      {isMenuVisible && <SettingsMenuBody
+      <SettingsMenu
         isOpen={isMenuOpen}
         onIsOpenChanged={
           () => 
           {
             setIsMenuOpen(value => !value);
-            setTimeout(() => setIsMenuVisible(false), OPEN_MENU_ANIMATION_TIME+200);
           }
         }
 
@@ -64,7 +59,7 @@ const SettingsMenuTester = () => {
         classicMode={classicMode}
         onClassicModeChange={value => setclassicMode(value)}
 
-      ></SettingsMenuBody>}
+      ></SettingsMenu>
 
     </Wrapper>
   );
