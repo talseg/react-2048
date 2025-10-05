@@ -4,8 +4,8 @@ import { styled } from 'styled-components';
 import { useState } from 'react';
 
 const Wrapper = styled.div`
-  width: 240px;
-  height: 200px;
+  width: 340px;
+  height: 400px;
   background-color: blue;
   position: relative;
   display: flex;

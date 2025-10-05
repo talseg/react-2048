@@ -21,6 +21,7 @@ import { IconRestart, IconUndo } from "../../../assets/Icons";
 import { MAX_TILE_VALUE } from "../tile/Tile";
 import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
+import { SettingsMenu } from "../settings/SettingsMenu";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -99,6 +100,11 @@ export const Game: React.FC = () => {
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [allowTileChange, setAllowTileChange] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [allow4, setAllow4] = useState(false);
+    const [classicMode, setclassicMode] = useState(true);
+
+
     const { onUndo, updateUndoBoard } = useUndo();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -199,6 +205,10 @@ export const Game: React.FC = () => {
                     <IconUndo />
                 </SmallButton>
 
+                <SmallButton onClick={() => setIsMenuOpen(true)}>
+                    <div>...</div>
+                </SmallButton>
+
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allowTileChange}
@@ -221,6 +231,22 @@ export const Game: React.FC = () => {
             <InfoWrapper>
                 {`Game by Inbar and Tal Segal version: ${VERSION}`}
             </InfoWrapper>
+
+            <SettingsMenu
+                isOpen={isMenuOpen}
+                onIsOpenChanged={
+                    () => {
+                        setIsMenuOpen(value => !value);
+                    }
+                }
+
+                allow4={allow4}
+                onAllow4Changed={value => setAllow4(value)}
+
+                classicMode={classicMode}
+                onClassicModeChange={value => setclassicMode(value)}
+
+            ></SettingsMenu>
 
         </PageWrapper>
 
