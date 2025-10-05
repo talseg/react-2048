@@ -45,11 +45,12 @@ const InfoWrapper = styled.div`
     max-width: 260px;
 `;
 
-const CheckboxStyled = styled.input`
+// ToDo - create a checkbox styled component
+export const CheckboxStyled = styled.input`
     width: 38px;
     height: 38px;
     accent-color: #636363;
-    `;
+`;
 
 const CheckboxWrapper = styled.div`
     display: flex; 
