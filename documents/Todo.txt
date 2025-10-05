@@ -10,4 +10,4 @@ Install Whatsup Web
 Install vsCode chatgpt extension
 check Computer fans
 Implement plan when there are no swips. remove undefined plan
-
+fix startup mess

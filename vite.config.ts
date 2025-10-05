@@ -13,7 +13,8 @@ export default defineConfig({
   plugins: [react()],
   base: process.env.NODE_ENV === 'production' ? '/react-2048/' : '/',
   server: {
-    host: true
+    host: true,
+    allowedHosts: ['tal-pc']
   },
   test: {
     projects: [{
