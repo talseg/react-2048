@@ -32,7 +32,7 @@ const createHorizontalMove = (x0: number, x1: number) => keyframes`
 
 const HorizontalMovingTileStyled = styled(Tile) <{ x0: number; x1: number; y: number }>`
     position: absolute;
-    animation: ${({ x0, x1 }) => createHorizontalMove(x0, x1)} ${ANIMATION_DURATION/2.0}ms forwards;
+    animation: ${({ x0, x1 }) => createHorizontalMove(x0, x1)} ${ANIMATION_DURATION}ms forwards;
     top: ${({ y }) => { return `${y}px` }};
 `;
 
@@ -43,7 +43,7 @@ const createVerticalMove = (y0: number, y1: number) => keyframes`
 
 const VerticalMovingTileStyled = styled(Tile) <{ y0: number; y1: number; x: number }>`
     position: absolute;
-    animation: ${({ y0, y1 }) => createVerticalMove(y0, y1)} ${ANIMATION_DURATION/2.0}ms forwards;
+    animation: ${({ y0, y1 }) => createVerticalMove(y0, y1)} ${ANIMATION_DURATION}ms forwards;
     left: ${({ x }) => { return `${x}px` }};
 `;
 

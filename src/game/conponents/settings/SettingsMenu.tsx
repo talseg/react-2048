@@ -1,15 +1,7 @@
 import { styled } from "styled-components";
 import { CheckboxStyled } from "../Game/Game";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
-export interface SettingsMenuProps {
-    isOpen: boolean;
-    onIsOpenChanged: () => void;
-    allow4: boolean;
-    onAllow4Changed: (allow: boolean) => void;
-    classicMode: boolean;
-    onClassicModeChange: (isClassic: boolean) => void;
-}
 
 export const OPEN_MENU_ANIMATION_TIME = 600; // ms
 
@@ -19,7 +11,7 @@ const MenuWrapper = styled.div<{ open: boolean }>`
     top: 0;
     right: 0;
     height: 100%;
-    width: 100%; /* or 260px if you want a panel width */
+    width: 100%;
     transform: translateX(${({ open }) => (open ? '0%' : '100%')});
     transition: transform ${OPEN_MENU_ANIMATION_TIME}ms cubic-bezier(.2,.9,.3,1);
     will-change: transform;
@@ -38,10 +30,24 @@ export const CheckboxWrapper = styled.div`
     gap: 10px;
 `;
 
+export interface SettingsMenuProps {
+    isOpen: boolean;
+    onIsOpenChanged: () => void;
+    allow4: boolean;
+    onAllow4Changed: () => void;
+    classicMode: boolean;
+    onClassicModeChange: () => void;
+    // Allow changing the tiles by clicking them
+    allowTileChange: boolean;
+    onAllowTileChangeChange: () => void;
+}
+
+
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     isOpen, onIsOpenChanged,
     allow4, onAllow4Changed,
-    classicMode, onClassicModeChange
+    classicMode, onClassicModeChange,
+    allowTileChange, onAllowTileChangeChange
 }) => {
 
     // Keeps the element mounted while closing animation runs
@@ -49,52 +55,28 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     // Drives the CSS transform state
     const [animOpen, setAnimOpen] = useState(false);
 
-    const panelRef = useRef<HTMLDivElement>(null);
-    const rafIds = useRef<number[]>([]);
-
-    // Clean up any pending rAFs on unmount
     useEffect(() => {
-        return () => {
-            rafIds.current.forEach(id => cancelAnimationFrame(id));
-            rafIds.current = [];
-        };
-    }, []);
-
-    useEffect(() => {
-        // Cancel in-flight rAFs between toggles
-        rafIds.current.forEach(id => cancelAnimationFrame(id));
-        rafIds.current = [];
 
         if (isOpen) {
-            // 1) Mount closed (off-screen)
             setPresent(true);
-            setAnimOpen(false);
-
-            // 2) Next frame: force layout so closed transform is committed
-            const id1 = requestAnimationFrame(() => {
-                panelRef.current?.getBoundingClientRect(); // flush styles/layout
-
-                // 3) Next frame: flip to open → transition will run
-                const id2 = requestAnimationFrame(() => setAnimOpen(true));
-                rafIds.current.push(id2);
-            });
-            rafIds.current.push(id1);
+            setTimeout(() => setAnimOpen(true), 10);
         } else {
-            // Start closing transition
-            setAnimOpen(false);
+            if (!isOpen) {
+                setAnimOpen(false);
+            }
         }
     }, [isOpen]);
 
     const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-        // Only react to our own transform finishing
         if (e.target !== e.currentTarget || e.propertyName !== 'transform') return;
-        if (!animOpen) setPresent(false);
+        if (!isOpen)
+            setPresent(false);
     };
 
     if (!present) return null;
 
     return (
-        <MenuWrapper ref={panelRef} open={animOpen} onTransitionEnd={handleTransitionEnd} role="dialog" aria-modal="true">
+        <MenuWrapper open={animOpen} onTransitionEnd={handleTransitionEnd} role="dialog" aria-modal="true">
             <ItemsWrapper>
                 <button
                     style={{ width: "70px" }}
@@ -105,7 +87,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allow4}
-                        onChange={() => onAllow4Changed(!allow4)}>
+                        onChange={() => onAllow4Changed()}>
                     </CheckboxStyled>
                     <div>Allow 4</div>
                 </CheckboxWrapper>
@@ -113,10 +95,19 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={classicMode}
-                        onChange={() => onClassicModeChange(!classicMode)}>
+                        onChange={() => onClassicModeChange()}>
                     </CheckboxStyled>
                     <div>Classic Mode</div>
                 </CheckboxWrapper>
+
+                <CheckboxWrapper>
+                    <CheckboxStyled type="checkbox"
+                        checked={allowTileChange}
+                        onChange={() => onAllowTileChangeChange()}>
+                    </CheckboxStyled>
+                    <div>Allow tile change</div>
+                </CheckboxWrapper>
+
             </ItemsWrapper>
         </MenuWrapper>
     );

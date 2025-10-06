@@ -13,7 +13,7 @@ import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
 import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
+import { GRID_SIZE, SPAWN_4_PROBABILITY } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
@@ -53,13 +53,6 @@ export const CheckboxStyled = styled.input`
     accent-color: #636363;
 `;
 
-const CheckboxWrapper = styled.div`
-    display: flex; 
-    margin-left: auto; 
-    flex-direction: column; 
-    align-items: center;
-`;
-
 const ButtonsWrapper = styled.div`
     display: flex;
     align-self: start;
@@ -85,9 +78,6 @@ const isSwipePossible = (boardData: number[][]): boolean => {
     return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
 }
 
-const canAddTiles = (boardData: number[][]): boolean =>
-    getNumZeros(boardData) > 0;
-
 const HeaderStyled = styled.div`
     color: black;
     font-size: 36px;
@@ -101,10 +91,8 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [allow4, setAllow4] = useState(false);
-    const [classicMode, setclassicMode] = useState(true);
-
-
+    const [isClassicMode, setIsClassicMode] = useState(true);
+    const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -112,9 +100,8 @@ export const Game: React.FC = () => {
         if (plan) {
             setAnimationPlan(plan);
         }
-
-        if (canAddTiles(newBoard)) {
-            const newTileValue = 2;
+        if (getNumZeros(newBoard) > 0) {
+            const newTileValue = spawn4 ? Math.random() < SPAWN_4_PROBABILITY ? 4 : 2 : 2;
 
             const randomTilePosition: Cell = getRandomTilePosition(newBoard);
             const newRandomTile: MovingTile = {
@@ -126,19 +113,21 @@ export const Game: React.FC = () => {
 
             if (plan) {
                 plan.movingTiles.push(newRandomTile);
+                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
 
-            newBoard[randomTilePosition.row][randomTilePosition.col] = 2;
+            if (!isClassicMode)
+                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
         }
 
         updateUndoBoard(boardData);
         setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION * 2);
+            setTimeout(() => { alert("Game Over") }, 10);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData, updateUndoBoard]);
+    }, [boardData, isClassicMode, spawn4, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
@@ -163,7 +152,7 @@ export const Game: React.FC = () => {
 
     const handleTileClick = (row: number, column: number): undefined => {
 
-        if (!allowTileChange) return
+        if (!allowTileChange) return;
 
         const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
@@ -175,6 +164,9 @@ export const Game: React.FC = () => {
     }
 
     const handleTileDoubleClick = (row: number, column: number): undefined => {
+
+        if (!allowTileChange) return;
+
         const newBoardData = copyMatrix(boardData);
         newBoardData[row][column] = 0;
         setData(newBoardData);
@@ -209,14 +201,6 @@ export const Game: React.FC = () => {
                     <div>...</div>
                 </SmallButton>
 
-                <CheckboxWrapper>
-                    <CheckboxStyled type="checkbox"
-                        checked={allowTileChange}
-                        onChange={(e) => setAllowTileChange(e.target.checked)}>
-                    </CheckboxStyled>
-                    <div>change</div>
-                </CheckboxWrapper>
-
             </ButtonsWrapper>
 
             <HeaderStyled>2048 to 65k</HeaderStyled>
@@ -234,17 +218,17 @@ export const Game: React.FC = () => {
 
             <SettingsMenu
                 isOpen={isMenuOpen}
-                onIsOpenChanged={
-                    () => {
-                        setIsMenuOpen(value => !value);
-                    }
-                }
+                onIsOpenChanged={() => setIsMenuOpen(value => !value)}
 
-                allow4={allow4}
-                onAllow4Changed={value => setAllow4(value)}
+                // ToDo - move setting parameters to useContext
+                allow4={spawn4}
+                onAllow4Changed={() => setSpawn4(value => !value)}
 
-                classicMode={classicMode}
-                onClassicModeChange={value => setclassicMode(value)}
+                classicMode={isClassicMode}
+                onClassicModeChange={() => setIsClassicMode(value => !value)}
+
+                allowTileChange={allowTileChange}
+                onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
 
             ></SettingsMenu>
 

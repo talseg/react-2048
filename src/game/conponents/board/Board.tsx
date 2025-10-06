@@ -48,7 +48,7 @@ export const Board: React.FC<BoardProps> = ({
 
         // wait SWIPE_TIME until the animation plan finishes,
         // only then signal the game that it was finished
-        setTimeout(onAnimationPlanEnded, ANIMATION_DURATION + 100);
+        setTimeout(onAnimationPlanEnded, ANIMATION_DURATION + 10);
 
         if (animationPlan) {
             const tileList: React.ReactElement[] = [];
