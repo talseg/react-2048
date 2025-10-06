@@ -2,14 +2,6 @@ import { styled } from "styled-components";
 import { CheckboxStyled } from "../Game/Game";
 import { useEffect, useState } from "react";
 
-export interface SettingsMenuProps {
-    isOpen: boolean;
-    onIsOpenChanged: () => void;
-    allow4: boolean;
-    onAllow4Changed: (allow: boolean) => void;
-    classicMode: boolean;
-    onClassicModeChange: (isClassic: boolean) => void;
-}
 
 export const OPEN_MENU_ANIMATION_TIME = 600; // ms
 
@@ -38,10 +30,24 @@ export const CheckboxWrapper = styled.div`
     gap: 10px;
 `;
 
+export interface SettingsMenuProps {
+    isOpen: boolean;
+    onIsOpenChanged: () => void;
+    allow4: boolean;
+    onAllow4Changed: () => void;
+    classicMode: boolean;
+    onClassicModeChange: () => void;
+    // Allow changing the tiles by clicking them
+    allowTileChange: boolean;
+    onAllowTileChangeChange: () => void;
+}
+
+
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     isOpen, onIsOpenChanged,
     allow4, onAllow4Changed,
-    classicMode, onClassicModeChange
+    classicMode, onClassicModeChange,
+    allowTileChange, onAllowTileChangeChange
 }) => {
 
     // Keeps the element mounted while closing animation runs
@@ -81,7 +87,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allow4}
-                        onChange={() => onAllow4Changed(!allow4)}>
+                        onChange={() => onAllow4Changed()}>
                     </CheckboxStyled>
                     <div>Allow 4</div>
                 </CheckboxWrapper>
@@ -89,10 +95,19 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={classicMode}
-                        onChange={() => onClassicModeChange(!classicMode)}>
+                        onChange={() => onClassicModeChange()}>
                     </CheckboxStyled>
                     <div>Classic Mode</div>
                 </CheckboxWrapper>
+
+                <CheckboxWrapper>
+                    <CheckboxStyled type="checkbox"
+                        checked={allowTileChange}
+                        onChange={() => onAllowTileChangeChange()}>
+                    </CheckboxStyled>
+                    <div>Allow tile change</div>
+                </CheckboxWrapper>
+
             </ItemsWrapper>
         </MenuWrapper>
     );

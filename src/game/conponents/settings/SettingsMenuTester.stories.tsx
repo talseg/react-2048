@@ -23,6 +23,7 @@ const SettingsMenuTester = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [allow4, setAllow4] = useState(false);
   const [classicMode, setclassicMode] = useState(true);
+  const [allowTileChange, setAllowTileChange] = useState(false);
   
   return (
     <Wrapper>
@@ -42,6 +43,8 @@ const SettingsMenuTester = () => {
 
         <div style={{ color: "white" }}>{`Classic Mode: ${classicMode}`}</div>
 
+        <div style={{ color: "white" }}>{`Allow tile change: ${allowTileChange}`}</div>
+
       </ContentWrapper>
 
       <SettingsMenu
@@ -54,10 +57,14 @@ const SettingsMenuTester = () => {
         }
 
         allow4={allow4}
-        onAllow4Changed={value => setAllow4(value)}
+        onAllow4Changed={() => setAllow4(value => !value)}
 
         classicMode={classicMode}
-        onClassicModeChange={value => setclassicMode(value)}
+        onClassicModeChange={() => setclassicMode(value => !value)}
+
+        allowTileChange={allowTileChange}
+        onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
+        
 
       ></SettingsMenu>
 

@@ -53,13 +53,6 @@ export const CheckboxStyled = styled.input`
     accent-color: #636363;
 `;
 
-const CheckboxWrapper = styled.div`
-    display: flex; 
-    margin-left: auto; 
-    flex-direction: column; 
-    align-items: center;
-`;
-
 const ButtonsWrapper = styled.div`
     display: flex;
     align-self: start;
@@ -100,7 +93,6 @@ export const Game: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isClassicMode, setIsClassicMode] = useState(true);
     const [spawn4, setSpawn4] = useState(true);
-
     const { onUndo, updateUndoBoard } = useUndo();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -160,7 +152,7 @@ export const Game: React.FC = () => {
 
     const handleTileClick = (row: number, column: number): undefined => {
 
-        if (!allowTileChange) return
+        if (!allowTileChange) return;
 
         const newBoardData = copyMatrix(boardData);
         const getNextTileValue = (value: number): number => {
@@ -172,6 +164,9 @@ export const Game: React.FC = () => {
     }
 
     const handleTileDoubleClick = (row: number, column: number): undefined => {
+
+        if (!allowTileChange) return;
+
         const newBoardData = copyMatrix(boardData);
         newBoardData[row][column] = 0;
         setData(newBoardData);
@@ -206,14 +201,6 @@ export const Game: React.FC = () => {
                     <div>...</div>
                 </SmallButton>
 
-                <CheckboxWrapper>
-                    <CheckboxStyled type="checkbox"
-                        checked={allowTileChange}
-                        onChange={(e) => setAllowTileChange(e.target.checked)}>
-                    </CheckboxStyled>
-                    <div>change</div>
-                </CheckboxWrapper>
-
             </ButtonsWrapper>
 
             <HeaderStyled>2048 to 65k</HeaderStyled>
@@ -233,11 +220,15 @@ export const Game: React.FC = () => {
                 isOpen={isMenuOpen}
                 onIsOpenChanged={() => setIsMenuOpen(value => !value)}
 
+                // ToDo - move setting parameters to useContext
                 allow4={spawn4}
-                onAllow4Changed={value => setSpawn4(value)}
+                onAllow4Changed={() => setSpawn4(value => !value)}
 
                 classicMode={isClassicMode}
-                onClassicModeChange={value => setIsClassicMode(value)}
+                onClassicModeChange={() => setIsClassicMode(value => !value)}
+
+                allowTileChange={allowTileChange}
+                onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
 
             ></SettingsMenu>
 
