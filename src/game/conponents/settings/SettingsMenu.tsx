@@ -59,7 +59,8 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
 
         if (isOpen) {
             setPresent(true);
-            setTimeout(() => setAnimOpen(true), 10);
+            // We must have this timeout to support android
+            setTimeout(() => setAnimOpen(true), 50);
         } else {
             if (!isOpen) {
                 setAnimOpen(false);
