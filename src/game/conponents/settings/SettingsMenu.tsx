@@ -5,15 +5,14 @@ import { useEffect, useState } from "react";
 
 export const OPEN_MENU_ANIMATION_TIME = 300; // ms
 
-const createCloseAnimation = keyframes`
-  0%   { transform: translateX(0%); }
-  100%  { transform: translateX(100%); }
+const closeAnimation = keyframes`
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
 `;
 
-const createOpenAnimation = keyframes`
- 0%   { transform: translateX(100%); }
- 1% { transform: translateX(100%); }
- 100%  { transform: translateX(0%); }
+const openAnimation = keyframes`
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
 `;
 
 const MenuWrapper1 = styled.div<{ open: boolean }>`
@@ -23,7 +22,8 @@ const MenuWrapper1 = styled.div<{ open: boolean }>`
     right: 0;
     height: 100%;
     width: 100%;
-    animation: ${({ open }) => (open ? createOpenAnimation : createCloseAnimation)} ${OPEN_MENU_ANIMATION_TIME}ms forwards;
+    animation: ${({ open }) => (open ? openAnimation : closeAnimation)} 
+        ${OPEN_MENU_ANIMATION_TIME}ms forwards;
 `;
 
 const ItemsWrapper = styled.div`
