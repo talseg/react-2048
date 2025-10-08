@@ -58,9 +58,9 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     allowTileChange, onAllowTileChangeChange
 }) => {
 
-    // // Keeps the element mounted while closing animation runs
+    // Keeps the element mounted while closing animation runs
     const [present, setPresent] = useState(isOpen);
-    // // Drives the CSS transform state
+    // Drives the CSS transform state
     const [animOpen, setAnimOpen] = useState(false);
 
     useEffect(() => {
