@@ -1,20 +1,29 @@
-import { styled } from "styled-components";
+import { keyframes, styled } from "styled-components";
 import { CheckboxStyled } from "../Game/Game";
 import { useEffect, useState } from "react";
 
 
-export const OPEN_MENU_ANIMATION_TIME = 600; // ms
+export const OPEN_MENU_ANIMATION_TIME = 300; // ms
 
-const MenuWrapper = styled.div<{ open: boolean }>`
+const createCloseAnimation = keyframes`
+  0%   { transform: translateX(0%); }
+  100%  { transform: translateX(100%); }
+`;
+
+const createOpenAnimation = keyframes`
+ 0%   { transform: translateX(100%); }
+ 1% { transform: translateX(100%); }
+ 100%  { transform: translateX(0%); }
+`;
+
+const MenuWrapper1 = styled.div<{ open: boolean }>`
     background-color: #baada1;
     position: absolute;
     top: 0;
     right: 0;
     height: 100%;
     width: 100%;
-    transform: translateX(${({ open }) => (open ? '0%' : '100%')});
-    transition: transform ${OPEN_MENU_ANIMATION_TIME}ms cubic-bezier(.2,.9,.3,1);
-    will-change: transform;
+    animation: ${({ open }) => (open ? createOpenAnimation : createCloseAnimation)} ${OPEN_MENU_ANIMATION_TIME}ms forwards;
 `;
 
 const ItemsWrapper = styled.div`
@@ -42,7 +51,6 @@ export interface SettingsMenuProps {
     onAllowTileChangeChange: () => void;
 }
 
-
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     isOpen, onIsOpenChanged,
     allow4, onAllow4Changed,
@@ -50,16 +58,16 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     allowTileChange, onAllowTileChangeChange
 }) => {
 
-    // Keeps the element mounted while closing animation runs
+    // // Keeps the element mounted while closing animation runs
     const [present, setPresent] = useState(isOpen);
-    // Drives the CSS transform state
+    // // Drives the CSS transform state
     const [animOpen, setAnimOpen] = useState(false);
 
     useEffect(() => {
 
         if (isOpen) {
             setPresent(true);
-            setTimeout(() => setAnimOpen(true), 10);
+            setAnimOpen(true);
         } else {
             if (!isOpen) {
                 setAnimOpen(false);
@@ -67,8 +75,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
         }
     }, [isOpen]);
 
-    const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-        if (e.target !== e.currentTarget || e.propertyName !== 'transform') return;
+    const handleAnimationEnd = () => {
         if (!isOpen)
             setPresent(false);
     };
@@ -76,7 +83,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     if (!present) return null;
 
     return (
-        <MenuWrapper open={animOpen} onTransitionEnd={handleTransitionEnd} role="dialog" aria-modal="true">
+        <MenuWrapper1 open={animOpen} 
+        
+        onAnimationEnd={handleAnimationEnd}
+        
+        role="dialog" aria-modal="true">
             <ItemsWrapper>
                 <button
                     style={{ width: "70px" }}
@@ -109,6 +120,6 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 </CheckboxWrapper>
 
             </ItemsWrapper>
-        </MenuWrapper>
+        </MenuWrapper1>
     );
 };
