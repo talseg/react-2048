@@ -1,7 +1,7 @@
 {
   "name": "react-2048",
   "private": true,
-  "version": "2.2.12",
+  "version": "2.2.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
