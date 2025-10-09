@@ -15,7 +15,7 @@ const openAnimation = keyframes`
     100% { transform: translateX(0%); }
 `;
 
-const MenuWrapper1 = styled.div<{ open: boolean }>`
+const MenuWrapper = styled.div<{ open: boolean }>`
     background-color: #baada1;
     position: absolute;
     top: 0;
@@ -83,7 +83,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     if (!present) return null;
 
     return (
-        <MenuWrapper1 open={animOpen} 
+        <MenuWrapper open={animOpen} 
         
         onAnimationEnd={handleAnimationEnd}
         
@@ -120,6 +120,6 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 </CheckboxWrapper>
 
             </ItemsWrapper>
-        </MenuWrapper1>
+        </MenuWrapper>
     );
 };
