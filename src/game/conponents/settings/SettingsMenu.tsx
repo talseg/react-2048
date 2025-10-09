@@ -63,12 +63,8 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     const [animOpen, setAnimOpen] = useState(false);
 
     useEffect(() => {
-        if (isOpen) {
-            setPresent(true);
-            setAnimOpen(true);
-        } else {
-            setAnimOpen(false);
-        }
+        setAnimOpen(isOpen);
+        if (isOpen) setPresent(true);
     }, [isOpen]);
 
     if (!present) return null;
