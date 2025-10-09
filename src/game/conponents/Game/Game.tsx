@@ -22,6 +22,7 @@ import { MAX_TILE_VALUE } from "../tile/Tile";
 import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
+import HamburgerIcon from '../../../assets//hamburger.svg?react';
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -57,8 +58,8 @@ const ButtonsWrapper = styled.div`
     display: flex;
     align-self: start;
     gap: 20px;
-    width: 90vw;
-    margin:10px 0px 0px 10px;
+    width: 93vw;
+    margin:14px 0px 0px 14px;
 `;
 
 const createInitialBoardData = (): number[][] => {
@@ -85,6 +86,10 @@ const HeaderStyled = styled.div`
     font-weight: 500;
 `;
 
+const HanburgerButtonStyled = styled(SmallButton)`
+  margin-left: auto;  
+`;
+
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
@@ -101,7 +106,7 @@ export const Game: React.FC = () => {
             setAnimationPlan(plan);
         }
         if (getNumZeros(newBoard) > 0) {
-            const newTileValue = spawn4 ? Math.random() < SPAWN_4_PROBABILITY ? 4 : 2 : 2;
+            const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
             const randomTilePosition: Cell = getRandomTilePosition(newBoard);
             const newRandomTile: MovingTile = {
@@ -197,9 +202,9 @@ export const Game: React.FC = () => {
                     <IconUndo />
                 </SmallButton>
 
-                <SmallButton onClick={() => setIsMenuOpen(true)}>
-                    <div>...</div>
-                </SmallButton>
+                <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
+                    <HamburgerIcon/>
+                </HanburgerButtonStyled>
 
             </ButtonsWrapper>
 
