@@ -1,7 +1,8 @@
 import { keyframes, styled } from "styled-components";
 import { CheckboxStyled } from "../Game/Game";
 import { useEffect, useState } from "react";
-
+import { SmallButton } from "../../elements/SmallButton";
+import BackIcon from '../../../assets/back.svg?react';
 export const OPEN_MENU_ANIMATION_TIME = 300; // ms
 
 const closeAnimation = keyframes`
@@ -74,11 +75,10 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             onAnimationEnd={() => { if (!isOpen) setPresent(false) }}
             role="dialog" aria-modal="true">
             <ItemsWrapper>
-                <button
-                    style={{ width: "70px" }}
-                    onClick={onIsOpenChanged}>
-                    close
-                </button>
+
+                <SmallButton onClick={onIsOpenChanged}>
+                    <BackIcon/>
+                </SmallButton>
 
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"

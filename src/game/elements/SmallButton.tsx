@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 
 interface SmallButtonProps {
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    className?: string;
 }
 
 const SmallButtonStyled = styled.button`
@@ -25,9 +26,9 @@ const SmallButtonStyled = styled.button`
 `;
 
 
-export const SmallButton: React.FC<PropsWithChildren<SmallButtonProps>> = ({ children, onClick }) => {
+export const SmallButton: React.FC<PropsWithChildren<SmallButtonProps>> = ({ children, onClick, className }) => {
     return (
-        <SmallButtonStyled onClick={onClick}>
+        <SmallButtonStyled onClick={onClick} className={"small-button" + className}>
             {children}
         </SmallButtonStyled>
     );
