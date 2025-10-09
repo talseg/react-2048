@@ -2,7 +2,6 @@ import { keyframes, styled } from "styled-components";
 import { CheckboxStyled } from "../Game/Game";
 import { useEffect, useState } from "react";
 
-
 export const OPEN_MENU_ANIMATION_TIME = 300; // ms
 
 const closeAnimation = keyframes`
@@ -64,30 +63,20 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     const [animOpen, setAnimOpen] = useState(false);
 
     useEffect(() => {
-
         if (isOpen) {
             setPresent(true);
             setAnimOpen(true);
         } else {
-            if (!isOpen) {
-                setAnimOpen(false);
-            }
+            setAnimOpen(false);
         }
     }, [isOpen]);
-
-    const handleAnimationEnd = () => {
-        if (!isOpen)
-            setPresent(false);
-    };
 
     if (!present) return null;
 
     return (
-        <MenuWrapper open={animOpen} 
-        
-        onAnimationEnd={handleAnimationEnd}
-        
-        role="dialog" aria-modal="true">
+        <MenuWrapper open={animOpen}
+            onAnimationEnd={() => { if (!isOpen) setPresent(false) }}
+            role="dialog" aria-modal="true">
             <ItemsWrapper>
                 <button
                     style={{ width: "70px" }}
@@ -98,7 +87,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allow4}
-                        onChange={() => onAllow4Changed()}>
+                        onChange={onAllow4Changed}>
                     </CheckboxStyled>
                     <div>Allow 4</div>
                 </CheckboxWrapper>
@@ -106,7 +95,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={classicMode}
-                        onChange={() => onClassicModeChange()}>
+                        onChange={onClassicModeChange}>
                     </CheckboxStyled>
                     <div>Classic Mode</div>
                 </CheckboxWrapper>
@@ -114,7 +103,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allowTileChange}
-                        onChange={() => onAllowTileChangeChange()}>
+                        onChange={onAllowTileChangeChange}>
                     </CheckboxStyled>
                     <div>Allow tile change</div>
                 </CheckboxWrapper>
