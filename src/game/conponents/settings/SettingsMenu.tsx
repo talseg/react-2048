@@ -27,8 +27,7 @@ const MenuWrapper = styled.div<{ open: boolean }>`
 `;
 
 const ItemsWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 10px;
     padding: 10px;
 `;
@@ -76,7 +75,8 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             role="dialog" aria-modal="true">
             <ItemsWrapper>
 
-                <SmallButton onClick={onIsOpenChanged}>
+                <SmallButton onClick={onIsOpenChanged}
+                    style={{ justifySelf: "end" }}>
                     <BackIcon/>
                 </SmallButton>
 

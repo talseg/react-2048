@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 
 
-export const TILE_PIXEL_SIZE: number = 64;
+export const TILE_PIXEL_SIZE: number = 72;
 
 // ToDO - background color
 const TileWrapper = styled.div<{ color: string; fontSize: number; $backgroundColor: string }>`
@@ -71,12 +71,19 @@ const getTextColorByValue = (color: number): string => {
     if (color <= 4) {
         return "#776e65";
     }
+    if (color == 128) {
+        return "#ffffff";
+    }
     return "#f7f5f4";
 }
 
 function getFontSizeByValue(value: number): number {
+    if (value <= 512)
+        return 32;
     if (value <= 8192)
         return 26;
+    // if (value <= 1024)
+    //     return 18;
     return 20;
 
 }
