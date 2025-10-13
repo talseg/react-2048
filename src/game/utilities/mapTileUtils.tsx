@@ -13,7 +13,7 @@ const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
 
 const createPop = () => keyframes`
   0%   { transform: scale(0); }
-  60%  { transform: scale(0); }
+  40%  { transform: scale(0); }
   100% { transform: scale(1); }
 `;
 

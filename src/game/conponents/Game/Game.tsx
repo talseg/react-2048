@@ -37,6 +37,7 @@ const PageWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     touch-action: none;
+    gap: 20px;
 `;
 
 const InfoWrapper = styled.div`
