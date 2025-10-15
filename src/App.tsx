@@ -1,11 +1,11 @@
 import './App.css'
-import { Game } from './game/conponents/Game/Game';
+import { PagesTester } from './page/test-print.stories';
 
 
 function App() {
 
   return (
-      <Game/>
+      <PagesTester/>
   )
 }
 
