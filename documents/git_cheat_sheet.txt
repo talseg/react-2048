@@ -80,3 +80,6 @@ npx npm-check-updates
 # > git branch -r       // show remote branches
 # remotes/origin/branch-name
 git push origin --delete branch-name
+
+# update version and push
+npm run bump-version
