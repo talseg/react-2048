@@ -65,13 +65,18 @@ const ButtonsWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
-    addRandomTile(grid, 2);
+    if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
     return grid;
 }
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
+const ADD_RANDOM_TILE = false; // For debug
+
 
 const isSwipePossible = (boardData: number[][]): boolean => {
+    if (!ADD_RANDOM_TILE)
+        return true;
+
     const canSwipe = (direction: Direction): boolean => {
         const { plan } =
             getNewMatrixByDirection(boardData, direction);
@@ -95,7 +100,7 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [allowTileChange, setAllowTileChange] = useState(false);
+    const [allowTileChange, setAllowTileChange] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isClassicMode, setIsClassicMode] = useState(true);
     const [spawn4, setSpawn4] = useState(true);
@@ -117,9 +122,9 @@ export const Game: React.FC = () => {
                 tileType: "poping"
             }
 
-            if (plan) {
-                plan.movingTiles.push(newRandomTile);
-                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
+            if (ADD_RANDOM_TILE && plan) {
+               plan.movingTiles.push(newRandomTile);
+               newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
 
             if (!isClassicMode)
