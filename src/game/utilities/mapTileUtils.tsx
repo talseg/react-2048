@@ -13,7 +13,7 @@ const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
 
 const createPop = () => keyframes`
   0%   { transform: scale(0); }
-  50%  { transform: scale(0); }
+  80%  { transform: scale(0); }
   100% { transform: scale(1); }
 `;
 
@@ -28,8 +28,7 @@ const createMerge = () => keyframes`
   0%   { transform: scale(0); }
   50%  { transform: scale(0); }
   51%  { transform: scale(1.0); }
-  75%  { transform: scale(1.0); }
-  // ToDO - Change it to a good value
+  75%  { transform: scale(1.1); }
   100% { transform: scale(1.0); }
 `;
 

@@ -1,4 +1,4 @@
-export const ANIMATION_DURATION = 200;
+export const ANIMATION_DURATION = 350;
 export const GRID_SIZE = 4;
 export const MARGIN_BETWEEN_TILES = 8;
 export const SWIPE_DISTANCE = 10;
