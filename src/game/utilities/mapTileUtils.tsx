@@ -27,8 +27,10 @@ const PopingTileStyled = styled(Tile) <{ x: number; y: number }>`
 const createMerge = () => keyframes`
   0%   { transform: scale(0); }
   50%  { transform: scale(0); }
-  51%  { transform: scale(1.5); }
-  100% { transform: scale(1); }
+  51%  { transform: scale(1.0); }
+  75%  { transform: scale(1.0); }
+  // ToDO - Change it to a good value
+  100% { transform: scale(1.0); }
 `;
 
 const MergedTileStyled = styled(Tile) <{ x: number; y: number }>`
@@ -37,8 +39,6 @@ const MergedTileStyled = styled(Tile) <{ x: number; y: number }>`
     top: ${({ y }) => { return `${y}px` }};
     left: ${({ x }) => { return `${x}px` }};
 `;
-
-
 
 const createHorizontalMove = (x0: number, x1: number) => keyframes`
   from { left: ${x0}px; }

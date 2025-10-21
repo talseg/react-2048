@@ -70,7 +70,7 @@ const createInitialBoardData = (): number[][] => {
 }
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
-const ADD_RANDOM_TILE = false; // For debug
+const ADD_RANDOM_TILE = true; // For debug
 
 
 const isSwipePossible = (boardData: number[][]): boolean => {

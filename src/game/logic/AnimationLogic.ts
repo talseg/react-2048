@@ -1,93 +1,120 @@
-import type { AnimationPlan, MovingTile } from "./boardLogic";
+import { getRowTilesAfterLeftSwipe, type AnimationPlan, type MovingTile } from "./boardLogic";
 import { clockwiseBoardRotation, getRow, horizontalBoardFlip } from "./matrixUtils";
 import { getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
 
-const getRowAnimationLeftSwipe = (row: number[]): AnimationPlan => {
+// const getRowAnimationLeftSwipe = (row: number[]): AnimationPlan => {
 
-    const currentTiles: MovingTile[] = [];
+//     const currentTiles: MovingTile[] = [];
 
-    const q: number[] = [];
-    let lastTile = { value: 0, lastIndex: -1 };
+//     const q: number[] = [];
+//     let lastTile = { value: 0, lastIndex: -1 };
 
-    for (let index = 0; index < row.length; index++) {
+//     for (let index = 0; index < row.length; index++) {
 
-        const current = row[index];
+//         const current = row[index];
 
-        if (current === 0)
-            continue;
+//         if (current === 0)
+//             continue;
 
-        if (current === lastTile.value) {
-            currentTiles.push(
-                {
-                    value: current,
-                    from: { row: 0, col: index },
-                    to: { row: 0, col: q.length }
-                },
+//         if (current === lastTile.value) {
+//             currentTiles.push(
+//                 {
+//                     value: current,
+//                     from: { row: 0, col: index },
+//                     to: { row: 0, col: q.length }
+//                 },
 
-                {
-                    value: current,
-                    from: { row: 0, col: lastTile.lastIndex },
-                    to: { row: 0, col: q.length }
-                }
-            );
-            q.push(current * 2);
-            lastTile = { value: 0, lastIndex: -1 };
-            continue;
-        }
+//                 {
+//                     value: current,
+//                     from: { row: 0, col: lastTile.lastIndex },
+//                     to: { row: 0, col: q.length }
+//                 }
+//             );
+//             q.push(current * 2);
+//             lastTile = { value: 0, lastIndex: -1 };
+//             continue;
+//         }
 
-        if (lastTile.value !== 0) {
-            currentTiles.push(
-                {
-                    value: lastTile.value,
-                    from: { row: 0, col: lastTile.lastIndex },
-                    to: { row: 0, col: q.length }
-                },);
-            q.push(lastTile.value);
-        }
+//         if (lastTile.value !== 0) {
+//             currentTiles.push(
+//                 {
+//                     value: lastTile.value,
+//                     from: { row: 0, col: lastTile.lastIndex },
+//                     to: { row: 0, col: q.length }
+//                 },);
+//             q.push(lastTile.value);
+//         }
 
-        lastTile = { value: current, lastIndex: index };
+//         lastTile = { value: current, lastIndex: index };
 
-    }
+//     }
 
-    if (lastTile.value !== 0) {
-        currentTiles.push(
-            {
-                value: lastTile.value,
-                from: { row: 0, col: lastTile.lastIndex },
-                to: { row: 0, col: q.length }
-            },);
-        q.push(lastTile.value);
-    }
+//     if (lastTile.value !== 0) {
+//         currentTiles.push(
+//             {
+//                 value: lastTile.value,
+//                 from: { row: 0, col: lastTile.lastIndex },
+//                 to: { row: 0, col: q.length }
+//             },);
+//         q.push(lastTile.value);
+//     }
 
-    while (q.length !== row.length) {
-        q.push(0);
-    }
+//     while (q.length !== row.length) {
+//         q.push(0);
+//     }
 
-    return {
-        movingTiles: currentTiles,
-        staticTiles: []
-    };
-}
+//     return {
+//         movingTiles: currentTiles,
+//         staticTiles: [],
+//         mergedTiles:[]
+//         //Implement merged
+//     };
+// }
 
 
 export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => {
     const finalPlan: AnimationPlan = {
         movingTiles: [],
-        staticTiles: []
+        staticTiles: [],
+        mergedTiles: []
     };
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
         const row = getRow(board, rowIndex);
-        const rowPlan = getRowAnimationLeftSwipe(row);
-        const rowMovement = rowPlan.movingTiles;
+        const rowPlan = getRowTilesAfterLeftSwipe(row).newPlan;
+        // const rowPlan = getRowAnimationLeftSwipe(row);
+        const rowMovingTiles = rowPlan.movingTiles;
 
-        for (let index = 0; index < rowMovement.length; index++) {
-            rowMovement[index].from.row = rowIndex;
-            rowMovement[index].to.row = rowIndex;
-            finalPlan.movingTiles.push(rowMovement[index]);
+        for (let index = 0; index < rowMovingTiles.length; index++) {
+            rowMovingTiles[index].from.row = rowIndex;
+            rowMovingTiles[index].to.row = rowIndex;
+            finalPlan.movingTiles.push(rowMovingTiles[index]);
         }
 
+        const rowStaticTiles = rowPlan.staticTiles;
+
+        for (let index = 0; index < rowStaticTiles.length; index++) {
+            rowStaticTiles[index].position.row = rowIndex;
+            finalPlan.staticTiles.push(rowStaticTiles[index]);
+        }
+
+        const rowMergedTiles = rowPlan.mergedTiles;
+
+        for (let index = 0; index < rowMergedTiles.length; index++) {
+            rowMergedTiles[index].position.row = rowIndex;
+            finalPlan.mergedTiles.push(rowMergedTiles[index]);
+        }
+
+        //         const rowMovement = rowPlan.movingTiles;
+
+        // for (let index = 0; index < rowMovement.length; index++) {
+        //     rowMovement[index].from.row = rowIndex;
+        //     rowMovement[index].to.row = rowIndex;
+        //     finalPlan.movingTiles.push(rowMovement[index]);
+        // }
+
     }
+    // console.log("merged: ",finalPlan.mergedTiles);
     return finalPlan;
 }
 
