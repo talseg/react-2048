@@ -100,7 +100,7 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [allowTileChange, setAllowTileChange] = useState(true);
+    const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isClassicMode, setIsClassicMode] = useState(true);
     const [spawn4, setSpawn4] = useState(true);
