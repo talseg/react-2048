@@ -123,8 +123,8 @@ export const Game: React.FC = () => {
             }
 
             if (ADD_RANDOM_TILE && plan) {
-               plan.movingTiles.push(newRandomTile);
-               newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
+                plan.movingTiles.push(newRandomTile);
+                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
 
             if (!isClassicMode)
@@ -209,7 +209,7 @@ export const Game: React.FC = () => {
                 </SmallButton>
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
-                    <HamburgerIcon/>
+                    <HamburgerIcon />
                 </HanburgerButtonStyled>
 
             </ButtonsWrapper>

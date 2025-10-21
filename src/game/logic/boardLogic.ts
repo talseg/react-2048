@@ -229,13 +229,12 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
             };
             newPlan.movingTiles.push(movingtile1, movingtile2);
 
-            
-            const mergeTile={
+            const mergeTile = {
                 value: currentValue * 2,
                 position: { row: 0, col: q.length }
             };
             newPlan.mergedTiles.push(mergeTile);
-            
+
             q.push(currentValue * 2);
             lastTile = { value: 0, lastIndex: -1 };
             continue;

@@ -37,18 +37,15 @@ export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => 
     return finalPlan;
 }
 
-
 export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan => {
     const plan = getBoardAnimationLeftSwipe(horizontalBoardFlip(board));
     return getBoardAnimationHorizontalFlip(plan, board.length);
 }
 
-
 export const getBoardAnimationUpSwipe = (board: number[][]): AnimationPlan => {
     const plan = getBoardAnimationRightSwipe(clockwiseBoardRotation(board));
     return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
 }
-
 
 export const getBoardAnimationDownSwipe = (board: number[][]): AnimationPlan => {
     const plan = getBoardAnimationLeftSwipe(clockwiseBoardRotation(board));

@@ -23,27 +23,27 @@ export const getBoardAnimationHorizontalFlip = (plan: AnimationPlan, Boardlength
         newPlan.movingTiles.push(newMove);
     }
 
-    const staticTiles= plan.staticTiles;
+    const staticTiles = plan.staticTiles;
 
-    for(let index=0; index<staticTiles.length; index++){
+    for (let index = 0; index < staticTiles.length; index++) {
         const currentTile = staticTiles[index];
-        
+
         const newTile: StaticTile = {
             value: currentTile.value,
-            position: {row: currentTile.position.row, col: Boardlength-currentTile.position.col-1}
+            position: { row: currentTile.position.row, col: Boardlength - currentTile.position.col - 1 }
         };
 
         newPlan.staticTiles.push(newTile);
     }
 
-    const mergedTiles= plan.mergedTiles;
+    const mergedTiles = plan.mergedTiles;
 
-        for(let index=0; index<mergedTiles.length; index++){
+    for (let index = 0; index < mergedTiles.length; index++) {
         const currentTile = mergedTiles[index];
-        
+
         const newTile: StaticTile = {
             value: currentTile.value,
-            position: {row: currentTile.position.row, col: Boardlength-currentTile.position.col-1}
+            position: { row: currentTile.position.row, col: Boardlength - currentTile.position.col - 1 }
         };
 
         newPlan.mergedTiles.push(newTile);
@@ -56,7 +56,7 @@ export const getBoardAnimationClockwiseRotaion = (plan: AnimationPlan, Boardleng
     const newPlan: AnimationPlan = {
         movingTiles: [],
         staticTiles: [],
-        mergedTiles:[]
+        mergedTiles: []
     };
 
     const movingTiles = plan.movingTiles;
@@ -73,7 +73,7 @@ export const getBoardAnimationClockwiseRotaion = (plan: AnimationPlan, Boardleng
         newPlan.movingTiles.push(newMove);
     }
 
-        const staticTiles = plan.staticTiles;
+    const staticTiles = plan.staticTiles;
 
     for (let index = 0; index < staticTiles.length; index++) {
         const currentTile = staticTiles[index];
@@ -86,7 +86,7 @@ export const getBoardAnimationClockwiseRotaion = (plan: AnimationPlan, Boardleng
         newPlan.staticTiles.push(newTile);
     }
 
-            const mergedTiles = plan.mergedTiles;
+    const mergedTiles = plan.mergedTiles;
 
     for (let index = 0; index < mergedTiles.length; index++) {
         const currentTile = mergedTiles[index];
@@ -107,6 +107,5 @@ export const getBoardAnimationCounterClockwiseRotaion = (plan: AnimationPlan, Bo
     for (let i = 0; i < 3; i++) {
         newPlan = getBoardAnimationClockwiseRotaion(newPlan, Boardlength);
     }
-
     return newPlan;
 }
