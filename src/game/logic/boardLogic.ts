@@ -4,12 +4,12 @@ export type Direction = "left" | "right" | "up" | "down";
 export type TileType = "static" | "moving" | "merging" | "poping";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell, tileType?: TileType };
-
-// ToDo - implement  static tile handling
 export type StaticTile = { value: number, position: Cell };
+
 export type AnimationPlan = {
     staticTiles: StaticTile[];
     movingTiles: MovingTile[];
+    mergedTiles: StaticTile[];
 }
 
 export const getNewMatrixByDirection = (board: number[][], direction: Direction): {
@@ -68,9 +68,6 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
             plan = getBoardAnimationDownSwipe(board);
         }
     }
-    else {
-        plan = undefined;
-    }
 
     return (
         { newBoard, plan }
@@ -82,16 +79,16 @@ export const addRandomTile = (matrix: number[][], tileValue: number) => {
     matrix[cell.row][cell.col] = tileValue;
 }
 
-const getTiles = (matrix: number[][]): StaticTile[] => 
-  matrix.flatMap((row, rowIndex) =>
-    row.map((value, colIndex) => ({
-      value,
-      position: { row: rowIndex, col: colIndex },
-    }))
-  );
+const getTiles = (matrix: number[][]): StaticTile[] =>
+    matrix.flatMap((row, rowIndex) =>
+        row.map((value, colIndex) => ({
+            value,
+            position: { row: rowIndex, col: colIndex },
+        }))
+    );
 
 const getEmptyTiles = (matrix: number[][]): StaticTile[] =>
-    getTiles(matrix).filter((cell) => cell.value === 0) 
+    getTiles(matrix).filter((cell) => cell.value === 0)
 
 export const getRandomTilePosition = (matrix: number[][]): Cell => {
     const emptyTiles = getEmptyTiles(matrix);
@@ -201,42 +198,50 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 }
 
 
-export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], newPlan: AnimationPlan | undefined } => {
-
-
-    const currentTiles: MovingTile[] = [];
+export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], newPlan: AnimationPlan } => {
+    const newPlan: AnimationPlan = {
+        movingTiles: [],
+        staticTiles: [],
+        mergedTiles: []
+    };
 
     const q: number[] = [];
     let lastTile = { value: 0, lastIndex: -1 };
 
     for (let index = 0; index < row.length; index++) {
 
-        const current = row[index];
+        const currentValue = row[index];
 
-        if (current === 0)
+        if (currentValue === 0)
             continue;
 
-        if (current === lastTile.value) {
-            currentTiles.push(
-                {
-                    value: current,
-                    from: { row: 0, col: index },
-                    to: { row: 0, col: q.length }
-                },
+        if (currentValue === lastTile.value) {
 
-                {
-                    value: current,
-                    from: { row: 0, col: lastTile.lastIndex },
-                    to: { row: 0, col: q.length }
-                }
-            );
-            q.push(current * 2);
+            const movingtile1 = {
+                value: currentValue,
+                from: { row: 0, col: index },
+                to: { row: 0, col: q.length }
+            };
+            const movingtile2 = {
+                value: currentValue,
+                from: { row: 0, col: lastTile.lastIndex },
+                to: { row: 0, col: q.length }
+            };
+            newPlan.movingTiles.push(movingtile1, movingtile2);
+
+            const mergeTile = {
+                value: currentValue * 2,
+                position: { row: 0, col: q.length }
+            };
+            newPlan.mergedTiles.push(mergeTile);
+
+            q.push(currentValue * 2);
             lastTile = { value: 0, lastIndex: -1 };
             continue;
         }
 
         if (lastTile.value !== 0) {
-            currentTiles.push(
+            newPlan.movingTiles.push(
                 {
                     value: lastTile.value,
                     from: { row: 0, col: lastTile.lastIndex },
@@ -245,12 +250,12 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
             q.push(lastTile.value);
         }
 
-        lastTile = { value: current, lastIndex: index };
+        lastTile = { value: currentValue, lastIndex: index };
 
     }
 
     if (lastTile.value !== 0) {
-        currentTiles.push(
+        newPlan.movingTiles.push(
             {
                 value: lastTile.value,
                 from: { row: 0, col: lastTile.lastIndex },
@@ -259,16 +264,25 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
         q.push(lastTile.value);
     }
 
+    for (let i = 0; i < newPlan.movingTiles.length; i++) {
+
+        const currentTile = newPlan.movingTiles[i];
+
+        if (currentTile.from.col == currentTile.to.col) {
+            newPlan.movingTiles.splice(i, 1);
+            newPlan.staticTiles.push({
+                value: currentTile.value,
+                position: { row: 0, col: currentTile.from.col }
+            });
+        }
+    }
+
     while (q.length !== row.length) {
         q.push(0);
     }
 
     return {
         newrow: q,
-        newPlan:
-        {
-            movingTiles: currentTiles,
-            staticTiles: []
-        }
+        newPlan: newPlan
     };
 }

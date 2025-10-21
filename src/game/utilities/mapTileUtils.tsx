@@ -1,6 +1,6 @@
 import { css, keyframes, styled } from "styled-components";
 import { Tile, TILE_PIXEL_SIZE } from "../conponents/tile/Tile";
-import type { MovingTile } from "../logic/boardLogic";
+import type { MovingTile, StaticTile } from "../logic/boardLogic";
 import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from "./globals";
 
 const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
@@ -13,7 +13,7 @@ const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
 
 const createPop = () => keyframes`
   0%   { transform: scale(0); }
-  40%  { transform: scale(0); }
+  80%  { transform: scale(0); }
   100% { transform: scale(1); }
 `;
 
@@ -24,6 +24,20 @@ const PopingTileStyled = styled(Tile) <{ x: number; y: number }>`
     left: ${({ x }) => { return `${x}px` }};
 `;
 
+const createMerge = () => keyframes`
+  0%   { transform: scale(0); }
+  50%  { transform: scale(0); }
+  51%  { transform: scale(1.0); }
+  75%  { transform: scale(1.1); }
+  100% { transform: scale(1.0); }
+`;
+
+const MergedTileStyled = styled(Tile) <{ x: number; y: number }>`
+    position: absolute;
+    animation: ${createMerge()} ${ANIMATION_DURATION}ms forwards;
+    top: ${({ y }) => { return `${y}px` }};
+    left: ${({ x }) => { return `${x}px` }};
+`;
 
 const createHorizontalMove = (x0: number, x1: number) => keyframes`
   from { left: ${x0}px; }
@@ -32,7 +46,7 @@ const createHorizontalMove = (x0: number, x1: number) => keyframes`
 
 const HorizontalMovingTileStyled = styled(Tile) <{ x0: number; x1: number; y: number }>`
     position: absolute;
-    animation: ${({ x0, x1 }) => createHorizontalMove(x0, x1)} ${ANIMATION_DURATION}ms forwards;
+    animation: ${({ x0, x1 }) => createHorizontalMove(x0, x1)} ${ANIMATION_DURATION * 0.5}ms forwards;
     top: ${({ y }) => { return `${y}px` }};
 `;
 
@@ -43,7 +57,7 @@ const createVerticalMove = (y0: number, y1: number) => keyframes`
 
 const VerticalMovingTileStyled = styled(Tile) <{ y0: number; y1: number; x: number }>`
     position: absolute;
-    animation: ${({ y0, y1 }) => createVerticalMove(y0, y1)} ${ANIMATION_DURATION}ms forwards;
+    animation: ${({ y0, y1 }) => createVerticalMove(y0, y1)} ${ANIMATION_DURATION * 0.5}ms forwards;
     left: ${({ x }) => { return `${x}px` }};
 `;
 
@@ -73,6 +87,32 @@ export const pushEmptyTiles = (tiles: React.ReactElement[],
     return tiles;
 }
 
+export const pushStaticTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
+
+    for (let index = 0; index < tiles.length; index++) {
+
+        const tile = tiles[index];
+        const x = toPixels(tile.position.col);
+        const y = toPixels(tile.position.row);
+        tileList.push(
+            <StaticTileStyled key={`static-tile-${index}`} value={tile.value} x={x} y={y} />
+        );
+    }
+}
+
+export const pushMergedTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
+
+    for (let index = 0; index < tiles.length; index++) {
+
+        const tile = tiles[index];
+        const x = toPixels(tile.position.col);
+        const y = toPixels(tile.position.row);
+        tileList.push(
+            <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} x={x} y={y} />
+        );
+    }
+}
+
 export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
     for (let index = 0; index < tiles.length; index++) {
 
@@ -82,7 +122,7 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
             const x = toPixels(tile.from.col);
             const y = toPixels(tile.from.row);
             tileList.push(
-                <PopingTileStyled key={`moving-tile-${index}`} value={tile.value} x={x} y={y} />
+                <PopingTileStyled key={`poping-tile-${index}`} value={tile.value} x={x} y={y} />
             );
         }
         else if (tile.from.row === tile.to.row) {
@@ -107,7 +147,7 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
             );
         }
         else {
-            throw(
+            throw (
                 new Error("Got diagonal movement")
             );
         }

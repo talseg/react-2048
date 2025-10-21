@@ -65,13 +65,18 @@ const ButtonsWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
-    addRandomTile(grid, 2);
+    if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
     return grid;
 }
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
+const ADD_RANDOM_TILE = true; // For debug
+
 
 const isSwipePossible = (boardData: number[][]): boolean => {
+    if (!ADD_RANDOM_TILE)
+        return true;
+
     const canSwipe = (direction: Direction): boolean => {
         const { plan } =
             getNewMatrixByDirection(boardData, direction);
@@ -117,7 +122,7 @@ export const Game: React.FC = () => {
                 tileType: "poping"
             }
 
-            if (plan) {
+            if (ADD_RANDOM_TILE && plan) {
                 plan.movingTiles.push(newRandomTile);
                 newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
@@ -204,7 +209,7 @@ export const Game: React.FC = () => {
                 </SmallButton>
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
-                    <HamburgerIcon/>
+                    <HamburgerIcon />
                 </HanburgerButtonStyled>
 
             </ButtonsWrapper>
