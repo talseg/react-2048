@@ -6,7 +6,6 @@ export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell, tileType?: TileType };
 export type StaticTile = { value: number, position: Cell };
 
-// ToDo - implement  static tile handling
 export type AnimationPlan = {
     staticTiles: StaticTile[];
     movingTiles: MovingTile[];
@@ -69,15 +68,7 @@ export const getNewMatrixByDirection = (board: number[][], direction: Direction)
             plan = getBoardAnimationDownSwipe(board);
         }
     }
-    else {
-        //plan = undefined;
-    }
 
-    // console.log("Plan: ",plan?.mergedTiles);
-    // // console.log("Plan: ",plan?.mergedTiles);
-    // console.log("plan Merged Tiles: ", plan?.mergedTiles);
-    // console.log("plan Moving Tiles: ", plan?.movingTiles);
-    // console.log("plan Static Tiles: ", plan?.staticTiles);
     return (
         { newBoard, plan }
     );
@@ -208,17 +199,9 @@ export const getRowAfterLeftSwipe = (row: number[]): number[] => {
 
 
 export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], newPlan: AnimationPlan } => {
-
-
-    // const currentTiles: MovingTile[] = [];
     const newPlan: AnimationPlan = {
         movingTiles: [],
         staticTiles: [],
-        // mergedTiles: [
-        //     {
-        //         position:{row:0, col: 1},
-        //         value:2
-        // }]
         mergedTiles: []
     };
 
@@ -299,15 +282,8 @@ export const getRowTilesAfterLeftSwipe = (row: number[]): { newrow: number[], ne
         q.push(0);
     }
 
-
     return {
         newrow: q,
         newPlan: newPlan
-        // {
-        //     movingTiles: currentTiles,
-        //     staticTiles: [],
-        //     mergedTiles:[]
-        //     //todo merged
-        // }
     };
 }
