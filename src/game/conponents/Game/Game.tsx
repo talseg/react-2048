@@ -123,9 +123,9 @@ export const Game: React.FC = () => {
             }
             else {
                 randomTilePosition = getRandomTilePosition(newBoard, undefined);
-                setIsAfterUndo(false);
+                
             }
-
+            setIsAfterUndo(false);
             
             const newRandomTile: MovingTile = {
                 value: newTileValue,
