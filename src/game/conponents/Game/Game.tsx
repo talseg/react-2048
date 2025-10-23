@@ -123,7 +123,6 @@ export const Game: React.FC = () => {
             }
             else {
                 randomTilePosition = getRandomTilePosition(newBoard, undefined);
-                
             }
             setIsAfterUndo(false);
             
@@ -198,15 +197,15 @@ export const Game: React.FC = () => {
 
     function handleUndo(): void {
 
-        console.log("handleUndo currentBoard: ", boardData);
+        //console.log("handleUndo currentBoard: ", boardData);
 
         const prevBoard = onUndo();
         setData(prevBoard);
 
-        console.log("handleUndo prevBoard: ", prevBoard);
+        //console.log("handleUndo prevBoard: ", prevBoard);
 
         setIsAfterUndo(true);
-        console.log("handleUndo setIsAfterUndo(true);");
+        //console.log("handleUndo setIsAfterUndo(true);");
     }
 
     return (

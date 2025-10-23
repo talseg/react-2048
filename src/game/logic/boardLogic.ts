@@ -98,38 +98,41 @@ export const getRandomTilePosition = (matrix: number[][], lastUndoCell: Cell | u
         throw new Error(`addRandomTile requested to add random tile to empty board:\n${JSON.stringify(matrix)}`)
     }
 
-    console.log(`getRandomTilePosition lastUndoCell:`, lastUndoCell)
+    //console.log(`getRandomTilePosition lastUndoCell:`, lastUndoCell)
 
     // If this was right after undo - help by choosing the next Cell instead of a random one
+
     if (lastUndoCell) {
+        console.log("using smart undo");
         const lastTile = emptyTiles.find((tile: StaticTile) => 
         {
             return (tile.position.row === lastUndoCell.row) && (tile.position.col === lastUndoCell.col);
         });
 
-        console.log("getRandomTilePosition emptyTiles: ", emptyTiles);
-        console.log("getRandomTilePosition lastTile: ", lastTile);
+        //console.log("getRandomTilePosition emptyTiles: ", emptyTiles);
+        //console.log("getRandomTilePosition lastTile: ", lastTile);
         if (lastTile) {
             const lastTileIndex = emptyTiles.indexOf(lastTile);
-            console.log("getRandomTilePosition lastTileIndex: ", lastTileIndex);
+            //console.log("getRandomTilePosition lastTileIndex: ", lastTileIndex);
             let nextTileIndex: number = -1;
             if (lastTileIndex !== -1) {
                 if (lastTileIndex === emptyTiles.length - 1)
                     nextTileIndex = 0;
                 else
                     nextTileIndex = lastTileIndex+1;
-                console.log("getRandomTilePosition nextTileIndex: ", nextTileIndex);
+                //console.log("getRandomTilePosition nextTileIndex: ", nextTileIndex);
                 const nextCell =  emptyTiles[nextTileIndex];
-                console.log("getRandomTilePosition nextCell: ", nextCell);
+                //console.log("getRandomTilePosition nextCell: ", nextCell);
                 const nextPosition = nextCell.position;
-                console.log("getRandomTilePosition nextPosition: ", nextPosition);
+                //console.log("getRandomTilePosition nextPosition: ", nextPosition);
                 return nextPosition;
             }  
         }
     }
 
+    console.log("using random undo");
     const itemIndex = Math.floor(Math.random() * numEmptyTiles);
-    console.log(`no undo - returning Cell: row:${emptyTiles[itemIndex].position.row} col:${emptyTiles[itemIndex].position.col}`);
+    //console.log(`no undo - returning Cell: row:${emptyTiles[itemIndex].position.row} col:${emptyTiles[itemIndex].position.col}`);
     return emptyTiles[itemIndex].position;
 }
 
