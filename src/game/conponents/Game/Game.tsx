@@ -65,6 +65,7 @@ const ButtonsWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
+    // ToDO - Use 
     if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
     return grid;
 }
@@ -105,6 +106,8 @@ export const Game: React.FC = () => {
     const [isClassicMode, setIsClassicMode] = useState(true);
     const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
+    const [prevNewCell, setPrevNewCell] = useState<Cell|undefined>(undefined);
+    const [isAfterUndo, setIsAfterUndo] = useState(false);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -114,13 +117,22 @@ export const Game: React.FC = () => {
         if (getNumZeros(newBoard) > 0) {
             const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
-            const randomTilePosition: Cell = getRandomTilePosition(newBoard);
+            let randomTilePosition: Cell;
+            if (isAfterUndo) {
+                randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
+            }
+            else {
+                randomTilePosition = getRandomTilePosition(newBoard, undefined);
+            }
+            setIsAfterUndo(false);
+            
             const newRandomTile: MovingTile = {
                 value: newTileValue,
                 from: randomTilePosition,
                 to: randomTilePosition,
                 tileType: "poping"
             }
+            setPrevNewCell(randomTilePosition);
 
             if (ADD_RANDOM_TILE && plan) {
                 plan.movingTiles.push(newRandomTile);
@@ -184,8 +196,16 @@ export const Game: React.FC = () => {
     }
 
     function handleUndo(): void {
+
+        //console.log("handleUndo currentBoard: ", boardData);
+
         const prevBoard = onUndo();
         setData(prevBoard);
+
+        //console.log("handleUndo prevBoard: ", prevBoard);
+
+        setIsAfterUndo(true);
+        //console.log("handleUndo setIsAfterUndo(true);");
     }
 
     return (
@@ -200,6 +220,8 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
+                    setIsAfterUndo(false);
+                    setPrevNewCell(undefined);
                 }}>
                     <IconRestart />
                 </SmallButton>
