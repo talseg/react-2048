@@ -43,9 +43,7 @@ export interface SettingsMenuProps {
     onIsOpenChanged: () => void;
     allow4: boolean;
     onAllow4Changed: () => void;
-    classicMode: boolean;
-    onClassicModeChange: () => void;
-    // Allow changing the tiles by clicking them
+    // Allow changing the tiles by clicking or double clicking on them
     allowTileChange: boolean;
     onAllowTileChangeChange: () => void;
 }
@@ -53,7 +51,6 @@ export interface SettingsMenuProps {
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     isOpen, onIsOpenChanged,
     allow4, onAllow4Changed,
-    classicMode, onClassicModeChange,
     allowTileChange, onAllowTileChangeChange
 }) => {
 
@@ -86,14 +83,6 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                         onChange={onAllow4Changed}>
                     </CheckboxStyled>
                     <div>Allow 4</div>
-                </CheckboxWrapper>
-
-                <CheckboxWrapper>
-                    <CheckboxStyled type="checkbox"
-                        checked={classicMode}
-                        onChange={onClassicModeChange}>
-                    </CheckboxStyled>
-                    <div>Classic Mode</div>
                 </CheckboxWrapper>
 
                 <CheckboxWrapper>
