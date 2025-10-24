@@ -103,44 +103,44 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isClassicMode, setIsClassicMode] = useState(true);
     const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
-    const [prevNewCell, setPrevNewCell] = useState<Cell|undefined>(undefined);
+    const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
     const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        if (plan) {
-            setAnimationPlan(plan);
-        }
+
+        // no plan - the board did not change, nothing to do
+        if (!plan) return;
+        
+        setAnimationPlan(plan);
+        
         if (getNumZeros(newBoard) > 0) {
             const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
-            let randomTilePosition: Cell;
-            if (numConsecutiveUndos === 1) {
-                randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
-            }
-            else {
-                randomTilePosition = getRandomTilePosition(newBoard, undefined);
-            }
-            setNumConsecutiveUndos(0);
-            
-            const newRandomTile: MovingTile = {
-                value: newTileValue,
-                from: randomTilePosition,
-                to: randomTilePosition,
-                tileType: "poping"
-            }
-            setPrevNewCell(randomTilePosition);
-
             if (ADD_RANDOM_TILE && plan) {
+
+                let randomTilePosition: Cell;
+                if (numConsecutiveUndos === 1) {
+                    randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
+                }
+                else {
+                    randomTilePosition = getRandomTilePosition(newBoard, undefined);
+                }
+                setNumConsecutiveUndos(0);
+
+                const newRandomTile: MovingTile = {
+                    value: newTileValue,
+                    from: randomTilePosition,
+                    to: randomTilePosition,
+                    tileType: "poping"
+                }
+                setPrevNewCell(randomTilePosition);
+
                 plan.movingTiles.push(newRandomTile);
                 newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
-
-            if (!isClassicMode)
-                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
         }
 
         updateUndoBoard(boardData);
@@ -150,7 +150,7 @@ export const Game: React.FC = () => {
             setTimeout(() => { alert("Game Over") }, 10);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData, isClassicMode, spawn4, updateUndoBoard]);
+    }, [boardData, spawn4, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
@@ -256,9 +256,6 @@ export const Game: React.FC = () => {
                 // ToDo - move setting parameters to useContext
                 allow4={spawn4}
                 onAllow4Changed={() => setSpawn4(value => !value)}
-
-                classicMode={isClassicMode}
-                onClassicModeChange={() => setIsClassicMode(value => !value)}
 
                 allowTileChange={allowTileChange}
                 onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
