@@ -107,7 +107,7 @@ export const Game: React.FC = () => {
     const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
     const [prevNewCell, setPrevNewCell] = useState<Cell|undefined>(undefined);
-    const [isAfterUndo, setIsAfterUndo] = useState(false);
+    const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -118,13 +118,13 @@ export const Game: React.FC = () => {
             const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
             let randomTilePosition: Cell;
-            if (isAfterUndo) {
+            if (numConsecutiveUndos === 1) {
                 randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
             }
             else {
                 randomTilePosition = getRandomTilePosition(newBoard, undefined);
             }
-            setIsAfterUndo(false);
+            setNumConsecutiveUndos(0);
             
             const newRandomTile: MovingTile = {
                 value: newTileValue,
@@ -204,7 +204,7 @@ export const Game: React.FC = () => {
 
         //console.log("handleUndo prevBoard: ", prevBoard);
 
-        setIsAfterUndo(true);
+        setNumConsecutiveUndos(value => value + 1);
         //console.log("handleUndo setIsAfterUndo(true);");
     }
 
@@ -220,7 +220,7 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
-                    setIsAfterUndo(false);
+                    setNumConsecutiveUndos(0);
                     setPrevNewCell(undefined);
                 }}>
                     <IconRestart />
