@@ -3,6 +3,7 @@ import { Board } from "../board/Board";
 import {
     addRandomTile,
     getNewMatrixByDirection,
+    getNextTilePosition,
     getRandomTilePosition,
     type AnimationPlan,
     type Cell,
@@ -108,25 +109,37 @@ export const Game: React.FC = () => {
     const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
     const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
 
+
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
 
         // no plan - the board did not change, nothing to do
         if (!plan) return;
-        
+
         setAnimationPlan(plan);
-        
-        if (getNumZeros(newBoard) > 0) {
-            const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
-            if (ADD_RANDOM_TILE && plan) {
+        if (getNumZeros(newBoard) > 0 && ADD_RANDOM_TILE) {
+            addRandomTile();
+        }
 
-                let randomTilePosition: Cell;
-                if (numConsecutiveUndos === 1) {
-                    randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
+        updateUndoBoard(boardData);
+        setBoardData(newBoard);
+
+        if (!isSwipePossible(newBoard)) {
+            setTimeout(() => { alert("Game Over") }, 10);
+        }
+        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
+
+        function addRandomTile() {
+            if (getNumZeros(newBoard) > 0 && ADD_RANDOM_TILE) {
+                const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
+                let randomTilePosition: Cell | undefined;
+                // If this was done right after undo - help by choosing the next Cell instead of a random one
+                if (numConsecutiveUndos === 1 && prevNewCell) {
+                    randomTilePosition = getNextTilePosition(newBoard, prevNewCell);
                 }
                 else {
-                    randomTilePosition = getRandomTilePosition(newBoard, undefined);
+                    randomTilePosition = getRandomTilePosition(newBoard);
                 }
                 setNumConsecutiveUndos(0);
 
@@ -138,18 +151,11 @@ export const Game: React.FC = () => {
                 }
                 setPrevNewCell(randomTilePosition);
 
-                plan.movingTiles.push(newRandomTile);
+                plan && plan.movingTiles.push(newRandomTile);
                 newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
             }
-        }
+        };
 
-        updateUndoBoard(boardData);
-        setBoardData(newBoard);
-
-        if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, 10);
-        }
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
     }, [boardData, spawn4, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
