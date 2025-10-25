@@ -196,16 +196,9 @@ export const Game: React.FC = () => {
     }
 
     function handleUndo(): void {
-
-        //console.log("handleUndo currentBoard: ", boardData);
-
         const prevBoard = onUndo();
         setData(prevBoard);
-
-        //console.log("handleUndo prevBoard: ", prevBoard);
-
         setNumConsecutiveUndos(value => value + 1);
-        //console.log("handleUndo setIsAfterUndo(true);");
     }
 
     return (
