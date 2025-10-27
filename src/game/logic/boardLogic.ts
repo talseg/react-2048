@@ -103,7 +103,7 @@ export const getNextTilePosition = (matrix: number[][],
         return (tile.position.row === lastUndoCell.row) && (tile.position.col === lastUndoCell.col);
     });
     if (!lastTile) return emptyTiles[0].position;
-    
+
     const lastTileIndex = emptyTiles.indexOf(lastTile);
     if (lastTileIndex === emptyTiles.length - 1)
         return emptyTiles[0].position;
@@ -114,33 +114,6 @@ export const getNextTilePosition = (matrix: number[][],
 export const getRandomTilePosition = (matrix: number[][]): Cell => {
     const emptyTiles = getEmptyTiles(matrix);
     const itemIndex = Math.floor(Math.random() * emptyTiles.length);
-    return emptyTiles[itemIndex].position;
-}
-
-export const getRandomTilePosition1 = (matrix: number[][], lastUndoCell: Cell | undefined): Cell => {
-    const emptyTiles = getEmptyTiles(matrix);
-    const numEmptyTiles = emptyTiles.length;
-    if (numEmptyTiles === 0) {
-        // ToDo handle exceptions
-        throw new Error(`addRandomTile requested to add random tile to empty board:\n${JSON.stringify(matrix)}`)
-    }
-    // If this was done right after undo - help by choosing the next Cell instead of a random one
-    if (lastUndoCell) {
-        const lastTile = emptyTiles.find((tile: StaticTile) => {
-            return (tile.position.row === lastUndoCell.row) && (tile.position.col === lastUndoCell.col);
-        });
-
-        if (lastTile) {
-            const lastTileIndex = emptyTiles.indexOf(lastTile);
-            if (lastTileIndex !== -1) {
-                if (lastTileIndex === emptyTiles.length - 1)
-                    return emptyTiles[0].position;
-                else
-                    return emptyTiles[lastTileIndex + 1].position;
-            }
-        }
-    }
-    const itemIndex = Math.floor(Math.random() * numEmptyTiles);
     return emptyTiles[itemIndex].position;
 }
 
