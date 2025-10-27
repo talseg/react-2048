@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SettingsMenu } from './SettingsMenu';
 import { styled } from 'styled-components';
 import { useState } from 'react';
+import { SettingsProvider } from './SettingsContext';
 
 const Wrapper = styled.div`
   width: 340px;
@@ -18,13 +19,14 @@ const ContentWrapper = styled.div`
     gap: 20px;
 `;
 
+
 const SettingsMenuTester = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [allow4, setAllow4] = useState(false);
-  const [allowTileChange, setAllowTileChange] = useState(false);
   
   return (
+    <SettingsProvider>
+    
     <Wrapper>
       <ContentWrapper>
         <button style={{
@@ -38,9 +40,9 @@ const SettingsMenuTester = () => {
           }}
         >open menu</button>
 
-        <div style={{ color: "white" }}>{`Allow4: ${allow4}`}</div>
-
-        <div style={{ color: "white" }}>{`Allow tile change: ${allowTileChange}`}</div>
+        {/* these are inside the SettingsProvider - ToDo - Wrap this and expose them  */}
+        {/* <div style={{ color: "white" }}>{`Allow4: ${allow4}`}</div> */}
+        {/* <div style={{ color: "white" }}>{`Allow tile change: ${allowTileChange}`}</div> */}
 
       </ContentWrapper>
 
@@ -53,16 +55,11 @@ const SettingsMenuTester = () => {
           }
         }
 
-        allow4={allow4}
-        onAllow4Changed={() => setAllow4(value => !value)}
-
-        allowTileChange={allowTileChange}
-        onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
-        
-
       ></SettingsMenu>
 
     </Wrapper>
+
+    </SettingsProvider>
   );
 }
 

@@ -3,17 +3,14 @@ import { Board } from "../board/Board";
 import {
     addRandomTile,
     getNewMatrixByDirection,
-    getRandomTilePosition,
     type AnimationPlan,
-    type Cell,
-    type Direction,
-    type MovingTile
+    type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
-import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
+import { createMatrix, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE, SPAWN_4_PROBABILITY } from "../../utilities/globals";
+import { GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
@@ -23,6 +20,8 @@ import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
+import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
+import {  useSettings } from "../settings/SettingsContext";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -65,13 +64,12 @@ const ButtonsWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
-    // ToDO - Use 
     if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
     return grid;
 }
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
-const ADD_RANDOM_TILE = true; // For debug
+export const ADD_RANDOM_TILE = true; // For debug
 
 
 const isSwipePossible = (boardData: number[][]): boolean => {
@@ -101,56 +99,30 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
-    const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
-    const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
+    const { allowTileChange, allow4 } = useSettings();
+    const addRandomTileManager = useAddRandomTileManager();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-
+        
         // no plan - the board did not change, nothing to do
         if (!plan) return;
-        
+
         setAnimationPlan(plan);
-        
-        if (getNumZeros(newBoard) > 0) {
-            const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
 
-            if (ADD_RANDOM_TILE && plan) {
-
-                let randomTilePosition: Cell;
-                if (numConsecutiveUndos === 1) {
-                    randomTilePosition = getRandomTilePosition(newBoard, prevNewCell);
-                }
-                else {
-                    randomTilePosition = getRandomTilePosition(newBoard, undefined);
-                }
-                setNumConsecutiveUndos(0);
-
-                const newRandomTile: MovingTile = {
-                    value: newTileValue,
-                    from: randomTilePosition,
-                    to: randomTilePosition,
-                    tileType: "poping"
-                }
-                setPrevNewCell(randomTilePosition);
-
-                plan.movingTiles.push(newRandomTile);
-                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
-            }
-        }
+        addRandomTileManager.addRandomTile(newBoard, plan);
 
         updateUndoBoard(boardData);
         setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, 10);
+            setTimeout(() => { alert("Game Over") }, 100);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-    }, [boardData, spawn4, updateUndoBoard]);
+
+    }, [boardData, updateUndoBoard, allow4]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
@@ -187,7 +159,6 @@ export const Game: React.FC = () => {
     }
 
     const handleTileDoubleClick = (row: number, column: number): undefined => {
-
         if (!allowTileChange) return;
 
         const newBoardData = copyMatrix(boardData);
@@ -196,16 +167,9 @@ export const Game: React.FC = () => {
     }
 
     function handleUndo(): void {
-
-        //console.log("handleUndo currentBoard: ", boardData);
-
         const prevBoard = onUndo();
         setData(prevBoard);
-
-        //console.log("handleUndo prevBoard: ", prevBoard);
-
-        setNumConsecutiveUndos(value => value + 1);
-        //console.log("handleUndo setIsAfterUndo(true);");
+        addRandomTileManager.onUndo();
     }
 
     return (
@@ -220,8 +184,7 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
-                    setNumConsecutiveUndos(0);
-                    setPrevNewCell(undefined);
+                    addRandomTileManager.resetUndos();
                 }}>
                     <IconRestart />
                 </SmallButton>
@@ -252,17 +215,11 @@ export const Game: React.FC = () => {
             <SettingsMenu
                 isOpen={isMenuOpen}
                 onIsOpenChanged={() => setIsMenuOpen(value => !value)}
-
-                // ToDo - move setting parameters to useContext
-                allow4={spawn4}
-                onAllow4Changed={() => setSpawn4(value => !value)}
-
-                allowTileChange={allowTileChange}
-                onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
-
             ></SettingsMenu>
 
         </PageWrapper>
-
     );
 }
+
+import React from "react";
+

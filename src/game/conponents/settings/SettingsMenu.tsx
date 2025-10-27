@@ -3,6 +3,7 @@ import { CheckboxStyled } from "../Game/Game";
 import { useEffect, useState } from "react";
 import { SmallButton } from "../../elements/SmallButton";
 import BackIcon from '../../../assets/back.svg?react';
+import { useSettings } from "./SettingsContext";
 export const OPEN_MENU_ANIMATION_TIME = 300; // ms
 
 const closeAnimation = keyframes`
@@ -41,23 +42,17 @@ export const CheckboxWrapper = styled.div`
 export interface SettingsMenuProps {
     isOpen: boolean;
     onIsOpenChanged: () => void;
-    allow4: boolean;
-    onAllow4Changed: () => void;
-    // Allow changing the tiles by clicking or double clicking on them
-    allowTileChange: boolean;
-    onAllowTileChangeChange: () => void;
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     isOpen, onIsOpenChanged,
-    allow4, onAllow4Changed,
-    allowTileChange, onAllowTileChangeChange
 }) => {
 
     // Keeps the element mounted while closing animation runs
     const [present, setPresent] = useState(isOpen);
     // Drives the CSS transform state
     const [animOpen, setAnimOpen] = useState(false);
+    const { allow4, setAllow4, allowTileChange, setAllowTileChange } = useSettings();
 
     useEffect(() => {
         setAnimOpen(isOpen);
@@ -80,16 +75,14 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allow4}
-                        onChange={onAllow4Changed}>
-                    </CheckboxStyled>
+                        onChange={() => setAllow4(v => !v)}/>
                     <div>Allow 4</div>
                 </CheckboxWrapper>
 
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allowTileChange}
-                        onChange={onAllowTileChangeChange}>
-                    </CheckboxStyled>
+                        onChange={() => setAllowTileChange(v => !v)}/>
                     <div>Allow tile change</div>
                 </CheckboxWrapper>
 

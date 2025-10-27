@@ -17,8 +17,8 @@ export const useUndo = (): UseUndoProps => {
     ]);
 
     const onUndo = useCallback((): number[][] => {
-        if (undoStack.length <= 1) {
-            return undoStack[0];
+        if (undoStack.length === 0) {
+            return createMatrix(GRID_SIZE, 0);
         }
         const newStack = [...undoStack];
         const topItem = newStack.pop()!;
