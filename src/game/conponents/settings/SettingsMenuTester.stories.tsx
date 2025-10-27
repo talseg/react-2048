@@ -23,13 +23,9 @@ const ContentWrapper = styled.div`
 const SettingsMenuTester = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const [allow4, setAllow4] = useState(false);
-  // const [allowTileChange, setAllowTileChange] = useState(false);
-  //const { allow4, allowTileChange } = useSettings();
   
   return (
     <SettingsProvider>
-      
     
     <Wrapper>
       <ContentWrapper>
@@ -44,8 +40,8 @@ const SettingsMenuTester = () => {
           }}
         >open menu</button>
 
+        {/* these are inside the SettingsProvider - ToDo - Wrap this and expose them  */}
         {/* <div style={{ color: "white" }}>{`Allow4: ${allow4}`}</div> */}
-
         {/* <div style={{ color: "white" }}>{`Allow tile change: ${allowTileChange}`}</div> */}
 
       </ContentWrapper>
@@ -58,13 +54,6 @@ const SettingsMenuTester = () => {
             setIsMenuOpen(value => !value);
           }
         }
-
-        // allow4={allow4}
-        // onAllow4Changed={() => setAllow4(value => !value)}
-
-        // allowTileChange={allowTileChange}
-        // onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
-        
 
       ></SettingsMenu>
 
