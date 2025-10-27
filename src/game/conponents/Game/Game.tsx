@@ -3,18 +3,14 @@ import { Board } from "../board/Board";
 import {
     addRandomTile,
     getNewMatrixByDirection,
-    getNextTilePosition,
-    getRandomTilePosition,
     type AnimationPlan,
-    type Cell,
-    type Direction,
-    type MovingTile
+    type Direction
 } from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
-import { createMatrix, getNumZeros, copyMatrix } from "../../logic/matrixUtils";
+import { createMatrix, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE, SPAWN_4_PROBABILITY } from "../../utilities/globals";
+import { GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
@@ -68,7 +64,6 @@ const ButtonsWrapper = styled.div`
 
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
-    // ToDO - Use 
     if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
     return grid;
 }
@@ -105,17 +100,10 @@ export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    //const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    //const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
     const { allowTileChange, allow4 } = useSettings();
-
-    //const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
-    //const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
-    //const canSpawn4 = true;
     const addRandomTileManager = useAddRandomTileManager();
-   
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
@@ -131,7 +119,7 @@ export const Game: React.FC = () => {
         setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, 10);
+            setTimeout(() => { alert("Game Over") }, 100);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
@@ -183,7 +171,6 @@ export const Game: React.FC = () => {
         const prevBoard = onUndo();
         setData(prevBoard);
         addRandomTileManager.onUndo();
-        //setNumConsecutiveUndos(value => value + 1);
     }
 
     return (
@@ -199,8 +186,6 @@ export const Game: React.FC = () => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
                     addRandomTileManager.resetUndos();
-                    //setNumConsecutiveUndos(0);
-                    //setPrevNewCell(undefined);
                 }}>
                     <IconRestart />
                 </SmallButton>
@@ -231,14 +216,6 @@ export const Game: React.FC = () => {
             <SettingsMenu
                 isOpen={isMenuOpen}
                 onIsOpenChanged={() => setIsMenuOpen(value => !value)}
-
-                // ToDo - move setting parameters to useContext
-                //allow4={addRandomTileManager.getCanSpawn4()}
-                //onAllow4Changed={() => addRandomTileManager.onSpawn4Changed()}
-
-                //allowTileChange={allowTileChange}
-                //onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
-
             ></SettingsMenu>
 
         </PageWrapper>
