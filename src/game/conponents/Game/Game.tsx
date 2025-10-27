@@ -24,6 +24,8 @@ import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
+import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
+import {  useSettings } from "../settings/SettingsContext";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -72,7 +74,7 @@ const createInitialBoardData = (): number[][] => {
 }
 
 const LOCAL_STORAGE_DATA_KEY = "boardData";
-const ADD_RANDOM_TILE = true; // For debug
+export const ADD_RANDOM_TILE = true; // For debug
 
 
 const isSwipePossible = (boardData: number[][]): boolean => {
@@ -98,29 +100,32 @@ const HanburgerButtonStyled = styled(SmallButton)`
   margin-left: auto;  
 `;
 
+
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [allowTileChange, setAllowTileChange] = useState(false);
+    //const [allowTileChange, setAllowTileChange] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [spawn4, setSpawn4] = useState(true);
+    //const [spawn4, setSpawn4] = useState(true);
     const { onUndo, updateUndoBoard } = useUndo();
-    const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
-    const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
+    const { allowTileChange, allow4 } = useSettings();
 
+    //const [prevNewCell, setPrevNewCell] = useState<Cell | undefined>(undefined);
+    //const [numConsecutiveUndos, setNumConsecutiveUndos] = useState(0);
+    //const canSpawn4 = true;
+    const addRandomTileManager = useAddRandomTileManager();
+   
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-
+        
         // no plan - the board did not change, nothing to do
         if (!plan) return;
 
         setAnimationPlan(plan);
 
-        if (getNumZeros(newBoard) > 0 && ADD_RANDOM_TILE) {
-            addRandomTile();
-        }
+        addRandomTileManager.addRandomTile(newBoard, plan);
 
         updateUndoBoard(boardData);
         setBoardData(newBoard);
@@ -130,33 +135,7 @@ export const Game: React.FC = () => {
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
-        function addRandomTile() {
-            if (getNumZeros(newBoard) > 0 && ADD_RANDOM_TILE) {
-                const newTileValue = spawn4 && Math.random() < SPAWN_4_PROBABILITY ? 4 : 2;
-                let randomTilePosition: Cell | undefined;
-                // If this was done right after undo - help by choosing the next Cell instead of a random one
-                if (numConsecutiveUndos === 1 && prevNewCell) {
-                    randomTilePosition = getNextTilePosition(newBoard, prevNewCell);
-                }
-                else {
-                    randomTilePosition = getRandomTilePosition(newBoard);
-                }
-                setNumConsecutiveUndos(0);
-
-                const newRandomTile: MovingTile = {
-                    value: newTileValue,
-                    from: randomTilePosition,
-                    to: randomTilePosition,
-                    tileType: "poping"
-                }
-                setPrevNewCell(randomTilePosition);
-
-                plan && plan.movingTiles.push(newRandomTile);
-                newBoard[randomTilePosition.row][randomTilePosition.col] = newTileValue;
-            }
-        };
-
-    }, [boardData, spawn4, updateUndoBoard]);
+    }, [boardData, updateUndoBoard, allow4]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
@@ -193,7 +172,6 @@ export const Game: React.FC = () => {
     }
 
     const handleTileDoubleClick = (row: number, column: number): undefined => {
-
         if (!allowTileChange) return;
 
         const newBoardData = copyMatrix(boardData);
@@ -204,7 +182,8 @@ export const Game: React.FC = () => {
     function handleUndo(): void {
         const prevBoard = onUndo();
         setData(prevBoard);
-        setNumConsecutiveUndos(value => value + 1);
+        addRandomTileManager.onUndo();
+        //setNumConsecutiveUndos(value => value + 1);
     }
 
     return (
@@ -219,8 +198,9 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={() => {
                     setData(createInitialBoardData());
                     setAnimationPlan(undefined);
-                    setNumConsecutiveUndos(0);
-                    setPrevNewCell(undefined);
+                    addRandomTileManager.resetUndos();
+                    //setNumConsecutiveUndos(0);
+                    //setPrevNewCell(undefined);
                 }}>
                     <IconRestart />
                 </SmallButton>
@@ -253,15 +233,17 @@ export const Game: React.FC = () => {
                 onIsOpenChanged={() => setIsMenuOpen(value => !value)}
 
                 // ToDo - move setting parameters to useContext
-                allow4={spawn4}
-                onAllow4Changed={() => setSpawn4(value => !value)}
+                //allow4={addRandomTileManager.getCanSpawn4()}
+                //onAllow4Changed={() => addRandomTileManager.onSpawn4Changed()}
 
-                allowTileChange={allowTileChange}
-                onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
+                //allowTileChange={allowTileChange}
+                //onAllowTileChangeChange={() => setAllowTileChange(value => !value)}
 
             ></SettingsMenu>
 
         </PageWrapper>
-
     );
 }
+
+import React from "react";
+
