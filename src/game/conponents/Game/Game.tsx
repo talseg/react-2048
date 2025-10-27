@@ -95,7 +95,6 @@ const HanburgerButtonStyled = styled(SmallButton)`
   margin-left: auto;  
 `;
 
-
 export const Game: React.FC = () => {
 
     const [boardData, setBoardData] = useState<number[][]>([[]]);

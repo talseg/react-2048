@@ -42,11 +42,6 @@ export const CheckboxWrapper = styled.div`
 export interface SettingsMenuProps {
     isOpen: boolean;
     onIsOpenChanged: () => void;
-    //allow4: boolean;
-    //onAllow4Changed: () => void;
-    // Allow changing the tiles by clicking or double clicking on them
-    //allowTileChange: boolean;
-    //onAllowTileChangeChange: () => void;
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
@@ -80,23 +75,14 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allow4}
-                        onChange={() => 
-                        {
-                            console.log("calling setAllow4 with: ", !allow4);
-                            setAllow4(v => !v)
-                        }
-                        
-                        
-                        }>
-                    </CheckboxStyled>
+                        onChange={() => setAllow4(v => !v)}/>
                     <div>Allow 4</div>
                 </CheckboxWrapper>
 
                 <CheckboxWrapper>
                     <CheckboxStyled type="checkbox"
                         checked={allowTileChange}
-                        onChange={() => setAllowTileChange(v => !v)}>
-                    </CheckboxStyled>
+                        onChange={() => setAllowTileChange(v => !v)}/>
                     <div>Allow tile change</div>
                 </CheckboxWrapper>
 
