@@ -10,7 +10,7 @@ import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
 import { createMatrix, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
@@ -118,7 +118,7 @@ export const Game: React.FC = () => {
         setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, 100);
+            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
