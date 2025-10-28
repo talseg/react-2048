@@ -122,7 +122,7 @@ export const Game: React.FC = () => {
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
-    }, [boardData, addRandomTileManager.addRandomTile]);
+    }, [boardData, addRandomTileManager, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
