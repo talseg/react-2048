@@ -7,9 +7,11 @@
 ![Extra Terms](https://img.shields.io/badge/Extra-Non--Commercial-orange.svg)
 
 A modern implementation of the classic **2048 game**, built with **React + TypeScript**.  
-This version challenges you to go **beyond 2048 all the way to 65,536**.
-Exercise clean code
+This version challenges you to go **beyond 2048 all the way to 65,536**,
 <br/>
+so the target board is:
+</br>
+![Full Board](public/fullBoard.png)</br>
 Built with ❤️ by Inbar and Tal Segal. August 2025.
 
 ---
