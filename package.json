@@ -35,6 +35,7 @@
     "@vitest/browser": "^4.0.4",
     "@vitest/coverage-v8": "^4.0.4",
     "eslint": "^9.38.0",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-storybook": "^9.1.15",
