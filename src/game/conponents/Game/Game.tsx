@@ -10,7 +10,7 @@ import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
 import { createMatrix, copyMatrix } from "../../logic/matrixUtils";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { GRID_SIZE } from "../../utilities/globals";
+import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useRefSwipe } from "../../hooks/useSRefwipe";
 import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
@@ -101,7 +101,7 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { onUndo, updateUndoBoard } = useUndo();
-    const { allowTileChange, allow4 } = useSettings();
+    const { allowTileChange } = useSettings();
     const addRandomTileManager = useAddRandomTileManager();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -118,11 +118,11 @@ export const Game: React.FC = () => {
         setBoardData(newBoard);
 
         if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, 100);
+            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION);
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
-    }, [boardData, updateUndoBoard, allow4]);
+    }, [boardData, addRandomTileManager, updateUndoBoard]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);

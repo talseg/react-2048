@@ -37,7 +37,7 @@ export const useAddRandomTileManager = (): {
             tileType: "poping"
         }
         setPrevNewCell(randomTilePosition);
-        plan && plan.movingTiles.push(newRandomTile);
+        plan?.movingTiles.push(newRandomTile);
         board[randomTilePosition.row][randomTilePosition.col] = newTileValue;
     }, [allow4, numConsecutiveUndos, prevNewCell]);
 

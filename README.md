@@ -1,15 +1,14 @@
-<h1>
-  <span style="color:#f2b179;">2048</span> to 
-  <span style="color:#edc22e;">65k</span>
-</h1>
+<h1>2048 to 65k</h1>
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Extra Terms](https://img.shields.io/badge/Extra-Non--Commercial-orange.svg)
 
 A modern implementation of the classic **2048 game**, built with **React + TypeScript**.  
-This version challenges you to go **beyond 2048 all the way to 65,536**.
-Exercise clean code
+This version challenges you to go **beyond 2048 all the way to 65,536**,
 <br/>
+so the target board is:
+</br>
+![Full Board](public/fullBoard.png)</br>
 Built with ❤️ by Inbar and Tal Segal. August 2025.
 
 ---
