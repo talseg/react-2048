@@ -101,7 +101,7 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { onUndo, updateUndoBoard } = useUndo();
-    const { allowTileChange, allow4 } = useSettings();
+    const { allowTileChange } = useSettings();
     const addRandomTileManager = useAddRandomTileManager();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -122,7 +122,7 @@ export const Game: React.FC = () => {
         }
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
 
-    }, [boardData, updateUndoBoard, allow4]);
+    }, [boardData, addRandomTileManager.addRandomTile]);
 
     const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
