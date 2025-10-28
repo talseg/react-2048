@@ -1,7 +1,4 @@
-<h1>
-  <span style="color:#f2b179;">2048</span> to 
-  <span style="color:#edc22e;">65k</span>
-</h1>
+<h1>2048 to 65k</h1>
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Extra Terms](https://img.shields.io/badge/Extra-Non--Commercial-orange.svg)
