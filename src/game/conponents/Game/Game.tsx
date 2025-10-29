@@ -20,6 +20,7 @@ import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
+import ThumbUpIcon from  '../../../assets//1F44D.svg?react';
 import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import {  useSettings } from "../settings/SettingsContext";
 const VERSION = pkg.version;
@@ -62,6 +63,10 @@ const ButtonsWrapper = styled.div`
     margin:14px 0px 0px 14px;
 `;
 
+const StyledThumUpWrapper = styled(ThumbUpIcon)`
+    margin-top: 2px;
+`;
+
 const createInitialBoardData = (): number[][] => {
     const grid = createMatrix(GRID_SIZE, 0);
     if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
@@ -101,7 +106,7 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { onUndo, updateUndoBoard } = useUndo();
-    const { allowTileChange } = useSettings();
+    const { allowTileChange, isPerfectBoard } = useSettings();
     const addRandomTileManager = useAddRandomTileManager();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -192,6 +197,8 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={handleUndo}>
                     <IconUndo />
                 </SmallButton>
+
+                { isPerfectBoard && <StyledThumUpWrapper /> }
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
                     <HamburgerIcon />
