@@ -52,7 +52,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     const [present, setPresent] = useState(isOpen);
     // Drives the CSS transform state
     const [animOpen, setAnimOpen] = useState(false);
-    const { allow4, setAllow4, allowTileChange, setAllowTileChange } = useSettings();
+    const { allow4, setAllow4, allowTileChange, setAllowTileChange, isPerfectBoard, setIsPerfectBoard } = useSettings();
 
     useEffect(() => {
         setAnimOpen(isOpen);
@@ -84,6 +84,13 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                         checked={allowTileChange}
                         onChange={() => setAllowTileChange(v => !v)}/>
                     <div>Allow tile change</div>
+                </CheckboxWrapper>
+
+                <CheckboxWrapper>
+                    <CheckboxStyled type="checkbox"
+                        checked={isPerfectBoard}
+                        onChange={() => setIsPerfectBoard(v => !v)}/>
+                    <div>Show Perfect Board</div>
                 </CheckboxWrapper>
 
             </ItemsWrapper>

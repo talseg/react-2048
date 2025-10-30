@@ -20,8 +20,10 @@ import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
+import ThumbUpIcon from  '../../../assets//1F44D.svg?react';
 import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import {  useSettings } from "../settings/SettingsContext";
+import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -60,6 +62,11 @@ const ButtonsWrapper = styled.div`
     gap: 20px;
     width: 93vw;
     margin:14px 0px 0px 14px;
+    max-height: 36px;
+`;
+
+const StyledThumUpWrapper = styled(ThumbUpIcon)`
+    margin-top: 2px;
 `;
 
 const createInitialBoardData = (): number[][] => {
@@ -101,7 +108,7 @@ export const Game: React.FC = () => {
     const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { onUndo, updateUndoBoard } = useUndo();
-    const { allowTileChange } = useSettings();
+    const { allowTileChange, isPerfectBoard } = useSettings();
     const addRandomTileManager = useAddRandomTileManager();
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
@@ -171,6 +178,7 @@ export const Game: React.FC = () => {
         setData(prevBoard);
         addRandomTileManager.onUndo();
     }
+    const showBoardPerfect = isPerfectBoard && isBoardAscending(boardData);
 
     return (
         <PageWrapper
@@ -192,6 +200,8 @@ export const Game: React.FC = () => {
                 <SmallButton onClick={handleUndo}>
                     <IconUndo />
                 </SmallButton>
+
+                { showBoardPerfect && <StyledThumUpWrapper /> }
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
                     <HamburgerIcon />
@@ -222,4 +232,5 @@ export const Game: React.FC = () => {
 }
 
 import React from "react";
+
 
