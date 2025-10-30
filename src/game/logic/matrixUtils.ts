@@ -114,3 +114,5 @@ export const getNumZeros = (matrix: number[][]) => {
     }
     return count;
 }
+
+export const appendRows = (a: number[], b: number[]): number[] => [...a, ...b];

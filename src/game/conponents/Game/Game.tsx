@@ -23,7 +23,7 @@ import HamburgerIcon from '../../../assets//hamburger.svg?react';
 import ThumbUpIcon from  '../../../assets//1F44D.svg?react';
 import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import {  useSettings } from "../settings/SettingsContext";
-import { isBoardAscending } from "../../logic/boardLogic1";
+import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
