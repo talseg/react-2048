@@ -1,31 +1,60 @@
-import { appendRows, arrayFlip } from "./matrixUtils";
+import { arrayFlip } from "./matrixUtils";
 
+/**
+ * 
+ * @param matrix 
+ * @returns true - if values ascend when read snakewise from bottom-right
+ * Examples:i
+ * true 3x3 Array:
+ * 2  ←  4  ←  8
+ *             ↑
+ * 64  → 32 →  16
+ * ↑
+ * 128 ← 256 ← 512
+ *
+ * false 3x3 Array:
+ * 0 ← 2 ← 0
+ *         ↑
+ * 0 → 4 → 2
+ * ↑
+ * 0 ← 8 ← 4
+ * 
+ * 4x4 legal direction:
+ * → → → →
+ * ↑
+ * ← ← ← ←
+ *       ↑
+ * → → → →
+ * ↑
+ * ← ← ← ←
+ */
 export const isBoardAscending = (matrix: number[][] | undefined): boolean => {
-    if (!matrix || matrix[0].length === 0) return false;
-    const roundArray = spreadMatrixToRoundArray(matrix);
-    const maxValue = 0;
-    return isRowAscending(roundArray, maxValue);
+    if (!matrix || matrix.length <= 1) return true;
+    const roundArray = flattenMatrixZigzag (matrix);
+    const noZeroArray = roundArray.filter(value => value !== 0);
+    return isRowAscending(noZeroArray);
 }
 
-const spreadMatrixToRoundArray = (matrix: number[][]): number[] => {
-    let outputArray: number[] = [];
-    let souldReverse = matrix[0].length % 2 === 0;
-    for (let row = 0; row < matrix[0].length; row++) {
-        const rowToCheck = souldReverse ? arrayFlip(matrix[row]) : matrix[row];
-        outputArray = appendRows(outputArray, rowToCheck);
-        souldReverse = !souldReverse;
+/**
+ * @param matrix 
+ * @returns fliped array - see explanation above
+ */
+const flattenMatrixZigzag  = (matrix: number[][]): number[] => {
+    const result: number[] = [];
+    let shouldFlip = matrix.length % 2 === 0;
+    for (let row = 0; row < matrix.length; row++) {
+        const actualRow = shouldFlip ? arrayFlip(matrix[row]) : matrix[row];
+        result.push(...actualRow);
+        shouldFlip = !shouldFlip;
     }
-    return outputArray;
+    return result;
 }
 
-const isRowAscending = (row: number[], max: number): boolean => {
-    let prevMax = max;
-    console.log(row);
-    const isPerfect = row.every((num: number) => {
-        if (num === 0) return true;                 // ToDo - give this function a non zero array
-        const isOK = num >= prevMax;
+const isRowAscending = (row: number[]): boolean => {
+    let prevMax = -Infinity;
+    return row.every((num: number) => {
+        if (num < prevMax) return false;
         prevMax = num;
-        return isOK;
+        return true;
     });
-    return isPerfect;
 }
