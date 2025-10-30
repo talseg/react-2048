@@ -23,6 +23,7 @@ import HamburgerIcon from '../../../assets//hamburger.svg?react';
 import ThumbUpIcon from  '../../../assets//1F44D.svg?react';
 import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import {  useSettings } from "../settings/SettingsContext";
+import { isBoardAscending } from "../../logic/boardLogic1";
 const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
@@ -61,6 +62,7 @@ const ButtonsWrapper = styled.div`
     gap: 20px;
     width: 93vw;
     margin:14px 0px 0px 14px;
+    max-height: 36px;
 `;
 
 const StyledThumUpWrapper = styled(ThumbUpIcon)`
@@ -176,6 +178,7 @@ export const Game: React.FC = () => {
         setData(prevBoard);
         addRandomTileManager.onUndo();
     }
+    const showBoardPerfect = isPerfectBoard && isBoardAscending(boardData);
 
     return (
         <PageWrapper
@@ -198,7 +201,7 @@ export const Game: React.FC = () => {
                     <IconUndo />
                 </SmallButton>
 
-                { isPerfectBoard && <StyledThumUpWrapper /> }
+                { showBoardPerfect && <StyledThumUpWrapper /> }
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
                     <HamburgerIcon />
@@ -229,4 +232,5 @@ export const Game: React.FC = () => {
 }
 
 import React from "react";
+
 
