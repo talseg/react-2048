@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { getNextTilePosition, getRandomTilePosition, type AnimationPlan, type Cell, type MovingTile, type StaticTile } from "../logic/boardLogic";
+import { getNextTilePosition, getRandomTilePosition, type AnimationPlan, type Cell, type StaticTile } from "../logic/boardLogic";
 import { ADD_RANDOM_TILE } from "../conponents/Game/Game";
 import { getNumZeros } from "../logic/matrixUtils";
 import { SPAWN_4_PROBABILITY } from "../utilities/globals";
