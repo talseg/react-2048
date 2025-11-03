@@ -33,6 +33,7 @@
     "@types/react-dom": "^19.2.2",
     "@types/styled-components": "^5.1.35",
     "@vitejs/plugin-react": "^5.1.0",
+    "@vitest/browser": "^4.0.6",
     "@vitest/browser-playwright": "^4.0.6",
     "@vitest/coverage-v8": "^4.0.6",
     "eslint": "^9.39.0",
