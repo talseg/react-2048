@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { TILE_PIXEL_SIZE } from '../tile/Tile';
 import type { AnimationPlan } from '../../logic/boardLogic';
-import { pushBoardTiles, pushEmptyTiles, pushMergedTiles, pushMovingTiles, pushStaticTiles } from '../../utilities/mapTileUtils';
+import { pushBoardTiles, pushEmptyTiles, pushMergedTiles, pushMovingTiles, pushPoppedTile, pushStaticTiles } from '../../utilities/mapTileUtils';
 import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from '../../utilities/globals';
 
 const SURFACE_SIZE = GRID_SIZE * TILE_PIXEL_SIZE + (GRID_SIZE - 1) * MARGIN_BETWEEN_TILES;
@@ -56,6 +56,7 @@ export const Board: React.FC<BoardProps> = ({
             pushMovingTiles(animationPlan.movingTiles, tileList);
             pushStaticTiles(animationPlan.staticTiles, tileList);
             pushMergedTiles(animationPlan.mergedTiles, tileList);
+            if (animationPlan.poppedTile) pushPoppedTile(animationPlan.poppedTile, tileList);
             return tileList;
         }
         return <></>;

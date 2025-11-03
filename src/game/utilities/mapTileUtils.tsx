@@ -1,6 +1,6 @@
 import { css, keyframes, styled } from "styled-components";
 import { Tile, TILE_PIXEL_SIZE } from "../conponents/tile/Tile";
-import type { MovingTile, StaticTile } from "../logic/boardLogic";
+import type { Cell, MovingTile, StaticTile } from "../logic/boardLogic";
 import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from "./globals";
 
 const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
@@ -61,9 +61,12 @@ const VerticalMovingTileStyled = styled(Tile) <{ y0: number; y1: number; x: numb
     left: ${({ x }) => { return `${x}px` }};
 `;
 
-const toPixels = (col: number): number => {
-    return col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
-}
+const toPixels = (col: number): number => 
+    col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
+
+const getXY = (col: number, row: number) : { x: number, y: number} => ({ x: toPixels(col), y: toPixels(row) });
+
+const getCellXY = (position: Cell) : { x: number, y: number} => ({ x: toPixels(position.col), y: toPixels(position.row) });
 
 export const pushEmptyTiles = (tiles: React.ReactElement[],
     onTileClick?: (row: number, column: number) => undefined,
@@ -72,13 +75,8 @@ export const pushEmptyTiles = (tiles: React.ReactElement[],
     let key = 0;
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
-            const value = 0;
-
-            const x = toPixels(col);
-            const y = toPixels(row);
-
             tiles.push(
-                <StaticTileStyled value={value} x={x} y={y} key={`empty-tile-${key++}`}
+                <StaticTileStyled value={0} {...getXY(col, row)} key={`empty-tile-${key++}`}
                     onClick={() => onTileClick?.(row, col)}
                     onDoubleClick={() => onTileDoubleClick?.(row, col)} />
             );
@@ -88,29 +86,27 @@ export const pushEmptyTiles = (tiles: React.ReactElement[],
 }
 
 export const pushStaticTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
-
     for (let index = 0; index < tiles.length; index++) {
-
         const tile = tiles[index];
-        const x = toPixels(tile.position.col);
-        const y = toPixels(tile.position.row);
         tileList.push(
-            <StaticTileStyled key={`static-tile-${index}`} value={tile.value} x={x} y={y} />
+            <StaticTileStyled key={`static-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
         );
     }
 }
 
 export const pushMergedTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
-
     for (let index = 0; index < tiles.length; index++) {
-
         const tile = tiles[index];
-        const x = toPixels(tile.position.col);
-        const y = toPixels(tile.position.row);
         tileList.push(
-            <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} x={x} y={y} />
+            <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
         );
     }
+}
+
+export const pushPoppedTile = (tile: StaticTile, tileList: React.ReactElement[]) => {
+    tileList.push(
+        <PopingTileStyled key={`poping-tile`} value={tile.value} {...getCellXY(tile.position)} />
+    );
 }
 
 export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
@@ -118,15 +114,7 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
 
         const tile = tiles[index];
         // Horizontal movement
-        if (tile.tileType === "poping") {
-            const x = toPixels(tile.from.col);
-            const y = toPixels(tile.from.row);
-            tileList.push(
-                <PopingTileStyled key={`poping-tile-${index}`} value={tile.value} x={x} y={y} />
-            );
-        }
-        else if (tile.from.row === tile.to.row) {
-
+        if (tile.from.row === tile.to.row) {
             const x0 = toPixels(tile.from.col);
             const x1 = toPixels(tile.to.col);
             const y = toPixels(tile.from.row);
@@ -137,7 +125,6 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
         }
         // Vertical movement
         else if (tile.from.col === tile.to.col) {
-
             const y0 = toPixels(tile.from.row);
             const y1 = toPixels(tile.to.row);
             const x = toPixels(tile.from.col);
@@ -162,13 +149,9 @@ export const pushBoardTiles = (board: number[][],
     for (let row = 0; row < board.length; row++) {
         for (let col = 0; col < board[row].length; col++) {
             const value = board[row][col];
-
             if (value != 0) {
-                const x = toPixels(col);
-                const y = toPixels(row);
-
                 tileList.push(
-                    <StaticTileStyled value={value} key={`board-tile-${key++}`} x={x} y={y}
+                    <StaticTileStyled value={value} key={`board-tile-${key++}`} {...getXY(col, row)}
                         onClick={() => onTileClick?.(row, col)}
                         onDoubleClick={() => onTileDoubleClick?.(row, col)}
                     />

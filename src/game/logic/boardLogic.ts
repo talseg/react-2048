@@ -1,15 +1,15 @@
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
 import { getCol, getRow, copyMatrix, arrayFlip } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
-export type TileType = "static" | "moving" | "merging" | "poping";
 export type Cell = { row: number, col: number };
-export type MovingTile = { value: number, from: Cell, to: Cell, tileType?: TileType };
+export type MovingTile = { value: number, from: Cell, to: Cell };
 export type StaticTile = { value: number, position: Cell };
 
 export type AnimationPlan = {
     staticTiles: StaticTile[];
     movingTiles: MovingTile[];
     mergedTiles: StaticTile[];
+    poppedTile?: StaticTile;
 }
 
 export const getNewMatrixByDirection = (board: number[][], direction: Direction): {
