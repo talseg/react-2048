@@ -113,20 +113,20 @@ export const pushMergedTiles = (tiles: StaticTile[], tileList: React.ReactElemen
     }
 }
 
+export const pushPoppedTile = (tile: StaticTile, tileList: React.ReactElement[]) => {
+    const x = toPixels(tile.position.col);
+    const y = toPixels(tile.position.row);
+    tileList.push(
+        <PopingTileStyled key={`poping-tile`} value={tile.value} x={x} y={y} />
+    );
+}
+
 export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
     for (let index = 0; index < tiles.length; index++) {
 
         const tile = tiles[index];
         // Horizontal movement
-        if (tile.tileType === "poping") {
-            const x = toPixels(tile.from.col);
-            const y = toPixels(tile.from.row);
-            tileList.push(
-                <PopingTileStyled key={`poping-tile-${index}`} value={tile.value} x={x} y={y} />
-            );
-        }
-        else if (tile.from.row === tile.to.row) {
-
+        if (tile.from.row === tile.to.row) {
             const x0 = toPixels(tile.from.col);
             const x1 = toPixels(tile.to.col);
             const y = toPixels(tile.from.row);
@@ -137,7 +137,6 @@ export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElemen
         }
         // Vertical movement
         else if (tile.from.col === tile.to.col) {
-
             const y0 = toPixels(tile.from.row);
             const y1 = toPixels(tile.to.row);
             const x = toPixels(tile.from.col);

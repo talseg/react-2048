@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { getNextTilePosition, getRandomTilePosition, type AnimationPlan, type Cell, type MovingTile } from "../logic/boardLogic";
+import { getNextTilePosition, getRandomTilePosition, type AnimationPlan, type Cell, type MovingTile, type StaticTile } from "../logic/boardLogic";
 import { ADD_RANDOM_TILE } from "../conponents/Game/Game";
 import { getNumZeros } from "../logic/matrixUtils";
 import { SPAWN_4_PROBABILITY } from "../utilities/globals";
@@ -21,24 +21,23 @@ export const useAddRandomTileManager = (): {
     ): undefined => {
         if (!ADD_RANDOM_TILE || getNumZeros(board) === 0)
             return;
-        let randomTilePosition: Cell | undefined;
         const newTileValue = (allow4 && (Math.random() < SPAWN_4_PROBABILITY)) ? 4 : 2;
-        if (numConsecutiveUndos === 1 && prevNewCell) {
-            randomTilePosition = getNextTilePosition(board, prevNewCell);
-        }
-        else {
-            randomTilePosition = getRandomTilePosition(board);
-        }
+
+        // We want to help the user and not force him to undo until he gets a different next position
+        // So in the first undo - choose the next cell
+        const poppingTilePosition: Cell =
+            numConsecutiveUndos === 1 && prevNewCell ?  
+                getNextTilePosition(board, prevNewCell) :
+                getRandomTilePosition(board);
+
         setNumConsecutiveUndos(0);
-        const newRandomTile: MovingTile = {
+        const poppingTile: StaticTile = {
             value: newTileValue,
-            from: randomTilePosition,
-            to: randomTilePosition,
-            tileType: "poping"
+            position: poppingTilePosition
         }
-        setPrevNewCell(randomTilePosition);
-        plan?.movingTiles.push(newRandomTile);
-        board[randomTilePosition.row][randomTilePosition.col] = newTileValue;
+        setPrevNewCell(poppingTilePosition);
+        if (plan) plan.poppedTile = poppingTile;
+        board[poppingTilePosition.row][poppingTilePosition.col] = newTileValue;
     }, [allow4, numConsecutiveUndos, prevNewCell]);
 
     const onUndo = (): void => setNumConsecutiveUndos((value) => value + 1);
