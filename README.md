@@ -24,9 +24,8 @@ Built with ❤️ by Inbar and Tal Segal. August 2025.
   - Prefer readability over short or overly clever code.
   - Separate logic from UI for clarity and maintainability.
   - Keep developer tools clean — no warnings, no unnecessary logs or noise.
-- Clean code + no warnings + no junk in the developer tools
 - Swipe support (keyboard and touch).
-- Undo system.
+- Unlimited Undo system.
 - Optional hints to help with strategy.
 - **Storybook integration** for developing UI components in isolation.
 - 100% open code for learning and contributions.
