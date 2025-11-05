@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
 import { getNextTilePosition, getRandomTilePosition, type AnimationPlan, type Cell, type StaticTile } from "../logic/boardLogic";
-import { ADD_RANDOM_TILE } from "../conponents/Game/Game";
 import { getNumZeros } from "../logic/matrixUtils";
-import { SPAWN_4_PROBABILITY } from "../utilities/globals";
+import { ADD_RANDOM_TILE, SPAWN_4_PROBABILITY } from "../utilities/globals";
 import { useSettings } from "../conponents/settings/SettingsContext";
 
 export const useAddRandomTileManager = (): {

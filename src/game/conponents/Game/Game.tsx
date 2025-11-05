@@ -1,30 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import React from "react";
+import { useGame } from "./useGame";
 import { Board } from "../board/Board";
-import {
-    addRandomTile,
-    getNewMatrixByDirection,
-    type AnimationPlan,
-    type Direction
-} from "../../logic/boardLogic";
 import { styled } from "styled-components";
 import FullscreenToggleButton from "../FullScreenToggleButton";
-import { createMatrix, copyMatrix } from "../../logic/matrixUtils";
-import { useKeySwipe } from "../../hooks/useKeySwipe";
-import { ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
-import { useRefSwipe } from "../../hooks/useSRefwipe";
-import pkg from "../../../../package.json"
 import { SmallButton } from "../../elements/SmallButton";
 import { IconRestart, IconUndo } from "../../../assets/Icons";
-import { MAX_TILE_VALUE } from "../tile/Tile";
-import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
 import ThumbUpIcon from '../../../assets//1F44D.svg?react';
-import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
-import { useSettings } from "../settings/SettingsContext";
-import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
-const VERSION = pkg.version;
 
 const PageWrapper = styled.div`
     display: flex;
@@ -69,28 +53,6 @@ const StyledThumUpWrapper = styled(ThumbUpIcon)`
     margin-top: 2px;
 `;
 
-const createInitialBoardData = (): number[][] => {
-    const grid = createMatrix(GRID_SIZE, 0);
-    if (ADD_RANDOM_TILE) addRandomTile(grid, 2);
-    return grid;
-}
-
-const LOCAL_STORAGE_DATA_KEY = "boardData";
-export const ADD_RANDOM_TILE = true; // For debug
-
-
-const isSwipePossible = (boardData: number[][]): boolean => {
-    if (!ADD_RANDOM_TILE)
-        return true;
-
-    const canSwipe = (direction: Direction): boolean => {
-        const { plan } =
-            getNewMatrixByDirection(boardData, direction);
-        return plan !== undefined;
-    }
-    return canSwipe("up") || canSwipe("down") || canSwipe("left") || canSwipe("right");
-}
-
 const HeaderStyled = styled.div`
     color: black;
     font-size: 36px;
@@ -104,85 +66,13 @@ const HanburgerButtonStyled = styled(SmallButton)`
 
 export const Game: React.FC = () => {
 
-    const [boardData, setBoardData] = useState<number[][]>([[]]);
-    const [animationPlan, setAnimationPlan] = useState<AnimationPlan | undefined>(undefined);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { onUndo, updateUndoBoard } = useUndo();
-    const { allowTileChange, isPerfectBoard } = useSettings();
-    const addRandomTileManager = useAddRandomTileManager();
-
-    const handleSwipe = useCallback((direction: Direction): undefined => {
-        const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-
-        // no plan - the board did not change, nothing to do
-        if (!plan) return;
-
-        setAnimationPlan(plan);
-
-        addRandomTileManager.addRandomTile(newBoard, plan);
-
-        updateUndoBoard(boardData);
-        setBoardData(newBoard);
-
-        if (!isSwipePossible(newBoard)) {
-            setTimeout(() => { alert("Game Over") }, ANIMATION_DURATION);
-        }
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(newBoard));
-
-    }, [boardData, addRandomTileManager, updateUndoBoard]);
-
-    const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
-    useKeySwipe(handleSwipe);
-
-    const setData = (data: number[][]) => {
-        setBoardData(data);
-        localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(data));
-    }
-
-    useEffect(() => {
-        // toDo - Remove these debug code 
-        console.log('Build mode:', import.meta.env.MODE);
-        console.log('Game components mounted');
-        const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
-        if (localData) {
-            setBoardData(JSON.parse(localData));
-        }
-        else {
-            const initialBoard = createInitialBoardData();
-            setBoardData(initialBoard);
-            updateUndoBoard(initialBoard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-
-    const handleTileClick = (row: number, column: number): undefined => {
-
-        if (!allowTileChange) return;
-
-        const newBoardData = copyMatrix(boardData);
-        const getNextTileValue = (value: number): number => {
-            if (value >= MAX_TILE_VALUE) return 0;
-            return value == 0 ? 2 : value * 2;
-        }
-        newBoardData[row][column] = getNextTileValue(newBoardData[row][column]);
-        setData(newBoardData);
-    }
-
-    const handleTileDoubleClick = (row: number, column: number): undefined => {
-        if (!allowTileChange) return;
-
-        const newBoardData = copyMatrix(boardData);
-        newBoardData[row][column] = 0;
-        setData(newBoardData);
-    }
-
-    function handleUndo(): void {
-        const prevBoard = onUndo();
-        setData(prevBoard);
-        addRandomTileManager.onUndo();
-    }
-    const showBoardPerfect = isPerfectBoard && isBoardAscending(boardData);
+    const {
+        boardData, onTouchStart, onTouchMove, onRestart, handleUndo,
+        onMenuClick, handleTileClick, handleTileDoubleClick,
+        animationPlan, onAnimationPlanEnded, 
+        gameVersion, isMenuOpen,
+        onMenuOpenChange, showBoardPerfect
+    } = useGame();
 
     return (
         <PageWrapper
@@ -193,11 +83,7 @@ export const Game: React.FC = () => {
 
                 {!isOnIOS() && <FullscreenToggleButton />}
 
-                <SmallButton onClick={() => {
-                    setData(createInitialBoardData());
-                    setAnimationPlan(undefined);
-                    addRandomTileManager.resetUndos();
-                }}>
+                <SmallButton onClick={onRestart}>
                     <IconRestart />
                 </SmallButton>
 
@@ -207,7 +93,7 @@ export const Game: React.FC = () => {
 
                 {showBoardPerfect && <StyledThumUpWrapper />}
 
-                <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
+                <HanburgerButtonStyled onClick={onMenuClick}>
                     <HamburgerIcon />
                 </HanburgerButtonStyled>
 
@@ -218,23 +104,21 @@ export const Game: React.FC = () => {
             <Board boardData={boardData}
                 onTileClick={handleTileClick}
                 onTileDoubleClick={handleTileDoubleClick}
-                onAnimationPlanEnded={() => { setAnimationPlan(undefined) }}
+                onAnimationPlanEnded={onAnimationPlanEnded}
                 animationPlan={animationPlan}
             />
 
             <InfoWrapper>
-                {`Game by Inbar and Tal Segal version: ${VERSION}`}
+                {`Game by Inbar and Tal Segal version: ${gameVersion}`}
             </InfoWrapper>
 
             <SettingsMenu
                 isOpen={isMenuOpen}
-                onIsOpenChanged={() => setIsMenuOpen(value => !value)}
+                onIsOpenChanged={onMenuOpenChange}
             ></SettingsMenu>
 
         </PageWrapper>
     );
 }
-
-import React from "react";
 
 
