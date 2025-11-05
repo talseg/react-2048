@@ -52,6 +52,18 @@ git status
    - Squash & merge → combines all commits into one
    - Rebase & merge → applies commits on top of base branch (clean history)
 
+# prevent main commits:
+# add file: .git/hooks/pre-commit with:
+#!/bin/sh
+# Prevent commits directly to main branch
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "main" ]; then
+  echo "🚫 Direct push to main is disabled. Please open a feature branch."
+  exit 1
+fi
+
 ## 6️⃣ Updating After Merge
 After a PR is merged & branch deleted on GitHub:
 # Switch to main
@@ -83,3 +95,4 @@ git push origin --delete branch-name
 
 # update version and push
 npm run bump-version
+
