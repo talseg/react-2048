@@ -25,6 +25,7 @@ Built with ❤️ by Inbar and Tal Segal. August 2025.
   - Separate logic from UI for clarity and maintainability.
   - Keep developer tools clean — no warnings, no unnecessary logs or noise.
 - Swipe support (keyboard and touch).
+- Persistent board state, so you can continue where left off.
 - Unlimited Undo system.
 - Optional hints to help with strategy.
 - **Storybook integration** for developing UI components in isolation.
