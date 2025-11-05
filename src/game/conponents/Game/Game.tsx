@@ -20,9 +20,9 @@ import { useUndo } from "../../hooks/useUndo";
 import { isOnIOS } from "../../utilities/utilities";
 import { SettingsMenu } from "../settings/SettingsMenu";
 import HamburgerIcon from '../../../assets//hamburger.svg?react';
-import ThumbUpIcon from  '../../../assets//1F44D.svg?react';
+import ThumbUpIcon from '../../../assets//1F44D.svg?react';
 import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
-import {  useSettings } from "../settings/SettingsContext";
+import { useSettings } from "../settings/SettingsContext";
 import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
 const VERSION = pkg.version;
 
@@ -113,7 +113,7 @@ export const Game: React.FC = () => {
 
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
-        
+
         // no plan - the board did not change, nothing to do
         if (!plan) return;
 
