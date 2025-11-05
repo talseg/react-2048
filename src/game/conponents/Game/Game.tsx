@@ -140,6 +140,9 @@ export const Game: React.FC = () => {
     }
 
     useEffect(() => {
+        // toDo - Remove these debug code 
+        console.log('Build mode:', import.meta.env.MODE);
+        console.log('Game components mounted');
         const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
         if (localData) {
             setBoardData(JSON.parse(localData));
@@ -149,7 +152,8 @@ export const Game: React.FC = () => {
             setBoardData(initialBoard);
             updateUndoBoard(initialBoard);
         }
-    }, [updateUndoBoard])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
 
     const handleTileClick = (row: number, column: number): undefined => {
@@ -201,7 +205,7 @@ export const Game: React.FC = () => {
                     <IconUndo />
                 </SmallButton>
 
-                { showBoardPerfect && <StyledThumUpWrapper /> }
+                {showBoardPerfect && <StyledThumUpWrapper />}
 
                 <HanburgerButtonStyled onClick={() => setIsMenuOpen(true)}>
                     <HamburgerIcon />
