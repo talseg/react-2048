@@ -68,7 +68,7 @@ export const Game: React.FC = () => {
 
     const {
         boardData, onTouchStart, onTouchMove, onRestart, handleUndo,
-        onMenuClick, handleTileClick, handleTileDoubleClick,
+        onOpenMenu, handleTileClick, handleTileDoubleClick,
         animationPlan, onAnimationPlanEnded, 
         gameVersion, isMenuOpen,
         onMenuOpenChange, showBoardPerfect
@@ -93,7 +93,7 @@ export const Game: React.FC = () => {
 
                 {showBoardPerfect && <StyledThumUpWrapper />}
 
-                <HanburgerButtonStyled onClick={onMenuClick}>
+                <HanburgerButtonStyled onClick={onOpenMenu}>
                     <HamburgerIcon />
                 </HanburgerButtonStyled>
 
