@@ -6,7 +6,7 @@ import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import { ADD_RANDOM_TILE, ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { copyMatrix, createMatrix } from "../../logic/matrixUtils";
-import { useRefSwipe } from "../../hooks/useSRefwipe";
+import { useSwipe } from "../../hooks/useSwipe";
 import { MAX_TILE_VALUE } from "../tile/Tile";
 import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
 import pkg from "../../../../package.json"
@@ -90,7 +90,7 @@ export const useGame = (): UseGameProps => {
 
     }, [boardData, addRandomTileManager, updateUndoBoard]);
 
-    const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
+    const { onTouchStart, onTouchMove } = useSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {

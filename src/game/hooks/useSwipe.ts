@@ -18,7 +18,7 @@ export const useSwipe = (onSwipe: (direction: Direction) => undefined): UseSwipe
         setIsInSwipe(false);
     }
 
-    const handleTouchMove = (e: React.TouchEvent) => {
+    const onTouchMove = (e: React.TouchEvent) => {
 
         if (!isInSwipe) 
             return;
@@ -45,11 +45,11 @@ export const useSwipe = (onSwipe: (direction: Direction) => undefined): UseSwipe
         }
     }
 
-    const handleTouchStart = (e: React.TouchEvent) => {
+    const onTouchStart = (e: React.TouchEvent) => {
         setTouchStartX(e.changedTouches[0].screenX);
         setTouchStartY(e.changedTouches[0].screenY);
         setIsInSwipe(true);
     }
 
-    return { onTouchStart: handleTouchStart, onTouchMove: handleTouchMove }
+    return { onTouchStart, onTouchMove }
 } 
