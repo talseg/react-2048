@@ -4,7 +4,6 @@ export const createMatrix = (gridSize: number, initialValue: number): number[][]
 export const copyMatrix = (matrix: number[][]): number[][] =>
     matrix.map(row => [...row]);
 
-
 export const getRow = (matrix: number[][], rowIndex: number): number[] => [...matrix[rowIndex]];
 
 export const getCol = (matrix: number[][], colIndex: number): number[] =>
@@ -33,7 +32,8 @@ export const getRowString = (row: number[], header?: string) => {
   return prefix + row.join(" ");
 };
 
-export const printRow = (row: number[], header?: string) => console.log(getRowString(row, header));
+export const printRow = (row: number[], header?: string) => 
+    console.log(getRowString(row, header));
 
 export const getMatrixString = (matrix: number[][], header?: string) => {
     const prefix = header ? `${header}\n` : "";
@@ -41,19 +41,10 @@ export const getMatrixString = (matrix: number[][], header?: string) => {
     return prefix + output;
 }
 
-export const printMatrix = (matrix: number[][], header?: string) => console.log(getMatrixString(matrix, header));
+export const printMatrix = (matrix: number[][], header?: string) => 
+    console.log(getMatrixString(matrix, header));
 
-export const getNumZeros = (matrix: number[][]) => {
-
-    let count = 0;
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix.length; j++) {
-            if (matrix[i][j] === 0) {
-                count++;
-            }
-        }
-    }
-    return count;
-}
+export const getNumZeros = (matrix: number[][]) =>
+  matrix.flat().filter(v => v === 0).length;
 
 export const appendRows = (a: number[], b: number[]): number[] => [...a, ...b];
