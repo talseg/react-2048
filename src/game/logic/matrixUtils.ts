@@ -9,23 +9,22 @@ export const getRow = (matrix: number[][], rowIndex: number): number[] => [...ma
 export const getCol = (matrix: number[][], colIndex: number): number[] =>
   matrix.map(row => row[colIndex]);
 
-export const arrayFlip = (row: number[]): number[] => [...row].reverse();
+export const getFlippedArray = (row: number[]): number[] => [...row].reverse();
 
-export const clockwiseBoardRotation = (board: number[][]): number[][] => {
-  const size = board.length;
-  const newBoard = Array.from({ length: size }, () => Array(size).fill(0));
+export const getClockwiseRotatedMatrix = (matrix: number[][]): number[][] => {
+  const size = matrix.length;
+  const newMatrix = Array.from({ length: size }, () => Array(size).fill(0));
 
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
-      newBoard[col][size - row - 1] = board[row][col];
+      newMatrix[col][size - row - 1] = matrix[row][col];
     }
   }
-
-  return newBoard;
+  return newMatrix;
 };
 
-export const horizontalBoardFlip = (board: number[][]): number[][] =>
-  board.map(row => [...row].reverse());
+export const getHorizontalFlippedMatrix = (matrix: number[][]): number[][] =>
+  matrix.map(row => [...row].reverse());
 
 export const getRowString = (row: number[], header?: string) => {
   const prefix = header ? `${header}\n` : "";

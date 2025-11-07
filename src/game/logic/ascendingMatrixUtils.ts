@@ -1,4 +1,4 @@
-import { arrayFlip } from "./matrixUtils";
+import { getFlippedArray } from "./matrixUtils";
 
 /**
  * 
@@ -43,7 +43,7 @@ const flattenMatrixZigzag  = (matrix: number[][]): number[] => {
     const result: number[] = [];
     let shouldFlip = matrix.length % 2 === 0;
     for (let row = 0; row < matrix.length; row++) {
-        const actualRow = shouldFlip ? arrayFlip(matrix[row]) : matrix[row];
+        const actualRow = shouldFlip ? getFlippedArray(matrix[row]) : matrix[row];
         result.push(...actualRow);
         shouldFlip = !shouldFlip;
     }
