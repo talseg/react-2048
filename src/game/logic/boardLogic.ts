@@ -150,13 +150,13 @@ const getBoardAfterRightSwipe = (board: number[][]): number[][] => {
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
         const row = getRow(board, rowIndex);
-        const fliped = getFlippedArray(row);
+        const flipped = getFlippedArray(row);
 
-        const afterSwipe = getRowAfterLeftSwipe(fliped);
-        const flipedSwipe = getFlippedArray(afterSwipe);
+        const afterSwipe = getRowAfterLeftSwipe(flipped);
+        const flippedSwipe = getFlippedArray(afterSwipe);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            newBoard[rowIndex][colIndex] = flipedSwipe[colIndex];
+            newBoard[rowIndex][colIndex] = flippedSwipe[colIndex];
         }
     }
 

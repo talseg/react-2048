@@ -35,10 +35,6 @@ export const isBoardAscending = (matrix: number[][] | undefined): boolean => {
     return isRowAscending(noZeroArray);
 }
 
-/**
- * @param matrix 
- * @returns fliped array - see explanation above
- */
 const flattenMatrixZigzag  = (matrix: number[][]): number[] => {
     const result: number[] = [];
     let shouldFlip = matrix.length % 2 === 0;
