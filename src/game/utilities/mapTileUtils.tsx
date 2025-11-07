@@ -61,12 +61,12 @@ const VerticalMovingTileStyled = styled(Tile) <{ y0: number; y1: number; x: numb
     left: ${({ x }) => { return `${x}px` }};
 `;
 
-const toPixels = (col: number): number => 
+const toPixels = (col: number): number =>
     col * (TILE_PIXEL_SIZE + MARGIN_BETWEEN_TILES) + MARGIN_BETWEEN_TILES;
 
-const getXY = (col: number, row: number) : { x: number, y: number} => ({ x: toPixels(col), y: toPixels(row) });
+const getXY = (col: number, row: number): { x: number, y: number } => ({ x: toPixels(col), y: toPixels(row) });
 
-const getCellXY = (position: Cell) : { x: number, y: number} => ({ x: toPixels(position.col), y: toPixels(position.row) });
+const getCellXY = (position: Cell): { x: number, y: number } => ({ x: toPixels(position.col), y: toPixels(position.row) });
 
 export const pushEmptyTiles = (tiles: React.ReactElement[],
     onTileClick?: (row: number, column: number) => undefined,
