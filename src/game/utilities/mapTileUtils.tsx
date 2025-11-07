@@ -68,15 +68,17 @@ const getXY = (col: number, row: number): { x: number, y: number } => ({ x: toPi
 
 const getCellXY = (position: Cell): { x: number, y: number } => ({ x: toPixels(position.col), y: toPixels(position.row) });
 
-export const pushEmptyTiles = (tiles: React.ReactElement[],
+export const getEmptyTiles = (
+    gridSize: number,
     onTileClick?: (row: number, column: number) => undefined,
-    onTileDoubleClick?: (row: number, column: number) => undefined) => {
-
-    let key = 0;
-    for (let row = 0; row < GRID_SIZE; row++) {
-        for (let col = 0; col < GRID_SIZE; col++) {
+    onTileDoubleClick?: (row: number, column: number) => undefined
+) : React.ReactElement[] => {
+    const tiles: React.ReactElement[] = [];
+    //let key = 0;
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
             tiles.push(
-                <StaticTileStyled value={0} {...getXY(col, row)} key={`empty-tile-${key++}`}
+                <StaticTileStyled value={0} {...getXY(col, row)} key={`empty-tile-${row}-${col}`}
                     onClick={() => onTileClick?.(row, col)}
                     onDoubleClick={() => onTileDoubleClick?.(row, col)} />
             );
@@ -85,78 +87,81 @@ export const pushEmptyTiles = (tiles: React.ReactElement[],
     return tiles;
 }
 
-export const pushStaticTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
-    for (let index = 0; index < tiles.length; index++) {
-        const tile = tiles[index];
-        tileList.push(
-            <StaticTileStyled key={`static-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
-        );
-    }
-}
+export const getStaticTiles = (tiles: StaticTile[]) =>
+    tiles.map((tile, index) =>
+        <StaticTileStyled value={tile.value}
+            {...getCellXY(tile.position)} key={`static-tile-${index}`} />);
 
-export const pushMergedTiles = (tiles: StaticTile[], tileList: React.ReactElement[]) => {
-    for (let index = 0; index < tiles.length; index++) {
-        const tile = tiles[index];
-        tileList.push(
-            <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
-        );
-    }
-}
-
-export const pushPoppedTile = (tile: StaticTile, tileList: React.ReactElement[]) => {
-    tileList.push(
-        <PopingTileStyled key={`poping-tile`} value={tile.value} {...getCellXY(tile.position)} />
+export const getMergedTiles = (tiles: StaticTile[]) : React.ReactElement[] =>
+    tiles.map((tile, index) =>
+        <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
     );
-}
 
-export const pushMovingTiles = (tiles: MovingTile[], tileList: React.ReactElement[]) => {
-    for (let index = 0; index < tiles.length; index++) {
+export const getPopedTile = (tile: StaticTile) =>
+    <PopingTileStyled key={`poping-tile`} value={tile.value} {...getCellXY(tile.position)} />;
 
-        const tile = tiles[index];
+export const getMovingTiles = (tiles: MovingTile[]) => {
+    return tiles.map((tile, index) => {
         // Horizontal movement
         if (tile.from.row === tile.to.row) {
             const x0 = toPixels(tile.from.col);
             const x1 = toPixels(tile.to.col);
             const y = toPixels(tile.from.row);
 
-            tileList.push(
-                <HorizontalMovingTileStyled key={`moving-tile-${index}`} value={tile.value} x0={x0} x1={x1} y={y} />
-            );
+            return <HorizontalMovingTileStyled key={`moving-tile-${index}`}
+                value={tile.value} x0={x0} x1={x1} y={y} />;
         }
-        // Vertical movement
         else if (tile.from.col === tile.to.col) {
             const y0 = toPixels(tile.from.row);
             const y1 = toPixels(tile.to.row);
             const x = toPixels(tile.from.col);
-
-            tileList.push(
-                <VerticalMovingTileStyled key={`moving-tile-${index}`} value={tile.value} y0={y0} y1={y1} x={x} />
-            );
+            return <VerticalMovingTileStyled key={`moving-tile-${index}`}
+                value={tile.value} y0={y0} y1={y1} x={x} />;
         }
-        else {
-            throw (
-                new Error("Got diagonal movement")
-            );
-        }
-    }
+        else throw (new Error("Got diagonal movement"));
+    })
 }
 
-export const pushBoardTiles = (board: number[][],
-    tileList: React.ReactElement[],
-    onTileClick?: (row: number, column: number) => undefined,
-    onTileDoubleClick?: (row: number, column: number) => undefined) => {
-    let key = 0;
-    for (let row = 0; row < board.length; row++) {
-        for (let col = 0; col < board[row].length; col++) {
-            const value = board[row][col];
-            if (value != 0) {
-                tileList.push(
-                    <StaticTileStyled value={value} key={`board-tile-${key++}`} {...getXY(col, row)}
-                        onClick={() => onTileClick?.(row, col)}
-                        onDoubleClick={() => onTileDoubleClick?.(row, col)}
-                    />
-                );
-            }
+export const getBoardTiles = (
+  board: number[][],
+  onTileClick?: (row: number, column: number) => undefined,
+  onTileDoubleClick?: (row: number, column: number) => undefined
+): React.ReactElement[] =>
+  board
+    .flatMap((rowValues, row) =>
+      rowValues.flatMap((value, col) => {
+        if (value !== 0) {
+          return (
+            <StaticTileStyled
+              key={`board-tile-${row}-${col}`}
+              value={value}
+              {...getXY(col, row)}
+              onClick={() => onTileClick?.(row, col)}
+              onDoubleClick={() => onTileDoubleClick?.(row, col)}
+            />
+          );
         }
-    }
-}
+        return undefined; // ✅ explicit return for type safety
+      })
+    )
+    .filter((tile): tile is React.ReactElement => Boolean(tile)); // ✅ narrows type correctly
+
+// export const pushBoardTiles = (board: number[][],
+//     tileList: React.ReactElement[],
+//     onTileClick?: (row: number, column: number) => undefined,
+//     onTileDoubleClick?: (row: number, column: number) => undefined) => {
+//     let key = 0;
+//     for (let row = 0; row < board.length; row++) {
+//         for (let col = 0; col < board[row].length; col++) {
+//             const value = board[row][col];
+//             if (value != 0) {
+//                 tileList.push(
+//                     <StaticTileStyled value={value} key={`board-tile-${key++}`} {...getXY(col, row)}
+//                         onClick={() => onTileClick?.(row, col)}
+//                         onDoubleClick={() => onTileDoubleClick?.(row, col)}
+//                     />
+//                 );
+//             }
+//         }
+//     }
+// }
