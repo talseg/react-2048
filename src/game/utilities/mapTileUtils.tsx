@@ -72,9 +72,8 @@ export const getEmptyTiles = (
     gridSize: number,
     onTileClick?: (row: number, column: number) => undefined,
     onTileDoubleClick?: (row: number, column: number) => undefined
-) : React.ReactElement[] => {
+): React.ReactElement[] => {
     const tiles: React.ReactElement[] = [];
-    //let key = 0;
     for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
             tiles.push(
@@ -87,20 +86,20 @@ export const getEmptyTiles = (
     return tiles;
 }
 
-export const getStaticTiles = (tiles: StaticTile[]) =>
+export const getStaticTiles = (tiles: StaticTile[]): React.ReactElement[] =>
     tiles.map((tile, index) =>
         <StaticTileStyled value={tile.value}
             {...getCellXY(tile.position)} key={`static-tile-${index}`} />);
 
-export const getMergedTiles = (tiles: StaticTile[]) : React.ReactElement[] =>
+export const getMergedTiles = (tiles: StaticTile[]): React.ReactElement[] =>
     tiles.map((tile, index) =>
-        <MergedTileStyled key={`merged-tile-${index}`} value={tile.value} {...getCellXY(tile.position)} />
-    );
+        <MergedTileStyled value={tile.value}
+            {...getCellXY(tile.position)} key={`merged-tile-${index}`} />);
 
-export const getPopedTile = (tile: StaticTile) =>
+export const getPopedTile = (tile: StaticTile): React.ReactElement =>
     <PopingTileStyled key={`poping-tile`} value={tile.value} {...getCellXY(tile.position)} />;
 
-export const getMovingTiles = (tiles: MovingTile[]) => {
+export const getMovingTiles = (tiles: MovingTile[]): React.ReactElement[] => {
     return tiles.map((tile, index) => {
         // Horizontal movement
         if (tile.from.row === tile.to.row) {
@@ -123,45 +122,27 @@ export const getMovingTiles = (tiles: MovingTile[]) => {
 }
 
 export const getBoardTiles = (
-  board: number[][],
-  onTileClick?: (row: number, column: number) => undefined,
-  onTileDoubleClick?: (row: number, column: number) => undefined
-): React.ReactElement[] =>
-  board
-    .flatMap((rowValues, row) =>
-      rowValues.flatMap((value, col) => {
-        if (value !== 0) {
-          return (
-            <StaticTileStyled
-              key={`board-tile-${row}-${col}`}
-              value={value}
-              {...getXY(col, row)}
-              onClick={() => onTileClick?.(row, col)}
-              onDoubleClick={() => onTileDoubleClick?.(row, col)}
-            />
-          );
-        }
-        return undefined; // ✅ explicit return for type safety
-      })
-    )
-    .filter((tile): tile is React.ReactElement => Boolean(tile)); // ✅ narrows type correctly
+    board: number[][],
+    onTileClick?: (row: number, column: number) => undefined,
+    onTileDoubleClick?: (row: number, column: number) => undefined
+): React.ReactElement[] => {
+    const tiles: React.ReactElement[] = [];
 
-// export const pushBoardTiles = (board: number[][],
-//     tileList: React.ReactElement[],
-//     onTileClick?: (row: number, column: number) => undefined,
-//     onTileDoubleClick?: (row: number, column: number) => undefined) => {
-//     let key = 0;
-//     for (let row = 0; row < board.length; row++) {
-//         for (let col = 0; col < board[row].length; col++) {
-//             const value = board[row][col];
-//             if (value != 0) {
-//                 tileList.push(
-//                     <StaticTileStyled value={value} key={`board-tile-${key++}`} {...getXY(col, row)}
-//                         onClick={() => onTileClick?.(row, col)}
-//                         onDoubleClick={() => onTileDoubleClick?.(row, col)}
-//                     />
-//                 );
-//             }
-//         }
-//     }
-// }
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+            const value = board[row][col];
+            if (value !== 0) {
+                tiles.push(
+                    <StaticTileStyled
+                        key={`board-tile-${row}-${col}`}
+                        value={value}
+                        {...getXY(col, row)}
+                        onClick={() => onTileClick?.(row, col)}
+                        onDoubleClick={() => onTileDoubleClick?.(row, col)}
+                    />
+                );
+            }
+        }
+    }
+    return tiles;
+};
