@@ -1,5 +1,5 @@
 import { getRowTilesAfterLeftSwipe, type AnimationPlan } from "./boardLogic";
-import { clockwiseBoardRotation, getRow, horizontalBoardFlip } from "./matrixUtils";
+import { getClockwiseRotatedMatrix, getRow, getHorizontalFlippedMatrix } from "./matrixUtils";
 import { getBoardAnimationCounterClockwiseRotaion, getBoardAnimationHorizontalFlip } from "./AnimationUtils";
 
 export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => {
@@ -38,16 +38,16 @@ export const getBoardAnimationLeftSwipe = (board: number[][]): AnimationPlan => 
 }
 
 export const getBoardAnimationRightSwipe = (board: number[][]): AnimationPlan => {
-    const plan = getBoardAnimationLeftSwipe(horizontalBoardFlip(board));
+    const plan = getBoardAnimationLeftSwipe(getHorizontalFlippedMatrix(board));
     return getBoardAnimationHorizontalFlip(plan, board.length);
 }
 
 export const getBoardAnimationUpSwipe = (board: number[][]): AnimationPlan => {
-    const plan = getBoardAnimationRightSwipe(clockwiseBoardRotation(board));
+    const plan = getBoardAnimationRightSwipe(getClockwiseRotatedMatrix(board));
     return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
 }
 
 export const getBoardAnimationDownSwipe = (board: number[][]): AnimationPlan => {
-    const plan = getBoardAnimationLeftSwipe(clockwiseBoardRotation(board));
+    const plan = getBoardAnimationLeftSwipe(getClockwiseRotatedMatrix(board));
     return getBoardAnimationCounterClockwiseRotaion(plan, board.length);
 }

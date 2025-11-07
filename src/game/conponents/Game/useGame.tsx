@@ -6,7 +6,7 @@ import { useAddRandomTileManager } from "../../hooks/useAddRandomTileManager";
 import { ADD_RANDOM_TILE, ANIMATION_DURATION, GRID_SIZE } from "../../utilities/globals";
 import { useKeySwipe } from "../../hooks/useKeySwipe";
 import { copyMatrix, createMatrix } from "../../logic/matrixUtils";
-import { useRefSwipe } from "../../hooks/useSRefwipe";
+import { useSwipe } from "../../hooks/useSwipe";
 import { MAX_TILE_VALUE } from "../tile/Tile";
 import { isBoardAscending } from "../../logic/ascendingMatrixUtils";
 import pkg from "../../../../package.json"
@@ -17,7 +17,7 @@ interface UseGameProps {
     onTouchMove: (e: React.TouchEvent) => void;
     onRestart: () => void;
     handleUndo: () => void;
-    onMenuClick: () => void;
+    onOpenMenu: () => void;
     handleTileClick: (row: number, column: number) => undefined;
     handleTileDoubleClick: (row: number, column: number) => undefined;
     animationPlan: AnimationPlan | undefined;
@@ -55,6 +55,21 @@ export const useGame = (): UseGameProps => {
     const { allowTileChange, isPerfectBoard } = useSettings();
     const addRandomTileManager = useAddRandomTileManager();
 
+    useEffect(() => {
+        const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
+        if (localData) {
+            setBoardData(JSON.parse(localData));
+        }
+        else {
+            const initialBoard = createInitialBoardData();
+            setBoardData(initialBoard);
+            updateUndoBoard(initialBoard);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // #region Swipe handling 
+
     const handleSwipe = useCallback((direction: Direction): undefined => {
         const { newBoard, plan } = getNewMatrixByDirection(boardData, direction);
 
@@ -75,7 +90,7 @@ export const useGame = (): UseGameProps => {
 
     }, [boardData, addRandomTileManager, updateUndoBoard]);
 
-    const { onTouchStart, onTouchMove } = useRefSwipe(handleSwipe);
+    const { onTouchStart, onTouchMove } = useSwipe(handleSwipe);
     useKeySwipe(handleSwipe);
 
     const setData = (data: number[][]) => {
@@ -83,18 +98,13 @@ export const useGame = (): UseGameProps => {
         localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(data));
     }
 
-    useEffect(() => {
-        const localData = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
-        if (localData) {
-            setBoardData(JSON.parse(localData));
-        }
-        else {
-            const initialBoard = createInitialBoardData();
-            setBoardData(initialBoard);
-            updateUndoBoard(initialBoard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const onAnimationPlanEnded = () : undefined => {
+        setAnimationPlan(undefined);
+    }
+
+    // #endregion swipe handling
+
+    // #region Tile click
 
     const handleTileClick = (row: number, column: number): undefined => {
 
@@ -117,6 +127,8 @@ export const useGame = (): UseGameProps => {
         setData(newBoardData);
     }
 
+    // #endregion Tile click
+
     function handleUndo(): void {
         const prevBoard = onUndo();
         setData(prevBoard);
@@ -130,12 +142,8 @@ export const useGame = (): UseGameProps => {
         addRandomTileManager.resetUndos();
     }
 
-    const onMenuClick = () => {
+    const onOpenMenu = () => {
         setIsMenuOpen(value => !value);
-    }
-
-    const onAnimationPlanEnded = () : undefined => {
-        setAnimationPlan(undefined);
     }
 
     const onMenuOpenChange = () => {
@@ -144,7 +152,7 @@ export const useGame = (): UseGameProps => {
 
     return ({
         boardData, onTouchStart, onTouchMove, onRestart, handleUndo,
-        onMenuClick, handleTileClick, handleTileDoubleClick,
+        onOpenMenu, handleTileClick, handleTileDoubleClick,
         animationPlan, onAnimationPlanEnded, 
         gameVersion: pkg.version, isMenuOpen,
         onMenuOpenChange, showBoardPerfect

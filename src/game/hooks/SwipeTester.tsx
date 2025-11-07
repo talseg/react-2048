@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
-// import { useSwipe } from "./useSwipe";
 import type { Direction } from "../logic/boardLogic";
-import { useRefSwipe } from "./useSRefwipe";
+import { useSwipe } from "./useSwipe";
 
 
 const SwipeAreaStyled = styled.div`
@@ -16,7 +15,7 @@ export const SwipeTester: React.FC = ( ) => {
         console.log("swipe hook: onSwipe was called with", direction)
     };
 
-    const { onTouchStart, onTouchMove } = useRefSwipe(onSwipe);
+    const { onTouchStart, onTouchMove } = useSwipe(onSwipe);
 
     return (
         <SwipeAreaStyled 

@@ -1,5 +1,5 @@
 import { getBoardAnimationDownSwipe, getBoardAnimationLeftSwipe, getBoardAnimationRightSwipe, getBoardAnimationUpSwipe } from "./AnimationLogic";
-import { getCol, getRow, copyMatrix, arrayFlip } from "./matrixUtils";
+import { getCol, getRow, copyMatrix, getFlippedArray } from "./matrixUtils";
 export type Direction = "left" | "right" | "up" | "down";
 export type Cell = { row: number, col: number };
 export type MovingTile = { value: number, from: Cell, to: Cell };
@@ -150,13 +150,13 @@ const getBoardAfterRightSwipe = (board: number[][]): number[][] => {
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
         const row = getRow(board, rowIndex);
-        const fliped = arrayFlip(row);
+        const flipped = getFlippedArray(row);
 
-        const afterSwipe = getRowAfterLeftSwipe(fliped);
-        const flipedSwipe = arrayFlip(afterSwipe);
+        const afterSwipe = getRowAfterLeftSwipe(flipped);
+        const flippedSwipe = getFlippedArray(afterSwipe);
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            newBoard[rowIndex][colIndex] = flipedSwipe[colIndex];
+            newBoard[rowIndex][colIndex] = flippedSwipe[colIndex];
         }
     }
 
@@ -196,9 +196,9 @@ const getBoardAfterDownSwipe = (board: number[][]): number[][] => {
     for (let colIndex = 0; colIndex < board.length; colIndex++) {
 
         const col = getCol(board, colIndex);
-        const flip = arrayFlip(col);
+        const flip = getFlippedArray(col);
         const afterSwipe = getRowAfterLeftSwipe(flip);
-        const flippedSwipe = arrayFlip(afterSwipe);
+        const flippedSwipe = getFlippedArray(afterSwipe);
 
         for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
 
