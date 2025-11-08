@@ -1,9 +1,7 @@
 import { css, keyframes, styled } from "styled-components";
 import { Tile, TILE_PIXEL_SIZE } from "../conponents/tile/Tile";
 import type { Cell, MovingTile, StaticTile } from "../logic/boardLogic";
-
-// This should be removed
-import { GRID_SIZE, MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from "./globals";
+import { MARGIN_BETWEEN_TILES, ANIMATION_DURATION } from "./globals";
 
 const StaticTileStyled = styled(Tile) <{ x: number; y: number }>`
     position: absolute;
