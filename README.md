@@ -9,7 +9,7 @@ This version challenges you to go **beyond 2048 all the way to 65,536**,
 so the target board is:
 </br>
 ![Full Board](public/fullBoard.png)</br>
-Built with ❤️ by Inbar and Tal Segal. August 2025.
+Built with ❤️ by Tal and Inbar Segal. August 2025.
 
 ---
 
