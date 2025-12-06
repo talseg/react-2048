@@ -26,11 +26,12 @@ const PageWrapper = styled.div`
 `;
 
 const InfoWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
     margin-top: 20px;
     color: #000000;
     font-size: 20px;
     font-weight: bold;
-    max-width: 260px;
 `;
 
 // ToDo - create a checkbox styled component
@@ -109,7 +110,8 @@ export const Game: React.FC = () => {
             />
 
             <InfoWrapper>
-                {`Game by Tal Segal version: ${gameVersion}`}
+                <div>Game by Tal Segal</div> 
+                <div>{`version: ${gameVersion}`}</div>
             </InfoWrapper>
 
             <SettingsMenu
